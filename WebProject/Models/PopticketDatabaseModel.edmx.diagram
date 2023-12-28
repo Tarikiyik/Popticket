@@ -7,7 +7,6 @@
       <Diagram DiagramId="dd3ffa9902f54b31b126c517b05cafba" Name="Diagram1">
         <EntityTypeShape EntityType="PopTicketModel.BookingDetails" Width="1.5" PointX="9.75" PointY="1" IsExpanded="true" />
         <EntityTypeShape EntityType="PopTicketModel.Bookings" Width="1.5" PointX="7.5" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="PopTicketModel.CardDetails" Width="1.5" PointX="12" PointY="8.375" IsExpanded="true" />
         <EntityTypeShape EntityType="PopTicketModel.Cities" Width="1.5" PointX="0.75" PointY="5.375" IsExpanded="true" />
         <EntityTypeShape EntityType="PopTicketModel.Movie" Width="1.5" PointX="3" PointY="8.625" IsExpanded="true" />
         <EntityTypeShape EntityType="PopTicketModel.Payment" Width="1.5" PointX="9.75" PointY="8.125" IsExpanded="true" />
@@ -24,7 +23,6 @@
         <AssociationConnector Association="PopTicketModel.FK_Bookings_User" ManuallyRouted="false" ></AssociationConnector>
         <AssociationConnector Association="PopTicketModel.FK_Payment_Bookings" ManuallyRouted="false" />
         <AssociationConnector Association="PopTicketModel.FK_seatReservations_Bookings" ManuallyRouted="false" />
-        <AssociationConnector Association="PopTicketModel.FK_CardDetails_Payment" ManuallyRouted="false" />
         <AssociationConnector Association="PopTicketModel.FK_Theater_Cities" ManuallyRouted="false" />
         <AssociationConnector Association="PopTicketModel.FK_Showtime_Movie" ManuallyRouted="false" />
         <AssociationConnector Association="PopTicketModel.FK_seatReservations_Seats" ManuallyRouted="false" />

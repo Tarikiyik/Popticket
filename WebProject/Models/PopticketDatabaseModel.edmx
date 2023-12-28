@@ -360,18 +360,6 @@
           <NavigationProperty Name="Payment" Relationship="Self.FK_Payment_Bookings" FromRole="Bookings" ToRole="Payment" />
           <NavigationProperty Name="seatReservations" Relationship="Self.FK_seatReservations_Bookings" FromRole="Bookings" ToRole="seatReservations" />
         </EntityType>
-        <EntityType Name="CardDetails">
-          <Key>
-            <PropertyRef Name="cardDetailID" />
-          </Key>
-          <Property Name="cardDetailID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="paymentID" Type="Int32" Nullable="false" />
-          <Property Name="cardholderName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="cardNumber" Type="String" MaxLength="16" FixedLength="true" Unicode="false" Nullable="false" />
-          <Property Name="expiryMonth" Type="Byte" Nullable="false" />
-          <Property Name="expiryYear" Type="Int16" Nullable="false" />
-          <NavigationProperty Name="Payment" Relationship="Self.FK_CardDetails_Payment" FromRole="CardDetails" ToRole="Payment" />
-        </EntityType>
         <EntityType Name="Cities">
           <Key>
             <PropertyRef Name="cityID" />
@@ -405,7 +393,6 @@
           <Property Name="amount" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
           <Property Name="paymentStatus" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="Bookings" Relationship="Self.FK_Payment_Bookings" FromRole="Payment" ToRole="Bookings" />
-          <NavigationProperty Name="CardDetails" Relationship="Self.FK_CardDetails_Payment" FromRole="Payment" ToRole="CardDetails" />
         </EntityType>
         <EntityType Name="seatReservations">
           <Key>
@@ -564,18 +551,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_CardDetails_Payment">
-          <End Role="Payment" Type="Self.Payment" Multiplicity="1" />
-          <End Role="CardDetails" Type="Self.CardDetails" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Payment">
-              <PropertyRef Name="paymentID" />
-            </Principal>
-            <Dependent Role="CardDetails">
-              <PropertyRef Name="paymentID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Theater_Cities">
           <End Role="Cities" Type="Self.Cities" Multiplicity="1" />
           <End Role="Theater" Type="Self.Theater" Multiplicity="*" />
@@ -651,7 +626,6 @@
         <EntityContainer Name="PopTicketEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="BookingDetails" EntityType="Self.BookingDetails" />
           <EntitySet Name="Bookings" EntityType="Self.Bookings" />
-          <EntitySet Name="CardDetails" EntityType="Self.CardDetails" />
           <EntitySet Name="Cities" EntityType="Self.Cities" />
           <EntitySet Name="Movie" EntityType="Self.Movie" />
           <EntitySet Name="Payment" EntityType="Self.Payment" />
@@ -685,10 +659,6 @@
           <AssociationSet Name="FK_seatReservations_Bookings" Association="Self.FK_seatReservations_Bookings">
             <End Role="Bookings" EntitySet="Bookings" />
             <End Role="seatReservations" EntitySet="seatReservations" />
-          </AssociationSet>
-          <AssociationSet Name="FK_CardDetails_Payment" Association="Self.FK_CardDetails_Payment">
-            <End Role="Payment" EntitySet="Payment" />
-            <End Role="CardDetails" EntitySet="CardDetails" />
           </AssociationSet>
           <AssociationSet Name="FK_Theater_Cities" Association="Self.FK_Theater_Cities">
             <End Role="Cities" EntitySet="Cities" />
