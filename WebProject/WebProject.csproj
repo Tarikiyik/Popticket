@@ -144,9 +144,6 @@
     <Compile Include="Models\Bookings.cs">
       <DependentUpon>PopticketDatabaseModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\CardDetails.cs">
-      <DependentUpon>PopticketDatabaseModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\Cities.cs">
       <DependentUpon>PopticketDatabaseModel.tt</DependentUpon>
     </Compile>

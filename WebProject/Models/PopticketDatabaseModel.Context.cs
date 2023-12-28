@@ -27,7 +27,6 @@ namespace WebProject.Models
     
         public virtual DbSet<BookingDetails> BookingDetails { get; set; }
         public virtual DbSet<Bookings> Bookings { get; set; }
-        public virtual DbSet<CardDetails> CardDetails { get; set; }
         public virtual DbSet<Cities> Cities { get; set; }
         public virtual DbSet<Movie> Movie { get; set; }
         public virtual DbSet<Payment> Payment { get; set; }

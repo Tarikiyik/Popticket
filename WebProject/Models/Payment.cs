@@ -14,19 +14,11 @@ namespace WebProject.Models
     
     public partial class Payment
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Payment()
-        {
-            this.CardDetails = new HashSet<CardDetails>();
-        }
-    
         public int paymentID { get; set; }
         public int bookingID { get; set; }
         public decimal amount { get; set; }
         public string paymentStatus { get; set; }
     
         public virtual Bookings Bookings { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<CardDetails> CardDetails { get; set; }
     }
 }
