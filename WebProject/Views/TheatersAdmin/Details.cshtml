@@ -1,0 +1,59 @@
+﻿@model WebProject.Models.Theater
+
+@{
+    ViewBag.Title = "Details";
+}
+<div class="admin-panel">
+    <h2>Details</h2>
+
+    <div>
+        <h4>Theater</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.name)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.name)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.address)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.address)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.contactNumber)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.contactNumber)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.contactMail)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.contactMail)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Cities.cityName)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Cities.cityName)
+            </dd>
+
+        </dl>
+    </div>
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.theaterID }) |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+    </div>

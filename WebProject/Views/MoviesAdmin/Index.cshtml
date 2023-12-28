@@ -1,0 +1,87 @@
+﻿@model IEnumerable<WebProject.Models.Movie>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+
+
+<div class="admin-panel">
+    <h2 style="padding-bottom:10px; font-size:22px; font-family:cursive;">Index</h2>
+
+    <p style="line-height:24px; font-weight:300; color:black;">
+        @Html.ActionLink("Create New", "Create")
+    </p>
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.title)
+            </th>
+            <th class="admin-panel-description">
+                @Html.DisplayNameFor(model => model.description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.imdb)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.releaseDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.director)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.genre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.duration)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.movieImg)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.movieBanner)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.title)
+                </td>
+                <td class="admin-panel-description">
+                    @Html.DisplayFor(modelItem => item.description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.imdb)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.releaseDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.director)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.genre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.duration)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.movieImg)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.movieBanner)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.MovieID }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.MovieID }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.MovieID })
+                </td>
+            </tr>
+        }
+
+    </table>
+
+</div>

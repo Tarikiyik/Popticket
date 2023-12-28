@@ -1,0 +1,43 @@
+﻿@model WebProject.Models.Movie
+@{
+    ViewBag.Title = "Inspect";
+    bool isUpcoming = Model.releaseDate > DateTime.Now;
+}
+
+<div class="content-wrapper">
+    <div class="inspect-page">
+        <div class="movie-info">
+            <div class="movie-info-img">
+                <img src="@Url.Content("~/images/" + Model.movieImg)" alt="@Model.title" />
+            </div>
+            <div class="movie-info-text">
+                <div class="movie-title">
+                    <h1>@Model.title</h1>
+                    <div class="title-detail">
+                        <p>Director: @Model.director</p>
+                        <p>IMDB: @Model.imdb</p>
+                    </div>
+                </div>
+
+                <div class="movie-info-detail">
+                    <p>Genre: @Model.genre</p>
+                    <p>Release Date: @Model.releaseDate</p>
+                    <p>Time: @String.Format("{0}m", (int)Model.duration)</p>
+                </div>
+                <div class="movie-info-desc">
+                    <p>@Model.description</p>
+                </div>
+                <div class="movie-info-button">
+
+                    @if (!isUpcoming)
+                    {
+                        <a href="@Url.Action("BuyTicket", "Ticket", new { id = Model.MovieID })"><button>Buy Ticket</button></a>
+                    }
+                    </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="@Url.Content("~/Scripts/scriptinspect.js")"></script>

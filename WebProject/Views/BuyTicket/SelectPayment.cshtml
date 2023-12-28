@@ -1,0 +1,78 @@
+﻿<div class="content-wrapper-payment">
+    <div class="payment-page">
+        <div class="payment-container">
+            <div class="payment-form" id="payment-form">
+                <form action="" method="post">
+                    <h1>Payment Information</h1>
+                    <div class="form-group">
+                        <label for="card-number">Card Number</label>
+                        <input type="text"
+                               id="cardnumber"
+                               placeholder="Card number"
+                               maxlength="16"
+                               oninput="this.value=this.value.replace(/[^0-9]/g,'');"
+                               required />
+                    </div>
+                    <div class="form-group">
+                        <div class="monthandyear">
+                            <div class="month">
+                                <label for="month">Month (MM)</label>
+                                <input type="text"
+                                       id="month"
+                                       placeholder="MM"
+                                       pattern="\d{1,2}"
+                                       oninput="this.value=this.value.replace(/[^0-9]/g,'').replace(/(\..*)\./g, '$1'); if (this.value.length > 2) this.value = this.value.slice(0, 2);"
+                                       required />
+                            </div>
+                            <div class="year">
+                                <label for="year">Year (YYYY)</label>
+                                <input type="text"
+                                       id="year"
+                                       placeholder="YYYY"
+                                       pattern="\d{4}"
+                                       oninput="this.value=this.value.replace(/[^0-9]/g,'').replace(/(\..*)\./g, '$1'); if (this.value.length > 4) this.value = this.value.slice(0, 4);"
+                                       required />
+                            </div>
+                            <div class="cvv">
+                                <label for="cvv">CVV</label>
+                                <input type="text"
+                                       id="cvv"
+                                       placeholder="CVV"
+                                       pattern="\d{3}"
+                                       oninput="this.value=this.value.replace(/[^0-9]/g,'').replace(/(\..*)\./g, '$1'); if (this.value.length > 3) this.value = this.value.slice(0, 3);"
+                                       required />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="nameoncard">Name On Card</label>
+                        <input type="text"
+                               id="cardname"
+                               placeholder="Name on card"
+                               required />
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn-confirm-payment">
+                            Confirm Payment
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="credit-card-preview">
+            <div class="credit-card-front-preview">
+                <img src="./images/creditcard_front.png" alt="" />
+                <h3 id="card-front-text1">1234 5678 9012 3456</h3>
+                <h3 id="card-front-text2">12/23</h3>
+                <h3 id="card-front-text3">John Doe</h3>
+            </div>
+            <div class="credit-card-back-preview">
+                <img src="./images/creditcard_back.png" alt="" />
+                <h3 id="card-back-text">123</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="@Url.Content("~/Scripts/payment.js")"></script>

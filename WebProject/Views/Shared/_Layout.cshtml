@@ -1,0 +1,168 @@
+﻿
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Popticket</title>
+    <link rel="stylesheet" href="@Url.Content("~/Content/style.css?v=3")" />
+
+    <!-- Include jQuery -->
+    <script src="@Url.Content("~/Scripts/jquery-3.4.1.js")"></script>
+
+    <!-- Include jQuery Validation -->
+    <script src="@Url.Content("~/Scripts/jquery.validate.js")"></script>
+    <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")"></script>
+</head>
+<body>
+    <div class="navbar">
+        <div class="navbar-logo">
+            <a href="@Url.Action("Homepage","Home")">
+                <img src="@Url.Content("~/images/logom3.png")" alt="" class="logo" />
+            </a>
+        </div>
+        <div class="navbar-categories">
+            <a href="@Url.Action("OnTheaters","Movies")"><h3>MOVIES</h3> </a>
+            </div>
+            @if (Session["IsAdmin"] != null && (bool)Session["IsAdmin"])
+            {       <div class="navbar-categories">
+                        <a href="@Url.Action("Index","MoviesAdmin")"><h3>MOVIES PANEL</h3> </a>
+                    </div>
+                    <div class="navbar-categories">
+                        <a href="@Url.Action("Index","TheatersAdmin")"><h3>THEATERS PANEL</h3> </a>
+                    </div>
+            }
+             
+        <div class="navbar-spacer"></div>
+        <div class="navbar-search">
+            <input type="text" id="searchInput" placeholder="Search..." />
+            <img src="@Url.Content("~/images/search.png")" alt="" class="navbar-search-icon" id="searchIcon" />
+        </div>
+        @if (Session["User"] != null)
+        {
+            var user = Session["User"] as WebProject.Models.User;
+            <div class="navbar-login" id="profile">
+                <a href="@Url.Action("UserProfile", "Account", new { id = user.UserID })">
+                    <img src="@Url.Content("~/images/user3.png")" alt="" />
+                    <p id="login-username">@user.username</p>
+                </a>
+            </div>
+            <div class="navbar-logout" id="logout">
+                <a href="@Url.Action("Logout", "Account")">
+                    <img src="@Url.Content("~/images/logout.png")" alt="Logout" />
+                </a>
+            </div>
+        }
+        else
+        {
+            <div class="navbar-login" id="login">
+                <img src="@Url.Content("~/images/user3.png")" alt="" />
+                <p>Login/Sign Up</p>
+            </div>
+        }
+
+
+
+    </div>
+    <div class="login_container" id="logincontainer">
+        <div class="close-button" id="closebutton">X</div>
+        <div class="login-form" id="login-form">
+            <form id="loginForm" method="post" data-login-url="@Url.Action("Login", "Account")">
+                @Html.AntiForgeryToken()
+                <h1>Login</h1>
+
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" name="username" id="username" placeholder="Username" required />
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password"
+                           name="password"
+                           id="password"
+                           placeholder="Password"
+                           required />
+
+                </div>
+                <div id="loginError" class="error-message" style="display:none"> • Username or Password is wrong </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn-login">Log In</button>
+                    <button type="button" class="btn-signup" id="sign-up-button">
+                        Sign Up
+                    </button>
+                </div>
+            </form>
+        </div>
+        <div id="login-container-message" class="success-message" style="display:none">Account successfully created.</div>
+        <div class="register-form" id="register-form">
+            <form id="registerForm" method="post" data-register-url="@Url.Action("Register", "Account")">
+                @Html.AntiForgeryToken()
+                <h1>Register</h1>
+                <div class="form-group form-name-surname">
+                    <div class="register-name-input">
+                        <label for="name">Name </label>
+                        <input type="text" name="name" id="reg-name" placeholder="Name" required pattern="[A-Za-z]{2,40}" title="Name should only contain letters. Length: 2-40 characters." />
+                    </div>
+                    <div class="register-surname-input">
+                        <label for="surname">Surname </label>
+                        <input type="text" name="surname" id="reg-surname" placeholder="Surname" required pattern="[A-Za-z]{2,40}" title="Surname should only contain letters. Length: 2-40 characters." />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" name="username" id="reg-username" placeholder="Username" required pattern="[A-Za-z0-9]{4,16}" title="Username should be 4-16 characters long and should not contain symbols." />
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" name="email" id="reg-email" placeholder="Email" required />
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" name="password" id="reg-password" placeholder="Password" required pattern=".{8,18}" title="Password should be 8-18 characters long." />
+                </div>
+                <div id="signupError" class="error-message" style="display:none"></div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn-signup" id="create-account-button">Sign Up</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+    <div id="top-button">
+        <div id="up">^</div>
+    </div>
+    @RenderBody()
+    <footer>
+        <div class="footer-logo">
+            <img src="@Url.Content("~/images/logom3.png")" alt="" />
+        </div>
+        <div class="footer-container">
+            <div class="footer-section">
+                <a href="@Url.Action("About","Home")" class="footerlink"><h3>About Us</h3></a>
+            </div>
+            <div class="footer-section">
+                <a href="@Url.Action("Contact","Home")" class="footerlink"><h3>Contact Us</h3></a>
+            </div>
+            <div class="footer-section">
+                <h3>Follow Us</h3>
+                <ul>
+                    <li>
+                        <a href="#"><img src="@Url.Content("~/images/fblogo.png")" alt="" />Facebook</a>
+                    </li>
+                    <li>
+                        <a href="#"><img src="@Url.Content("~/images/iglogo.png")" alt="" />Instagram</a>
+                    </li>
+                    <li>
+                        <a href="#"><img src="@Url.Content("~/images/x.png")" alt="" />Twitter</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+
+    <script src="@Url.Content("~/Scripts/layout.js")"></script>
+
+</body>
+</html>

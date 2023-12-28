@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="dd3ffa9902f54b31b126c517b05cafba" Name="Diagram1">
+        <EntityTypeShape EntityType="PopTicketModel.BookingDetails" Width="1.5" PointX="9.75" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="PopTicketModel.Bookings" Width="1.5" PointX="7.5" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="PopTicketModel.CardDetails" Width="1.5" PointX="12" PointY="8.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="PopTicketModel.Cities" Width="1.5" PointX="0.75" PointY="5.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="PopTicketModel.Movie" Width="1.5" PointX="3" PointY="8.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="PopTicketModel.Payment" Width="1.5" PointX="9.75" PointY="8.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="PopTicketModel.seatReservations" Width="1.5" PointX="7.5" PointY="5" IsExpanded="true" />
+        <EntityTypeShape EntityType="PopTicketModel.Seats" Width="1.5" PointX="5.25" PointY="5" IsExpanded="true" />
+        <EntityTypeShape EntityType="PopTicketModel.Showtime" Width="1.5" PointX="5.25" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="PopTicketModel.sysdiagrams" Width="1.5" PointX="0.75" PointY="1.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="PopTicketModel.Theater" Width="1.5" PointX="3" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="PopTicketModel.TicketTypes" Width="1.5" PointX="7.5" PointY="8.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="PopTicketModel.User" Width="1.5" PointX="5.25" PointY="8.625" IsExpanded="true" />
+        <AssociationConnector Association="PopTicketModel.FK_BookingDetails_Bookings" ManuallyRouted="false" />
+        <AssociationConnector Association="PopTicketModel.FK_BookingDetails_TicketTypes" ManuallyRouted="false" />
+        <AssociationConnector Association="PopTicketModel.FK_Bookings_Showtime" ManuallyRouted="false" />
+        <AssociationConnector Association="PopTicketModel.FK_Bookings_User" ManuallyRouted="false" ></AssociationConnector>
+        <AssociationConnector Association="PopTicketModel.FK_Payment_Bookings" ManuallyRouted="false" />
+        <AssociationConnector Association="PopTicketModel.FK_seatReservations_Bookings" ManuallyRouted="false" />
+        <AssociationConnector Association="PopTicketModel.FK_CardDetails_Payment" ManuallyRouted="false" />
+        <AssociationConnector Association="PopTicketModel.FK_Theater_Cities" ManuallyRouted="false" />
+        <AssociationConnector Association="PopTicketModel.FK_Showtime_Movie" ManuallyRouted="false" />
+        <AssociationConnector Association="PopTicketModel.FK_seatReservations_Seats" ManuallyRouted="false" />
+        <AssociationConnector Association="PopTicketModel.FK_seatReservations_Showtime" ManuallyRouted="false" />
+        <AssociationConnector Association="PopTicketModel.FK_Seats_Theater" ManuallyRouted="false" />
+        <AssociationConnector Association="PopTicketModel.FK_Showtime_Theater" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

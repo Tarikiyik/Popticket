@@ -1,0 +1,60 @@
+﻿@model List<WebProject.Models.Movie>
+@{
+    ViewBag.Title = "Upcoming";
+}
+
+<div class="content-wrapper">
+    <div class="moviespage">
+        <div class="moviespageheader">
+            <div class="textarea">
+                <a href="@Url.Action("OnTheaters","Movies")">On Theaters</a>
+                <a href="@Url.Action("Upcoming","Movies")" class="active">Upcoming</a>
+            </div>
+            <div class="orderarea">
+                <div class="custom-select-wrapper">
+                    <div class="custom-select-visible">
+                        <span class="custom-select-placeholder" id="custom-placeholder">Select an option</span>
+                        <span class="custom-select-arrow">▼</span>
+                    </div>
+                    <ul class="custom-select-options hidden">
+                        <li data-value="smart">Smart Order</li>
+                        <li data-value="date">Order by Date</li>
+                        <li data-value="rating">Order by IMDB</li>
+                    </ul>
+                    <select class="custom-select"
+                            name="sorting"
+                            tabindex="-1"
+                            aria-hidden="true">
+                        <option value="smart">Smart Order</option>
+                        <option value="date">Order by Date</option>
+                        <option value="rating">Order by IMDB</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="movieslist">
+            <div class="movieslistrow">
+                @foreach (var movie in Model)
+                {
+                    <div class="movie-banner">
+                        <div class="movie-banner-img">
+                            <img src="@Url.Content("~/images/" + movie.movieImg)" alt="@movie.title" class="movie-image" />
+                            <div class="movie-banner-img-hover">
+                                <p class="bannerimdb">IMDB: @movie.imdb</p>
+                                <a href="@Url.Action("Inspect", "Movies", new { id = movie.MovieID })" class="bannerbutton inspectbutton">Inspect</a>
+                            </div>
+                        </div>
+                        <div class="movie-banner-details">
+                            <h3>@movie.title</h3>
+                            <p>@movie.duration.ToString()</p>
+                            <p>@movie.genre</p>
+                        </div>
+                    </div>
+                }
+                <!-- Repeat for each movie -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="@Url.Content("~/Scripts/scriptupcoming.js")"></script>

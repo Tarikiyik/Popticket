@@ -1,0 +1,103 @@
+﻿@model WebProject.Models.User
+@{
+    ViewBag.Title = "User Profile";
+}
+
+<div class="content-wrapper-profile">
+    <div class="profile-page">
+        <div class="profile-container">
+            <div class="profile-row">
+                <div class="profile-picture-column">
+                    <!-- Profile picture card-->
+                    <div class="profile-card">
+                        <div class="profile-card-header">Profile Picture</div>
+                        <div class="profile-card-body text-center">
+                            <!-- Profile picture image-->
+                            <img class="img-profile" src="./images/avatar1.png" alt="" />
+                            <!-- Profile picture help block-->
+                            <div class="img-profile-helper">
+                                JPG or PNG no larger than 5 MB
+                            </div>
+                            <!-- Profile picture upload button-->
+                            <button class="img-profile-btn" type="button">
+                                Upload new image
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="profile-details-column">
+                    <!-- Account details card-->
+                    <div class="profile-card">
+                        <div class="profile-card-header">Account Details</div>
+                        <div class="profile-card-body">
+                            <form method="post" action="@Url.Action("UpdateProfile", "Account")">
+                                @Html.AntiForgeryToken()
+
+                                <!-- Form Group (username) - Display only, not editable -->
+                                <div class="form-group">
+                                    <label for="inputUsername">Username</label>
+                                    <input class="form-input" id="inputUsername" type="text" value="@Model.username" readonly />
+                                </div>
+                                <div class="form-row">
+                                    <!-- Form Group (first name)-->
+                                    <div class="form-group">
+                                        <label for="inputFirstName">First name</label>
+                                        <input class="form-input"
+                                               id="inputFirstName"
+                                               type="text"
+                                               placeholder="Enter your first name"
+                                               value="@Model.firstName" readonly />
+                                    </div>
+                                    <!-- Form Group (last name)-->
+                                    <div class="form-group">
+                                        <label for="inputLastName">Last name</label>
+                                        <input class="form-input"
+                                               id="inputLastName"
+                                               type="text"
+                                               placeholder="Enter your last name"
+                                               value="@Model.lastName" readonly />
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="inputEmailAddress">Email address</label>
+                                    <input class="form-input"
+                                           id="inputEmailAddress"
+                                           type="email"
+                                           placeholder="name@example.com"
+                                           value="@Model.email" readonly />
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="inputPhone">Phone number</label>
+                                        <input class="form-input" id="inputPhone" name="PhoneNumber" type="tel" pattern="\d{10}" title="Phone number must be 10 digits" value="@Model.phoneNumber" />
+                                    </div>
+
+                                    <!-- Form Group (birthday) -->
+                                    <div class="form-group">
+                                        <label for="inputBirthday">Birthday</label>
+                                        <input class="form-input" id="inputBirthday" name="Birthday" type="date" value="@Model.birthday?.ToString(" yyyy-MM-dd")" />
+                                    </div>
+                                </div>
+                                <!-- Save changes button -->
+                                
+                                    <button class="details-profile-btn" type="submit">
+                                        Save changes
+                                    </button>
+                            </form>
+                                
+                            <!-- Delete Account Form -->
+                            <form method="post" action="@Url.Action("DeleteAccount", "Account")" onsubmit="return confirm('Are you sure you want to delete your account? This action cannot be undone.');" class="delete-account-form">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="userId" value="@Model.UserID" />
+                                <button type="submit" class="details-profile-btn delete-account-btn">Delete Account</button>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

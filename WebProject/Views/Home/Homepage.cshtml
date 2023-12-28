@@ -1,0 +1,130 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+
+<div class="slide_main">
+    <div class="slider">
+        <div class="slides">
+            <input type="radio" name="radio-btn" id="radio1" />
+            <input type="radio" name="radio-btn" id="radio2" />
+            <input type="radio" name="radio-btn" id="radio3" />
+
+            <div class="slide first">
+                <div class="movietext">
+                    <div class="movietitle">
+                        <h1>Star Wars: Episode IV - A New Hope</h1>
+                    </div>
+                    <div class="moviedesc">
+                        <p>
+                            Luke Skywalker joins forces with a Jedi Knight, a cocky pilot,
+                            a Wookiee and two droids to save the galaxy from the Empire's
+                            world-destroying battle station, while also attempting to
+                            rescue Princess Leia from the mysterious Darth Vader.
+                        </p>
+                    </div>
+                    <div class="moviedet">
+                        <div class="moviedirector">
+                            <p>Director: George Lucas</p>
+                        </div>
+                        <div class="movietimeandrate">
+                            <h4>Süre: 1 Saat 57dk</h4>
+                            <h4>Derece: 8.5</h4>
+                        </div>
+                        <div class="movieinspect">
+                            <button>Inspect</button>
+                        </div>
+                    </div>
+                </div>
+                <img src="@Url.Content("~/images/starwarsep7_banner.jpg")" alt="" />
+            </div>
+            <div class="slide">
+                <img src="@Url.Content("~/images/movie2.jpg")" alt="" />
+            </div>
+            <div class="slide">
+                <img src="@Url.Content("~/images/movie3.jpg")" alt="" />
+            </div>
+            <div class="navigation-auto">
+                <div class="auto-btn1"></div>
+                <div class="auto-btn2"></div>
+                <div class="auto-btn3"></div>
+            </div>
+        </div>
+        <div class="navigation-manual">
+            <label for="radio1" class="manual-btn"></label>
+            <label for="radio2" class="manual-btn"></label>
+            <label for="radio3" class="manual-btn"></label>
+        </div>
+    </div>
+</div>
+
+<div class="ontheater">
+    <a href="@Url.Action("OnTheaters","Movies")" class="carousel-text">On Theaters</a>
+    <div class="carousel">
+        <div class="carousel_container" id="carousel_cont">
+            <div class="carousel_item">
+                <img src="@Url.Content("~/images/smovie3.png")" alt="Movie 1" />
+                <div class="carousel-item-hover">
+                    <p class="bannerimdb">IMDB: 6.1</p>
+                    <button class="bannerbutton buybutton">Buy Ticket</button>
+                    <button class="bannerbutton inspectbutton">Inspect</button>
+                </div>
+            </div>
+            <div class="carousel_item">
+                <img src="@Url.Content("~/images/smovie3.png")" alt="Movie 2" />
+            </div>
+            <div class="carousel_item">
+                <img src="@Url.Content("~/images/smovie3.png")" alt="Movie 3" />
+            </div>
+            <div class="carousel_item">
+                <img src="@Url.Content("~/images/smovie4.png")" alt="Movie 4" />
+            </div>
+
+        </div>
+
+        <button class="carousel_prev" id="carousel_previous_button">
+            &lt;
+        </button>
+        <button class="carousel_next" id="carousel_next_button">&gt;</button>
+    </div>
+</div>
+
+<div class="upcoming">
+    <a href="@Url.Action("Upcoming","Movies")" class="carousel-text">Upcoming Movies</a>
+    <div class="carousel">
+        <div class="carousel_container" id="upcoming_carousel_cont">
+            <div class="carousel_item">
+                <img src="@Url.Content("~/images/smovie3.png")" alt="Movie 1" />
+                <div class="carousel-item-hover">
+                    <p class="bannerimdb">IMDB: 6.1</p>
+                    <button class="bannerbutton buybutton">Buy Ticket</button>
+                    <button class="bannerbutton inspectbutton">Inspect</button>
+                </div>
+            </div>
+            <div class="carousel_item">
+                <img src="@Url.Content("~/images/smovie3.png")" alt="Movie 2" />
+            </div>
+            <div class="carousel_item">
+                <img src="@Url.Content("~/images/smovie3.png")" alt="Movie 3" />
+            </div>
+            <div class="carousel_item">
+                <img src="@Url.Content("~/images/smovie4.png")" alt="Movie 4" />
+            </div>
+        </div>
+
+        <button class="carousel_prev" id="upcoming_carousel_previous_button">
+            &lt;
+        </button>
+        <button class="carousel_next" id="upcoming_carousel_next_button">
+            &gt;
+        </button>
+    </div>
+</div>
+
+
+
+<script src="@Url.Content("~/Scripts/script.js")"></script>
+
+
