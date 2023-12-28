@@ -42,7 +42,7 @@
                             <img src="@Url.Content("~/images/" + movie.movieImg)" alt="@movie.title" class="movie-image" />
                             <div class="movie-banner-img-hover">
                                 <p class="bannerimdb">IMDB: @movie.imdb</p>
-                                <button class="bannerbutton buybutton">Buy Ticket</button>
+                                <a href="@Url.Action("SelectTicket", "BuyTicket", new { movieId = movie.MovieID })" class="bannerbutton buybutton">Buy Ticket</a>
                                 <a href="@Url.Action("Inspect", "Movies", new { id = movie.MovieID })" class="bannerbutton inspectbutton">Inspect</a>
                             </div>
                         </div>

@@ -1272,7 +1272,9 @@ footer {
   align-items: center;
   background: rgba(255, 255, 255, 0.9);
 }
-
+.selected {
+   background : "rgb(255, 208, 0)";
+}
 /* For Webkit browsers like Chrome and Safari */
 .buy-info-date-select::-webkit-scrollbar {
   display: none;
@@ -1705,7 +1707,7 @@ footer {
 }
 
 /* You can add more styling to seat classes to represent different states */
-.seat.selected {
+.seat.selecteded {
   background-color: #ff851b;
 }
 

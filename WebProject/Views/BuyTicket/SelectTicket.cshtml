@@ -1,211 +1,114 @@
-﻿<div class="content-wrapper">
+﻿@model WebProject.ViewModels.SelectTicketViewModel
+
+
+
+<div class="content-wrapper">
     <div class="buy-ticket-page">
+        <!-- Movie Information Section -->
         <div class="movie-info">
+            <!-- Movie Poster -->
             <div class="movie-info-img">
-                <img src="./images/smovie2.PNG" alt="" />
+                <img src="@Url.Content("~/images/" + Model.Movie.movieImg)" alt="@Model.Movie.title Poster" />
             </div>
+            <!-- Movie Details Text -->
             <div class="movie-info-text">
                 <div class="movie-title">
-                    <h1>Oppenheimer</h1>
+                    <h1>@Model.Movie.title</h1>
                     <div class="title-detail">
-                        <p>Director: Christopher Nolan</p>
-                        <p>IMDB: 9.9</p>
+                        <p>Director: @Model.Movie.director</p>
+                        <p>IMDB: @Model.Movie.imdb</p>
                     </div>
                 </div>
-
                 <div class="movie-info-detail">
-                    <p>Genre: Belgesel</p>
-                    <p>Release Date: 08.12.2023</p>
-                    <p>Time: 1h 45m</p>
+                    <p>Genre: @Model.Movie.genre</p>
+                    <p>Release Date: @Model.Movie.releaseDate.ToString("dd.MM.yyyy")</p>
+                    <p>Time: @Model.Movie.duration</p>
                 </div>
                 <div class="movie-info-desc">
-                    <p>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                        Placeat, autem. Tempora blanditiis odio impedit enim adipisci
-                        nesciunt aperiam distinctio tenetur.
-                    </p>
+                    <p>@Model.Movie.description</p>
                 </div>
             </div>
         </div>
+
+        <!-- Ticket Selection Section -->
         <div class="buy-info" id="buy-info">
+            <!-- Theater Selection -->
             <div class="buy-info-theater-select">
                 <div class="theater-select-header">
                     <h3>Choose Theater</h3>
-                    <div class="orderarea">
-                        <div class="custom-select-wrapper">
-                            <div class="custom-select-visible">
-                                <span class="custom-select-placeholder"
-                                      id="custom-placeholder">Select a City</span>
-                                <span class="custom-select-arrow">▼</span>
-                            </div>
-                            <ul class="custom-select-options hidden">
-                                <li data-value="city1">İstanbul</li>
-                                <li data-value="city2">Ankara</li>
-                                <li data-value="city3">İzmir</li>
-                                <li data-value="city4">Eskişehir</li>
-                                <li data-value="city5">Bursa</li>
-                                <li data-value="city6">Antalya</li>
-                            </ul>
-                            <select class="custom-select"
-                                    name="sorting"
-                                    tabindex="-1"
-                                    aria-hidden="true">
-                                <option value="city1">İstanbul</option>
-                                <option value="city2">Ankara</option>
-                                <option value="city3">İzmir</option>
-                                <option value="city4">Eskişehir</option>
-                                <option value="city5">Bursa</option>
-                                <option value="city6">Antalya</option>
-                            </select>
-                        </div>
-                    </div>
                 </div>
                 <div class="theater-select">
-                    <div class="theater-select-container" id="theater-selection">
-                        <h4>İstanbulası sineması 1</h4>
-                        <p>istanbulda bir sinema</p>
-                    </div>
-                    <div class="theater-select-container" id="theater-selection">
-                        <h4>İstanbulası sineması 1</h4>
-                        <p>istanbulda bir sinema</p>
-                    </div>
-                    <div class="theater-select-container" id="theater-selection">
-                        <h4>İstanbulası sineması 1</h4>
-                        <p>istanbulda bir sinema</p>
-                    </div>
-                    <div class="theater-select-container" id="theater-selection">
-                        <h4>İstanbulası sineması 1</h4>
-                        <p>istanbulda bir sinema</p>
-                    </div>
-                    <div class="theater-select-container" id="theater-selection">
-                        <h4>İstanbulası sineması 1</h4>
-                        <p>istanbulda bir sinema</p>
-                    </div>
-                    <div class="theater-select-container" id="theater-selection">
-                        <h4>İstanbulası sineması 1</h4>
-                        <p>istanbulda bir sinema</p>
-                    </div>
-                    <div class="theater-select-container" id="theater-selection">
-                        <h4>İstanbulası sineması 1</h4>
-                        <p>istanbulda bir sinema</p>
-                    </div>
+                    @foreach (var theater in Model.Theaters)
+                    {
+                        <div class="theater-select-container" data-theater-id="@theater.theaterID">
+                            <h4>@theater.name</h4>
+                            <p>@theater.address</p>
+                        </div>
+                    }
                 </div>
             </div>
+
+            <!-- Date and Time Selection -->
             <div class="buy-info-dateandtime-select">
                 <div class="dateandtime-select-title">
                     <h3>Choose Date & Time</h3>
                 </div>
-                <div class="buy-info-date-select">
-                    <div class="date-container" id="date-selection">
-                        <h3>13 Aralık</h3>
-                    </div>
-                    <div class="date-container" id="date-selection">
-                        <h3>13 Aralık</h3>
-                    </div>
-                    <div class="date-container" id="date-selection">
-                        <h3>13 Aralık</h3>
-                    </div>
-                    <div class="date-container" id="date-selection">
-                        <h3>13 Aralık</h3>
-                    </div>
-                    <div class="date-container" id="date-selection">
-                        <h3>13 Aralık</h3>
-                    </div>
-                    <div class="date-container" id="date-selection">
-                        <h3>13 Aralık</h3>
-                    </div>
-                    <div class="date-container" id="date-selection">
-                        <h3>13 Aralık</h3>
-                    </div>
-                    <div class="date-container" id="date-selection">
-                        <h3>13 Aralık</h3>
-                    </div>
-                    <div class="date-container" id="date-selection">
-                        <h3>13 Aralık</h3>
-                    </div>
-                    <div class="date-container" id="date-selection">
-                        <h3>13 Aralık</h3>
-                    </div>
+                <div class="buy-info-date-select" id="date-selection">
+                    @foreach (var date in Model.Showtimes.Select(s => s.date).Distinct())
+                    {
+                        <div class="date-container" data-date="@date.ToString("yyyy-MM-dd")">
+                            <h3>@date.ToString("dd MMMM")</h3>
+                        </div>
+                    }
                 </div>
-                <div class="buy-info-time-select">
-                    <div class="time-container" id="time-selection">
-                        <h3>10:00</h3>
-                    </div>
-                    <div class="time-container" id="time-selection">
-                        <h3>10:00</h3>
-                    </div>
-                    <div class="time-container" id="time-selection">
-                        <h3>10:00</h3>
-                    </div>
-                    <div class="time-container" id="time-selection">
-                        <h3>10:00</h3>
-                    </div>
-                    <div class="time-container" id="time-selection">
-                        <h3>10:00</h3>
-                    </div>
-                    <div class="time-container" id="time-selection">
-                        <h3>10:00</h3>
-                    </div>
-                    <div class="time-container" id="time-selection">
-                        <h3>10:00</h3>
-                    </div>
-
-                    <div class="time-container" id="time-selection">
-                        <h3>10:00</h3>
-                    </div>
+                <div class="buy-info-time-select" id="time-selection">
+                    @foreach (var showtime in Model.Showtimes)
+                    {
+                        string formattedTime = showtime.time.ToString(@"hh\:mm");
+                        <div class="time-container" data-time="@formattedTime" data-showtime-id="@showtime.showtimeID">
+                            <h3>@formattedTime</h3>
+                        </div>
+                    }
                 </div>
             </div>
+
+            <!-- Ticket Type and Quantity Selection -->
             <div class="buy-info-ticket-wrapper">
                 <div class="buy-info-ticket-select">
                     <div class="ticket-select-title">
                         <h3>Choose Ticket</h3>
-                        <div class="buy-info-ticket-price">
-                            <h3 id="ticket-total-price">Total Price: 0.00TL</h3>
-                        </div>
+                    </div>
+                    <div class="buy-info-ticket-options">
+                        @foreach (var ticketType in Model.TicketTypes)
+                        {
+                            <div class="buy-info-ticket-container" data-ticket-type-id="@ticketType.ticketTypeID">
+                                <h3>@ticketType.typeName</h3>
+                                <div class="buy-info-ticket-pricing">
+                                    <h3>@ticketType.price.ToString("0.00TL")</h3>
+                                    <div class="buy-info-ticket-count">
+                                        <button class="buy-info-ticket-count-button reduce" data-action="reduce">-</button>
+                                        <span class="ticket-count-value">0</span>
+                                        <button class="buy-info-ticket-count-button increase" data-action="increase">+</button>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    <div class="buy-info-ticket-price">
+                        <h3 id="ticket-total-price">Total Price: 0.00TL</h3>
                     </div>
 
-                    <div class="buy-info-ticket-options">
-                        <div class="buy-info-ticket-container">
-                            <h3>Standard</h3>
-                            <div class="buy-info-ticket-pricing">
-                                <h3 id="ticket-price-standard">250.00TL</h3>
-                                <div class="buy-info-ticket-count">
-                                    <button class="buy-info-ticket-count-button"
-                                            id="ticket-reduce-count-sta">
-                                        -
-                                    </button>
-                                    <h3 id="buy-info-ticket-count-value-sta">0</h3>
-                                    <button class="buy-info-ticket-count-button"
-                                            id="ticket-increase-count-sta">
-                                        +
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="buy-info-ticket-container">
-                            <h3>Student</h3>
-                            <div class="buy-info-ticket-pricing">
-                                <h3 id="ticket-price-student">200.00TL</h3>
-                                <div class="buy-info-ticket-count">
-                                    <button class="buy-info-ticket-count-button"
-                                            id="ticket-reduce-count-stu">
-                                        -
-                                    </button>
-                                    <h3 id="buy-info-ticket-count-value-stu">0</h3>
-                                    <button class="buy-info-ticket-count-button"
-                                            id="ticket-increase-count-stu">
-                                        +
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
+                    <!-- Continue Button -->
+                    <div class="ticket-confirmation">
+                        <button id="ticket-confirmation-button">Continue</button>
                     </div>
                 </div>
-                <div class="ticket-confirmation">
-                    <a href="selectseat.html"><button id="ticket-confirmation-button">Continue</button></a>
-                </div>
             </div>
+
+
         </div>
     </div>
 </div>
-<script src="@Url.Content("~/Scripts/buyticket.js")"></script>
+
+<!-- Link to the JavaScript file -->
+<script src="@Url.Content("~/Scripts/scriptbuyticket.js")"></script>
