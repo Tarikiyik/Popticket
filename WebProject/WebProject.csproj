@@ -201,6 +201,9 @@
     <Compile Include="Models\Theater.cs">
       <DependentUpon>PopticketDatabaseModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\TheaterLayouts.cs">
+      <DependentUpon>PopticketDatabaseModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\TicketTypes.cs">
       <DependentUpon>PopticketDatabaseModel.tt</DependentUpon>
     </Compile>

@@ -12,21 +12,21 @@ namespace WebProject.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Seats
+    public partial class TheaterLayouts
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Seats()
+        public TheaterLayouts()
         {
-            this.seatReservations = new HashSet<seatReservations>();
+            this.Seats = new HashSet<Seats>();
         }
     
-        public int SeatID { get; set; }
         public int TheaterLayoutID { get; set; }
-        public string SeatRowLetter { get; set; }
-        public int SeatRowNumber { get; set; }
+        public int TheaterID { get; set; }
+        public int NumberOfRows { get; set; }
+        public int SeatsPerRow { get; set; }
     
-        public virtual TheaterLayouts TheaterLayouts { get; set; }
+        public virtual Theater Theater { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<seatReservations> seatReservations { get; set; }
+        public virtual ICollection<Seats> Seats { get; set; }
     }
 }
