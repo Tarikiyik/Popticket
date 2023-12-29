@@ -34,11 +34,20 @@
             <div class="buy-info-theater-select">
                 <div class="theater-select-header">
                     <h3>Choose Theater</h3>
+                    <div class="city-filter">
+                        <select id="city-dropdown">
+                            <option value="">Select City</option>
+                            @foreach (var city in Model.Cities)
+                            {
+                                <option value="@city.cityID">@city.cityName</option>
+                            }
+                        </select>
+                    </div>
                 </div>
-                <div class="theater-select">
+                <div id="theater-selection" class="theater-select">
                     @foreach (var theater in Model.Theaters)
                     {
-                        <div class="theater-select-container" data-theater-id="@theater.theaterID">
+                        <div class="theater-select-container" data-theater-id="@theater.theaterID" data-city="@theater.cityID">
                             <h4>@theater.name</h4>
                             <p>@theater.address</p>
                         </div>

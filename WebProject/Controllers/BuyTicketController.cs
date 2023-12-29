@@ -23,16 +23,40 @@ namespace WebProject.Controllers
             var theaters = db.Theater.ToList();
             var showtimes = db.Showtime.Where(s => s.movieID == movieId).ToList();
             var ticketTypes = db.TicketTypes.ToList();
+            var cities = db.Cities.ToList();
 
             var viewModel = new SelectTicketViewModel
             {
                 Movie = movie,
                 Theaters = theaters,
                 Showtimes = showtimes,
-                TicketTypes = ticketTypes // Make sure to add this to your ViewModel
+                TicketTypes = ticketTypes,
+                Cities = cities
             };
 
+
             return View(viewModel);
+        }
+
+        public ActionResult GetTheatersByCity(int? cityId)
+        {
+            try
+            {
+                var theatersQuery = db.Theater.AsQueryable();
+
+                if (cityId.HasValue)
+                {
+                    theatersQuery = theatersQuery.Where(t => t.cityID == cityId.Value);
+                }
+
+                var theaters = theatersQuery.ToList();
+                return Json(new { success = true, theaters = theaters.Select(t => new { t.theaterID, t.name, t.address, t.cityID }) }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception here
+                return Json(new { success = false, error = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
         }
 
         public ActionResult GetDates(int theaterId, int movieId)

@@ -5,6 +5,9 @@ document.addEventListener("DOMContentLoaded", function () {
     let selectedTickets = {};
     let movieId = document.querySelector('.buy-ticket-page').dataset.movieId;
 
+    // Call this function on initial load so the theaters are displayed before any city is selected
+    fetchTheaters(null);
+
     // Function to clear selections
     function clearSelections(selector) {
         document.querySelectorAll(selector).forEach(el => el.classList.remove('selected'));
@@ -31,10 +34,15 @@ document.addEventListener("DOMContentLoaded", function () {
             type: 'GET',
             data: { theaterId: theaterId, movieId: movieId },
             success: function (response) {
+                // Clear the date containers
                 let dateSelectionDiv = document.getElementById("date-selection");
-                // Clear the container safely
                 while (dateSelectionDiv.firstChild) {
                     dateSelectionDiv.removeChild(dateSelectionDiv.firstChild);
+                }
+                // Clear the time containers
+                let timeSelectionDiv = document.getElementById("time-selection");
+                while (timeSelectionDiv.firstChild) {
+                    timeSelectionDiv.removeChild(timeSelectionDiv.firstChild);
                 }
                 // Append new date containers if the request was successful
                 if (response.success) {
@@ -106,6 +114,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("date-selection").addEventListener("click", function (e) {
         if (e.target.classList.contains('date-container')) {
             clearSelections("#date-selection .date-container.selected");
+            clearSelections("#time-selection .time-container.selected");
             e.target.classList.add('selected');
             selectedDate = e.target.dataset.date;
             fetchTimes(selectedDate);
@@ -179,6 +188,83 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     });
+
+    // Event listener for the city dropdown change
+    document.getElementById('city-dropdown').addEventListener('change', function () {
+        clearSelections(".theater-select-container.selected");
+        clearSelections("#date-selection .date-container.selected");
+        clearSelections("#time-selection .time-container.selected");
+        const selectedCityId = this.value;
+        fetchTheaters(selectedCityId);
+        selectedTheater = null;
+        selectedDate = null;
+        selectedTime = null;
+        updateContinueButtonState();
+    });
+
+    function fetchTheaters(cityId) {
+        $.ajax({
+            url: '/BuyTicket/GetTheatersByCity',
+            type: 'GET',
+            data: { cityId: cityId }, // Pass the selected cityId to the controller
+            success: function (response) {
+                if (response.success) {
+                    let dateSelectionDiv = document.getElementById("date-selection");
+                    while (dateSelectionDiv.firstChild) {
+                        dateSelectionDiv.removeChild(dateSelectionDiv.firstChild);
+                    }
+
+                    let timeSelectionDiv = document.getElementById("time-selection");
+                    while (timeSelectionDiv.firstChild) {
+                        timeSelectionDiv.removeChild(timeSelectionDiv.firstChild);
+                    }
+                    updateTheaterSelection(response.theaters);
+                } else {
+                    console.error("Error fetching theaters: ", response.error);
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error("Error fetching theaters: ", status, error);
+            }
+        });
+    }
+
+    function updateTheaterSelection(theaters) {
+        const theaterSelectionDiv = document.getElementById("theater-selection");
+        // Clear the container safely
+        while (theaterSelectionDiv.firstChild) {
+            theaterSelectionDiv.removeChild(theaterSelectionDiv.firstChild);
+        }
+        // Append new theater containers
+        theaters.forEach(theater => {
+            const theaterDiv = document.createElement('div');
+            theaterDiv.className = 'theater-select-container';
+            theaterDiv.dataset.theaterId = theater.theaterID;
+            theaterDiv.dataset.cityId = theater.cityID;
+            theaterDiv.innerHTML = `<h4>${theater.name}</h4><p>${theater.address}</p>`;
+            theaterSelectionDiv.appendChild(theaterDiv);
+        });
+
+        // Reattach event listeners to the new theater elements
+        attachTheaterSelectionEvents();
+    }
+
+    function attachTheaterSelectionEvents() {
+        // Attach click event listeners to all theater-select-container divs
+        document.querySelectorAll(".theater-select-container").forEach(container => {
+            container.addEventListener("click", function () {
+                clearSelections(".theater-select-container.selected");
+                clearSelections("#date-selection .date-container.selected");
+                clearSelections("#time-selection .time-container.selected");
+                this.classList.add('selected');
+                selectedTheater = this.dataset.theaterId;
+                fetchDates(selectedTheater);
+                selectedDate = null;
+                selectedTime = null;
+                updateContinueButtonState();
+            });
+        });
+    }
 
     function formatDate(dateString) {
         var date = new Date(dateString);

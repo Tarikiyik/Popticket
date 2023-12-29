@@ -12,5 +12,6 @@ namespace WebProject.ViewModels
         public List<Theater> Theaters { get; set; }
         public List<Showtime> Showtimes { get; set; }
         public List<TicketTypes> TicketTypes { get; set; }
+        public List<Cities> Cities { get; set; }
     }
 }

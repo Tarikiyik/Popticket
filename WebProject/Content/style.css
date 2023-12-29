@@ -1362,7 +1362,7 @@ footer {
   justify-content: center;
 }
 
-.ticket-confirmation a button {
+#ticket-confirmation-button {
   border: 1px solid rgb(95, 95, 95);
   height: 64px;
   width: 90%;
@@ -1378,15 +1378,46 @@ footer {
   left: 5%;
 }
 
-.ticket-confirmation a button:hover {
-  background: rgb(255, 208, 0);
-  color: black;
+#ticket-confirmation-button:hover {
+   background: rgb(255, 208, 0);
+   color: black;}
+
+#ticket-confirmation-button:disabled {
+   border: 1px solid rgb(95, 95, 95);
+   height: 64px;
+   width: 90%;
+   border-radius: 30px;
+   background: rgb(95, 95, 95, 0.15);
+   color: white;
+   text-align: center;
+   cursor: default;
+   font-weight: bold;
+   font-size: 16px;
+   position: absolute;
+   bottom: 0;
+   left: 5%;
+}
+
+#ticket-confirmation-button:disabled:hover {
+    border: 1px solid rgb(95, 95, 95);
+    height: 64px;
+    width: 90%;
+    border-radius: 30px;
+    background: rgb(95, 95, 95, 0.15);
+    color: white;
+    text-align: center;
+    cursor: default;
+    font-weight: bold;
+    font-size: 16px;
+    position: absolute;
+    bottom: 0;
+    left: 5%;
 }
 
 .payment-form {
-  color: white;
-  text-align: left;
-  width: 60%;
+    color: white;
+    text-align: left;
+    width: 60%;
 }
 
 .payment-page {
