@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let selectedTheater = null;
     let selectedDate = null;
     let selectedTime = null;
+    let ticketSelected = false;
     let selectedTickets = {};
     let movieId = document.querySelector('.buy-ticket-page').dataset.movieId;
 
@@ -13,18 +14,42 @@ document.addEventListener("DOMContentLoaded", function () {
         document.querySelectorAll(selector).forEach(el => el.classList.remove('selected'));
     }
 
-    // Function to update total price
+    // Clear date and time selections
+    function clearTimeSelection() {
+        let timeSelectionDiv = document.getElementById("time-selection");
+        while (timeSelectionDiv.firstChild) {
+            timeSelectionDiv.removeChild(timeSelectionDiv.firstChild);
+        }
+    }
+
+    function clearDateAndTimeSelection() {
+        let dateSelectionDiv = document.getElementById("date-selection");
+        while (dateSelectionDiv.firstChild) {
+            dateSelectionDiv.removeChild(dateSelectionDiv.firstChild);
+        }
+        clearTimeSelection();
+    }
+
+    // Function to update total price and handle ticket selection
     function updateTotalPrice() {
-        let total = Object.values(selectedTickets).reduce((sum, ticket) => {
-            return sum + (ticket.quantity * ticket.price);
-        }, 0);
+        let total = 0;
+        ticketSelected = false; // Flag to detect if any ticket quantity is more than 0
+
+        for (const ticket of Object.values(selectedTickets)) {
+            total += (ticket.quantity * ticket.price);
+            if (ticket.quantity > 0) ticketSelected = true; // At least one ticket is selected
+        }
+
         document.getElementById("ticket-total-price").textContent = `Total Price: ${total.toFixed(2)}TL`;
+
+        // Call the function to enable or disable the continue button based on ticket selection
+        updateContinueButtonState(ticketSelected);
     }
 
     // Function to enable/disable the continue button
     function updateContinueButtonState() {
         const continueButton = document.getElementById('ticket-confirmation-button');
-        continueButton.disabled = !(selectedTheater && selectedDate && selectedTime && Object.keys(selectedTickets).length > 0);
+        continueButton.disabled = !(selectedTheater && selectedDate && selectedTime && ticketSelected);
     }
 
     // Function to fetch dates based on selected theater
@@ -95,45 +120,42 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // Event listeners for theater selection
-    document.querySelectorAll(".theater-select-container").forEach(container => {
-        container.addEventListener("click", function () {
-            clearSelections(".theater-select-container.selected");
-            clearSelections("#date-selection .date-container.selected");
-            clearSelections("#time-selection .time-container.selected");
-            this.classList.add('selected');
-            selectedTheater = this.dataset.theaterId;
-            fetchDates(selectedTheater);
-            selectedDate = null;
-            selectedTime = null;
-            updateContinueButtonState();
-        });
-    });
-
     // Add event delegation for dynamically created date elements
     document.getElementById("date-selection").addEventListener("click", function (e) {
         if (e.target.classList.contains('date-container')) {
-            clearSelections("#date-selection .date-container.selected");
+            // Toggle selection if the same date is clicked again
+            if (e.target.classList.contains('selected')) {
+                e.target.classList.remove('selected');
+                selectedDate = null;
+            } else {
+                clearSelections("#date-selection .date-container.selected");
+                e.target.classList.add('selected');
+                selectedDate = e.target.dataset.date;
+            }
+            // Clear times when date selection changes
             clearSelections("#time-selection .time-container.selected");
-            e.target.classList.add('selected');
-            selectedDate = e.target.dataset.date;
-            fetchTimes(selectedDate);
-            selectedTime = null; // Reset selected time
-            document.getElementById("time-selection").textContent = ''; // Clear time selection
+            selectedTime = null;
             updateContinueButtonState();
+            if (selectedDate) {
+                fetchTimes(selectedDate);
+            } else {
+                clearTimeSelection();
+            }
         }
     });
 
     // Add event delegation for dynamically created time elements
     document.getElementById("time-selection").addEventListener("click", function (e) {
         if (e.target.classList.contains('time-container')) {
-            // Remove the 'selected' class from all time containers
-            document.querySelectorAll("#time-selection .time-container").forEach(timeDiv => {
-                timeDiv.classList.remove('selected');
-            });
-            // Add the 'selected' class to the clicked time container
-            e.target.classList.add('selected');
-            selectedTime = e.target.dataset.time;
+            // Toggle selection if the same time is clicked again
+            if (e.target.classList.contains('selected')) {
+                e.target.classList.remove('selected');
+                selectedTime = null;
+            } else {
+                clearSelections("#time-selection .time-container.selected");
+                e.target.classList.add('selected');
+                selectedTime = e.target.dataset.time;
+            }
             updateContinueButtonState();
         }
     });
@@ -157,7 +179,6 @@ document.addEventListener("DOMContentLoaded", function () {
             selectedTickets[ticketType] = { quantity: quantity, price: price };
             ticketCountValueElement.textContent = quantity;
             updateTotalPrice();
-            updateContinueButtonState();
         }
     });
 
@@ -250,18 +271,29 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function attachTheaterSelectionEvents() {
-        // Attach click event listeners to all theater-select-container divs
+        // Event listeners for theater selection
         document.querySelectorAll(".theater-select-container").forEach(container => {
             container.addEventListener("click", function () {
-                clearSelections(".theater-select-container.selected");
+                // Toggle selection if the same theater is clicked again
+                if (this.classList.contains('selected')) {
+                    this.classList.remove('selected');
+                    selectedTheater = null;
+                } else {
+                    clearSelections(".theater-select-container.selected");
+                    this.classList.add('selected');
+                    selectedTheater = this.dataset.theaterId;
+                }
+                // Clear dates and times when theater selection changes
                 clearSelections("#date-selection .date-container.selected");
                 clearSelections("#time-selection .time-container.selected");
-                this.classList.add('selected');
-                selectedTheater = this.dataset.theaterId;
-                fetchDates(selectedTheater);
                 selectedDate = null;
                 selectedTime = null;
                 updateContinueButtonState();
+                if (selectedTheater) {
+                    fetchDates(selectedTheater);
+                } else {
+                    clearDateAndTimeSelection();
+                }
             });
         });
     }
