@@ -64,6 +64,9 @@
                 <div class="buy-info-ticket-select">
                     <div class="ticket-select-title">
                         <h3>Choose Ticket</h3>
+                        <div class="buy-info-ticket-price">
+                            <h3 id="ticket-total-price">Total Price: 0.00TL</h3>
+                        </div>
                     </div>
                     <div class="buy-info-ticket-options">
                         @foreach (var ticketType in Model.TicketTypes)
@@ -80,9 +83,6 @@
                                 </div>
                             </div>
                         }
-                    </div>
-                    <div class="buy-info-ticket-price">
-                        <h3 id="ticket-total-price">Total Price: 0.00TL</h3>
                     </div>
 
                     <!-- Continue Button -->
