@@ -32,10 +32,10 @@ namespace WebProject.Models
         public virtual DbSet<Payment> Payment { get; set; }
         public virtual DbSet<seatReservations> seatReservations { get; set; }
         public virtual DbSet<Seats> Seats { get; set; }
-        public virtual DbSet<Showtime> Showtime { get; set; }
         public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
         public virtual DbSet<Theater> Theater { get; set; }
         public virtual DbSet<TicketTypes> TicketTypes { get; set; }
         public virtual DbSet<User> User { get; set; }
+        public virtual DbSet<Showtime> Showtime { get; set; }
     }
 }

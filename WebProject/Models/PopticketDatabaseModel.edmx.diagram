@@ -12,23 +12,23 @@
         <EntityTypeShape EntityType="PopTicketModel.Payment" Width="1.5" PointX="9.75" PointY="8.125" IsExpanded="true" />
         <EntityTypeShape EntityType="PopTicketModel.seatReservations" Width="1.5" PointX="7.5" PointY="5" IsExpanded="true" />
         <EntityTypeShape EntityType="PopTicketModel.Seats" Width="1.5" PointX="5.25" PointY="5" IsExpanded="true" />
-        <EntityTypeShape EntityType="PopTicketModel.Showtime" Width="1.5" PointX="5.25" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="PopTicketModel.sysdiagrams" Width="1.5" PointX="0.75" PointY="1.375" IsExpanded="true" />
         <EntityTypeShape EntityType="PopTicketModel.Theater" Width="1.5" PointX="3" PointY="4.75" IsExpanded="true" />
         <EntityTypeShape EntityType="PopTicketModel.TicketTypes" Width="1.5" PointX="7.5" PointY="8.625" IsExpanded="true" />
         <EntityTypeShape EntityType="PopTicketModel.User" Width="1.5" PointX="5.25" PointY="8.625" IsExpanded="true" />
         <AssociationConnector Association="PopTicketModel.FK_BookingDetails_Bookings" ManuallyRouted="false" />
         <AssociationConnector Association="PopTicketModel.FK_BookingDetails_TicketTypes" ManuallyRouted="false" />
-        <AssociationConnector Association="PopTicketModel.FK_Bookings_Showtime" ManuallyRouted="false" />
         <AssociationConnector Association="PopTicketModel.FK_Bookings_User" ManuallyRouted="false" ></AssociationConnector>
         <AssociationConnector Association="PopTicketModel.FK_Payment_Bookings" ManuallyRouted="false" />
         <AssociationConnector Association="PopTicketModel.FK_seatReservations_Bookings" ManuallyRouted="false" />
         <AssociationConnector Association="PopTicketModel.FK_Theater_Cities" ManuallyRouted="false" />
-        <AssociationConnector Association="PopTicketModel.FK_Showtime_Movie" ManuallyRouted="false" />
         <AssociationConnector Association="PopTicketModel.FK_seatReservations_Seats" ManuallyRouted="false" />
-        <AssociationConnector Association="PopTicketModel.FK_seatReservations_Showtime" ManuallyRouted="false" />
         <AssociationConnector Association="PopTicketModel.FK_Seats_Theater" ManuallyRouted="false" />
-        <AssociationConnector Association="PopTicketModel.FK_Showtime_Theater" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="PopTicketModel.Showtime" Width="1.5" PointX="4.25" PointY="0.75" />
+        <AssociationConnector Association="PopTicketModel.FK_Bookings_Showtime" />
+        <AssociationConnector Association="PopTicketModel.FK_Showtime_Movie" />
+        <AssociationConnector Association="PopTicketModel.FK_seatReservations_Showtime" />
+        <AssociationConnector Association="PopTicketModel.FK_Showtime_Theater" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

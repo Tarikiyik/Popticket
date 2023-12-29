@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Globalization;
 using System.Web;
 using System.Web.Mvc;
 using System.Data.Entity;
@@ -12,7 +13,7 @@ namespace WebProject.Controllers
     public class BuyTicketController : Controller
     {
         private PopTicketEntities db = new PopTicketEntities();
-        
+
         public ActionResult SelectTicket(int movieId)
         {
             if (Session["User"] == null)
@@ -42,34 +43,37 @@ namespace WebProject.Controllers
                     .Where(s => s.theaterID == theaterId && s.movieID == movieId)
                     .Select(s => s.date)
                     .Distinct()
-                    .ToList();
+                    .OrderBy(d => d)
+                    .ToList()
+                    .Select(d => d.ToString("yyyy-MM-dd")); // Format dates into a standard ISO format
 
-                return Json(availableDates, JsonRequestBehavior.AllowGet);
+                return Json(new { success = true, availableDates }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
                 // Handle exception
-                return Json(new { error = "An error occurred while fetching dates." });
+                return Json(new { success = false, error = "An error occurred while fetching dates." }, JsonRequestBehavior.AllowGet);
             }
         }
 
-        public ActionResult GetTimes(int theaterId, int movieId, DateTime date)
+        public ActionResult GetTimes(int theaterId, int movieId, string date)
         {
             try
             {
+                DateTime parsedDate = DateTime.ParseExact(date, "yyyy-MM-dd", CultureInfo.InvariantCulture);
                 var availableTimes = db.Showtime
-                    .Where(s => s.theaterID == theaterId && s.movieID == movieId && DbFunctions.TruncateTime(s.date) == DbFunctions.TruncateTime(date))
+                    .Where(s => s.theaterID == theaterId && s.movieID == movieId && DbFunctions.TruncateTime(s.date) == parsedDate)
                     .Select(s => s.time)
                     .Distinct()
-                    .OrderBy(t => t) // Optional: To order the times
+                    .OrderBy(t => t) // Times are already in "HH:mm" format
                     .ToList();
 
-                return Json(availableTimes, JsonRequestBehavior.AllowGet);
+                return Json(new { success = true, availableTimes }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
-                // Handle exception
-                return Json(new { error = "An error occurred while fetching times." });
+                // Consider logging the exception here
+                return Json(new { success = false, error = "An error occurred while fetching times." }, JsonRequestBehavior.AllowGet);
             }
         }
     }
