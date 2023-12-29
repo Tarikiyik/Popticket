@@ -1,9 +1,7 @@
 ﻿@model WebProject.ViewModels.SelectTicketViewModel
 
-
-
 <div class="content-wrapper">
-    <div class="buy-ticket-page">
+    <div class="buy-ticket-page" data-movie-id="@Model.Movie.MovieID">
         <!-- Movie Information Section -->
         <div class="movie-info">
             <!-- Movie Poster -->
@@ -48,27 +46,16 @@
                 </div>
             </div>
 
-            <!-- Date and Time Selection -->
+            <!-- Date and Time Selection - Initially Empty -->
             <div class="buy-info-dateandtime-select">
                 <div class="dateandtime-select-title">
                     <h3>Choose Date & Time</h3>
                 </div>
                 <div class="buy-info-date-select" id="date-selection">
-                    @foreach (var date in Model.Showtimes.Select(s => s.date).Distinct())
-                    {
-                        <div class="date-container" data-date="@date.ToString("yyyy-MM-dd")">
-                            <h3>@date.ToString("dd MMMM")</h3>
-                        </div>
-                    }
+                    <!-- Dates will be dynamically loaded here -->
                 </div>
                 <div class="buy-info-time-select" id="time-selection">
-                    @foreach (var showtime in Model.Showtimes)
-                    {
-                        string formattedTime = showtime.time.ToString(@"hh\:mm");
-                        <div class="time-container" data-time="@formattedTime" data-showtime-id="@showtime.showtimeID">
-                            <h3>@formattedTime</h3>
-                        </div>
-                    }
+                    <!-- Times will be dynamically loaded here -->
                 </div>
             </div>
 
@@ -100,12 +87,10 @@
 
                     <!-- Continue Button -->
                     <div class="ticket-confirmation">
-                        <button id="ticket-confirmation-button">Continue</button>
+                        <button id="ticket-confirmation-button" disabled>Continue</button>
                     </div>
                 </div>
             </div>
-
-
         </div>
     </div>
 </div>

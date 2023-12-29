@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let selectedDate = null;
     let selectedTime = null;
     let selectedTickets = {};
+    let movieId = document.querySelector('.buy-ticket-page').dataset.movieId;
 
     // Function to clear selections
     function clearSelections(selector) {
@@ -23,35 +24,88 @@ document.addEventListener("DOMContentLoaded", function () {
         continueButton.disabled = !(selectedTheater && selectedDate && selectedTime && Object.keys(selectedTickets).length > 0);
     }
 
+    // Function to fetch dates based on selected theater
+    function fetchDates(theaterId) {
+        $.ajax({
+            url: '/BuyTicket/GetDates',
+            type: 'GET',
+            data: { theaterId: theaterId, movieId: movieId },
+            success: function (dates) {
+                let dateSelectionDiv = document.getElementById("date-selection");
+                dateSelectionDiv.innerHTML = '';
+                dates.forEach(date => {
+                    let dateDiv = document.createElement('div');
+                    dateDiv.className = 'date-container';
+                    dateDiv.dataset.date = date;
+                    dateDiv.textContent = formatDate(date); // Implement formatDate to format the date as needed
+                    dateSelectionDiv.appendChild(dateDiv);
+                });
+            },
+            error: function (xhr, status, error) {
+                console.error("Error fetching dates: ", status, error);
+            }
+        });
+    }
+
+    // Function to fetch times based on selected date and theater
+    function fetchTimes(date) {
+        $.ajax({
+            url: '/BuyTicket/GetTimes',
+            type: 'GET',
+            data: { date: date, theaterId: selectedTheater, movieId: movieId },
+            success: function (times) {
+                let timeSelectionDiv = document.getElementById("time-selection");
+                timeSelectionDiv.innerHTML = '';
+                times.forEach(time => {
+                    let timeDiv = document.createElement('div');
+                    timeDiv.className = 'time-container';
+                    timeDiv.dataset.time = time;
+                    timeDiv.textContent = formatTime(time); // Implement formatTime to format the time as needed
+                    timeSelectionDiv.appendChild(timeDiv);
+                });
+            },
+            error: function (xhr, status, error) {
+                console.error("Error fetching times: ", status, error);
+            }
+        });
+    }
+
     // Event listeners for theater selection
     document.querySelectorAll(".theater-select-container").forEach(container => {
         container.addEventListener("click", function () {
             clearSelections(".theater-select-container.selected");
+            clearSelections("#date-selection .date-container.selected");
+            clearSelections("#time-selection .time-container.selected");
             this.classList.add('selected');
             selectedTheater = this.dataset.theaterId;
+            fetchDates(selectedTheater);
+            selectedDate = null;
+            selectedTime = null;
             updateContinueButtonState();
         });
     });
 
-    // Event listeners for date selection
-    document.querySelectorAll("#date-selection .date-container").forEach(container => {
-        container.addEventListener("click", function () {
+    // Event listener for date selection
+    document.getElementById("date-selection").addEventListener("click", function (e) {
+        if (e.target.classList.contains('date-container')) {
             clearSelections("#date-selection .date-container.selected");
-            this.classList.add('selected');
-            selectedDate = this.dataset.date;
-            // TODO: Load the times for the selected date here if needed
+            clearSelections("#time-selection .time-container.selected");
+            e.target.classList.add('selected');
+            selectedDate = e.target.dataset.date;
+            fetchTimes(selectedDate);
+            selectedTime = null;
             updateContinueButtonState();
-        });
+        }
     });
 
     // Event listeners for time selection
-    document.querySelectorAll("#time-selection .time-container").forEach(container => {
-        container.addEventListener("click", function () {
+    document.querySelectorAll("#time-selection").addEventListener("click", function (e) {
+        if (e.target.classList.contains('time-container')) {
             clearSelections("#time-selection .time-container.selected");
-            this.classList.add('selected');
-            selectedTime = this.dataset.time;
+            e.target.classList.add('selected');
+            selectedTime = e.target.dataset.time;
             updateContinueButtonState();
-        });
+        }
     });
 
     // Event listeners for ticket count buttons
@@ -96,13 +150,24 @@ document.addEventListener("DOMContentLoaded", function () {
             data: JSON.stringify(dataToSend),
             dataType: 'json',
             success: function (response) {
-                // On success, redirect to the next step using returned URL
                 window.location.href = response.redirectUrl;
             },
             error: function (xhr, status, error) {
-                // Handle errors here
                 console.error("Error occurred: ", status, error);
             }
         });
     });
+
+    // Utility function to format date
+    function formatDate(dateString) {
+        var date = new Date(dateString);
+        var options = { year: 'numeric', month: 'long', day: 'numeric' };
+        return date.toLocaleDateString('en-US', options);
+    }
+
+    // Utility function to format time
+    function formatTime(timeString) {
+        // Implement time formatting logic
+        return timeString; // Placeholder
+    }
 });
