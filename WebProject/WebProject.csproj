@@ -134,7 +134,6 @@
     <Compile Include="Controllers\MoviesAdminController.cs" />
     <Compile Include="Controllers\MoviesController.cs" />
     <Compile Include="Controllers\TheatersAdminController.cs" />
-    <Compile Include="Controllers\TicketController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -295,7 +294,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Ticket\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
