@@ -79,7 +79,7 @@
           <Property Name="showtimeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="movieID" Type="int" Nullable="false" />
           <Property Name="theaterID" Type="int" Nullable="false" />
-          <Property Name="time" Type="time" Precision="7" Nullable="false" />
+          <Property Name="time" Type="char" MaxLength="5" Nullable="false" />
           <Property Name="date" Type="date" Nullable="false" />
         </EntityType>
         <EntityType Name="sysdiagrams">
@@ -424,7 +424,7 @@
           <Property Name="showtimeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="movieID" Type="Int32" Nullable="false" />
           <Property Name="theaterID" Type="Int32" Nullable="false" />
-          <Property Name="time" Type="Time" Nullable="false" Precision="7" />
+          <Property Name="time" Type="Time" Nullable="false" />
           <Property Name="date" Type="DateTime" Nullable="false" Precision="0" />
           <NavigationProperty Name="Bookings" Relationship="Self.FK_Bookings_Showtime" FromRole="Showtime" ToRole="Bookings" />
           <NavigationProperty Name="Movie" Relationship="Self.FK_Showtime_Movie" FromRole="Showtime" ToRole="Movie" />

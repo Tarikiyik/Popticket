@@ -24,7 +24,7 @@ namespace WebProject.Models
         public int showtimeID { get; set; }
         public int movieID { get; set; }
         public int theaterID { get; set; }
-        public System.TimeSpan time { get; set; }
+        public string time { get; set; }
         public System.DateTime date { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
