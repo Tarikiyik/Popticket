@@ -2,7 +2,7 @@
 
 
 
-<div class="content-wrapper">
+<div class="content-wrapper" data-movie-id="@Model.Movie.MovieID">
     <div class="buy-ticket-page">
         <!-- Movie Information Section -->
         <div class="movie-info">
@@ -56,8 +56,10 @@
                 <div class="buy-info-date-select" id="date-selection">
                     @foreach (var date in Model.Showtimes.Select(s => s.date).Distinct())
                     {
-                        <div class="date-container" data-date="@date.ToString("yyyy-MM-dd")">
-                            <h3>@date.ToString("dd MMMM")</h3>
+                        string formattedDate = date != null ? date.ToString("yyyy-MM-dd") : "";
+                        string formattedDateText = date != null ? date.ToString("dd MMMM") : "";
+                        <div class="date-container" data-date="@formattedDate">
+                            <h3>@formattedDateText</h3>
                         </div>
                     }
                 </div>
@@ -77,6 +79,8 @@
                 <div class="buy-info-ticket-select">
                     <div class="ticket-select-title">
                         <h3>Choose Ticket</h3>
+                        <h3 id="ticket-total-price">Total Price: 0.00TL</h3>
+
                     </div>
                     <div class="buy-info-ticket-options">
                         @foreach (var ticketType in Model.TicketTypes)
@@ -94,9 +98,7 @@
                             </div>
                         }
                     </div>
-                    <div class="buy-info-ticket-price">
-                        <h3 id="ticket-total-price">Total Price: 0.00TL</h3>
-                    </div>
+
 
                     <!-- Continue Button -->
                     <div class="ticket-confirmation">

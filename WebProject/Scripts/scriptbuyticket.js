@@ -3,106 +3,145 @@ document.addEventListener("DOMContentLoaded", function () {
     let selectedDate = null;
     let selectedTime = null;
     let selectedTickets = {};
+    const movieId = document.querySelector('.content-wrapper').dataset.movieId;
 
-    // Function to clear selections
-    function clearSelections(selector) {
-        document.querySelectorAll(selector).forEach(el => el.classList.remove('selected'));
-    }
-
-    // Function to update total price
-    function updateTotalPrice() {
-        let total = Object.values(selectedTickets).reduce((sum, ticket) => {
-            return sum + (ticket.quantity * ticket.price);
-        }, 0);
-        document.getElementById("ticket-total-price").textContent = `Total Price: ${total.toFixed(2)}TL`;
-    }
-
-    // Function to enable/disable the continue button
     function updateContinueButtonState() {
         const continueButton = document.getElementById('ticket-confirmation-button');
         continueButton.disabled = !(selectedTheater && selectedDate && selectedTime && Object.keys(selectedTickets).length > 0);
     }
 
-    // Event listeners for theater selection
+    function updateTotalPrice() {
+        let total = Object.values(selectedTickets).reduce((sum, ticket) => sum + (ticket.quantity * ticket.price), 0);
+        document.getElementById("ticket-total-price").textContent = `Total Price: ${total.toFixed(2)}TL`;
+    }
+
+    function clearSelections(selector) {
+        document.querySelectorAll(selector).forEach(el => {
+            el.style.background = "";
+            el.dataset.selected = "false";
+        });
+    }
+
+    function updateBackgroundAndSelection(container, selector) {
+        if (container.dataset.selected === "true") {
+            container.style.background = "";
+            container.dataset.selected = "false";
+        } else {
+            clearSelections(selector);
+            container.style.background = "rgb(255, 208, 0)";
+            container.dataset.selected = "true";
+        }
+    }
+
     document.querySelectorAll(".theater-select-container").forEach(container => {
         container.addEventListener("click", function () {
-            clearSelections(".theater-select-container.selected");
-            this.classList.add('selected');
-            selectedTheater = this.dataset.theaterId;
+            updateBackgroundAndSelection(this, ".theater-select-container");
+            selectedTheater = this.dataset.selected === "true" ? this.dataset.theaterId : null;
             updateContinueButtonState();
         });
     });
 
-    // Event listeners for date selection
-    document.querySelectorAll("#date-selection .date-container").forEach(container => {
+    document.querySelectorAll(".date-container").forEach(container => {
         container.addEventListener("click", function () {
-            clearSelections("#date-selection .date-container.selected");
-            this.classList.add('selected');
-            selectedDate = this.dataset.date;
-            // TODO: Load the times for the selected date here if needed
+            updateBackgroundAndSelection(this, ".date-container");
+            selectedDate = this.dataset.selected === "true" ? this.dataset.date : null;
+            if (selectedDate) {
+                loadTimesForDate(selectedDate);
+            } else {
+                // If no date is selected, clear the times
+                document.getElementById("time-selection").innerHTML = '';
+            }
             updateContinueButtonState();
         });
     });
 
-    // Event listeners for time selection
-    document.querySelectorAll("#time-selection .time-container").forEach(container => {
-        container.addEventListener("click", function () {
-            clearSelections("#time-selection .time-container.selected");
-            this.classList.add('selected');
-            selectedTime = this.dataset.time;
-            updateContinueButtonState();
-        });
-    });
+    function loadTimesForDate(date) {
+        const timeSelectionContainer = document.getElementById("time-selection");
+        timeSelectionContainer.innerHTML = ''; // Clear existing times before loading new ones
+        fetch(`/BuyTicket/GetTimesForDate?movieId=${movieId}&date=${date}`)
+            .then(response => response.json())
+            .then(times => {
+                times.forEach(time => {
+                    const timeContainer = document.createElement('div');
+                    timeContainer.className = 'time-container';
+                    timeContainer.dataset.time = time;
+                    timeContainer.innerHTML = `<h3>${time}</h3>`;
+                    timeContainer.addEventListener('click', function () {
+                        updateBackgroundAndSelection(this, ".time-container");
+                        selectedTime = this.dataset.selected === "true" ? this.dataset.time : null;
+                        updateContinueButtonState();
+                    });
+                    timeSelectionContainer.appendChild(timeContainer);
+                });
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
 
-    // Event listeners for ticket count buttons
+    function clearTimeSelection() {
+        const timeSelectionContainer = document.getElementById("time-selection");
+        timeSelectionContainer.innerHTML = '';
+        selectedTime = null;
+    }
+
     document.querySelectorAll(".buy-info-ticket-container").forEach(container => {
         let ticketType = container.dataset.ticketTypeId;
-        let price = parseFloat(container.querySelector(".buy-info-ticket-pricing h3").textContent.replace('TL', ''));
-        container.querySelectorAll(".buy-info-ticket-count-button").forEach(button => {
-            button.addEventListener("click", function () {
-                let action = this.dataset.action;
-                selectedTickets[ticketType] = selectedTickets[ticketType] || { quantity: 0, price: price };
-
-                if (action === 'increase') {
-                    selectedTickets[ticketType].quantity++;
-                } else if (action === 'reduce' && selectedTickets[ticketType].quantity > 0) {
-                    selectedTickets[ticketType].quantity--;
-                }
-
-                container.querySelector(".ticket-count-value").textContent = selectedTickets[ticketType].quantity;
-                updateTotalPrice();
-                updateContinueButtonState();
+        let priceElement = container.querySelector(".buy-info-ticket-pricing h3");
+        if (priceElement) {
+            let price = parseFloat(priceElement.textContent.replace('TL', ''));
+            container.querySelectorAll(".buy-info-ticket-count-button").forEach(button => {
+                button.addEventListener("click", function () {
+                    let action = this.dataset.action;
+                    selectedTickets[ticketType] = selectedTickets[ticketType] || { quantity: 0, price: price };
+                    if (action === 'increase') {
+                        selectedTickets[ticketType].quantity++;
+                    } else if (action === 'reduce' && selectedTickets[ticketType].quantity > 0) {
+                        selectedTickets[ticketType].quantity--;
+                    }
+                    container.querySelector(".ticket-count-value").textContent = selectedTickets[ticketType].quantity;
+                    updateTotalPrice();
+                    updateContinueButtonState();
+                });
             });
-        });
+        } else {
+            console.error("Price element not found for ticket type: ", ticketType);
+        }
     });
 
-    // Event listener for the continue button
-    document.getElementById("ticket-confirmation-button").addEventListener("click", function () {
-        let dataToSend = {
-            theaterId: selectedTheater,
-            date: selectedDate,
-            time: selectedTime,
-            tickets: Object.keys(selectedTickets).map(key => ({
-                ticketType: key,
-                quantity: selectedTickets[key].quantity
-            }))
-        };
-
-        // AJAX request to server
-        $.ajax({
-            url: '/BuyTicket/ConfirmTicketSelection', // Replace with your actual endpoint
-            type: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify(dataToSend),
-            dataType: 'json',
-            success: function (response) {
-                // On success, redirect to the next step using returned URL
-                window.location.href = response.redirectUrl;
-            },
-            error: function (xhr, status, error) {
-                // Handle errors here
-                console.error("Error occurred: ", status, error);
-            }
-        });
-    });
+    document.getElementById("ticket-confirmation-button").addEventListener("click", submitTicketSelection);
 });
+
+function submitTicketSelection() {
+    let dataToSend = {
+        theaterId: selectedTheater,
+        date: selectedDate,
+        time: selectedTime,
+        tickets: Object.keys(selectedTickets).map(key => ({
+            ticketType: key,
+            quantity: selectedTickets[key].quantity
+        }))
+    };
+
+    // Sending the booking confirmation data to the server
+    const token = $('[name="__RequestVerificationToken"]').val();
+
+    $.ajax({
+        url: '/BuyTicket/ConfirmTicketSelection',
+        type: 'POST',
+        headers: {
+            "RequestVerificationToken": token
+        },
+        data: dataToSend,
+        success: function (result) {
+            if (result.success) {
+                window.location.href = result.redirectUrl; // Redirect to the URL provided by the server
+            } else {
+                alert('Error: ' + result.error); // Display error message from server
+            }
+        },
+        error: function (xhr, status, error) {
+            alert('An error occurred: ' + error); // Display a generic error message
+        }
+    });
+}

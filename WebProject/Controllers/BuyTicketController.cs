@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using WebProject.Models;
 using WebProject.ViewModels;
+using System.Data.Entity;
 
 namespace WebProject.Controllers
 {
@@ -20,6 +21,11 @@ namespace WebProject.Controllers
                 return RedirectToAction("Login", "Account");
 
             var movie = db.Movie.Find(movieId);
+            if (movie == null)
+            {
+                return HttpNotFound(); // Ensure the movie exists
+            }
+
             var theaters = db.Theater.ToList();
             var showtimes = db.Showtime.Where(s => s.movieID == movieId).ToList();
             var ticketTypes = db.TicketTypes.ToList();
@@ -29,48 +35,64 @@ namespace WebProject.Controllers
                 Movie = movie,
                 Theaters = theaters,
                 Showtimes = showtimes,
-                TicketTypes = ticketTypes // Make sure to add this to your ViewModel
+                TicketTypes = ticketTypes
             };
 
             return View(viewModel);
+        }
+
+        public ActionResult GetTimesForDate(int movieId, DateTime date)
+        {
+            var times = db.Showtime
+                          .Where(s => s.movieID == movieId && DbFunctions.TruncateTime(s.date) == date.Date)
+                          .Select(s => new { s.time }) // Retrieve the time as-is
+                          .AsEnumerable() // Switch to LINQ to Objects
+                          .Select(s => s.time.ToString("HH:mm")) // Now we can format
+                          .ToList();
+
+            return Json(times, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
         public ActionResult ConfirmTicketSelection(ConfirmTicketSelectionViewModel model)
         {
             if (Session["User"] == null)
-                return RedirectToAction("Login", "Account");
+                return Json(new { success = false, error = "User not logged in." });
 
-            var user = Session["User"] as User;
-            var booking = new Bookings
+            try
             {
-                userID = user.UserID,
-                showtimeID = model.ShowtimeId,
-                bookingTime = DateTime.Now
-            };
-
-            using (var transaction = db.Database.BeginTransaction())
-            {
-                try
+                var user = Session["User"] as User;
+                var booking = new Bookings
                 {
-                    db.Bookings.Add(booking);
-                    db.SaveChanges(); // Save the booking to generate the bookingID
+                    userID = user.UserID,
+                    showtimeID = model.ShowtimeId,
+                    bookingTime = DateTime.Now
+                };
 
-                    // Add booking details and reserve seats
-                    AddBookingDetailsAndReserveSeats(model, booking);
+                db.Bookings.Add(booking);
+                db.SaveChanges();
 
-                    db.SaveChanges();
-                    transaction.Commit();
-                }
-                catch
+                // Add logic to handle booking details and seat reservations
+                foreach (var ticketSelection in model.TicketSelections)
                 {
-                    transaction.Rollback();
-                    // Handle errors, log them, and return an appropriate view/message
-                    return View("Error");
+                    var bookingDetail = new BookingDetails
+                    {
+                        bookingID = booking.bookingID,
+                        ticketTypeID = ticketSelection.TicketTypeId,
+                        quantity = ticketSelection.Quantity
+                    };
+                    db.BookingDetails.Add(bookingDetail);
+                    // Repeat for seat reservations if needed
                 }
+                db.SaveChanges();
+
+                return Json(new { success = true, redirectUrl = Url.Action("SelectSeat", new { bookingId = booking.bookingID }) });
             }
-
-            return RedirectToAction("SelectSeat", new { bookingId = booking.bookingID });
+            catch (Exception ex)
+            {
+                // Log the exception
+                return Json(new { success = false, error = ex.Message });
+            }
         }
         private void AddBookingDetailsAndReserveSeats(ConfirmTicketSelectionViewModel model, Bookings booking)
         {
