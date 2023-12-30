@@ -30,7 +30,6 @@ namespace WebProject.Models
         public virtual DbSet<Cities> Cities { get; set; }
         public virtual DbSet<Movie> Movie { get; set; }
         public virtual DbSet<Payment> Payment { get; set; }
-        public virtual DbSet<seatReservations> seatReservations { get; set; }
         public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
         public virtual DbSet<Theater> Theater { get; set; }
         public virtual DbSet<TicketTypes> TicketTypes { get; set; }
@@ -38,5 +37,6 @@ namespace WebProject.Models
         public virtual DbSet<Showtime> Showtime { get; set; }
         public virtual DbSet<TheaterLayouts> TheaterLayouts { get; set; }
         public virtual DbSet<Seats> Seats { get; set; }
+        public virtual DbSet<seatReservations> seatReservations { get; set; }
     }
 }

@@ -33,7 +33,7 @@
 
 @section Scripts {
     <script>
-        // Global object to hold data for the JavaScript file
+        // Pass the server-side data to JavaScript
         window.showtimeData = {
             showtimeId: @Model.ShowtimeId,
             ticketQuantities: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.TicketQuantities)),

@@ -6,7 +6,7 @@ using WebProject.Models;
 
 namespace WebProject.ViewModels
 {
-    public class SelectTicketViewModel
+    public class SelectTicket
     {
         public Movie Movie { get; set; }
         public List<Theater> Theaters { get; set; }

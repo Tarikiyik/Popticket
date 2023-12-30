@@ -30,8 +30,8 @@ namespace WebProject.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Bookings> Bookings { get; set; }
         public virtual Movie Movie { get; set; }
+        public virtual Theater Theater { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<seatReservations> seatReservations { get; set; }
-        public virtual Theater Theater { get; set; }
     }
 }

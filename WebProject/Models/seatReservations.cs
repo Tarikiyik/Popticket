@@ -17,10 +17,8 @@ namespace WebProject.Models
         public int reservationID { get; set; }
         public int showtimeID { get; set; }
         public int seatID { get; set; }
-        public int bookingID { get; set; }
     
-        public virtual Bookings Bookings { get; set; }
-        public virtual Showtime Showtime { get; set; }
         public virtual Seats Seats { get; set; }
+        public virtual Showtime Showtime { get; set; }
     }
 }

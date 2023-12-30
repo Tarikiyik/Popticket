@@ -25,7 +25,7 @@ namespace WebProject.Controllers
             var ticketTypes = db.TicketTypes.ToList();
             var cities = db.Cities.ToList();
 
-            var viewModel = new SelectTicketViewModel
+            var viewModel = new SelectTicket
             {
                 Movie = movie,
                 Theaters = theaters,
@@ -113,18 +113,17 @@ namespace WebProject.Controllers
         [HttpPost]
         public ActionResult SelectSeats(SelectTicketData data)
         {
-            if (Session["User"] == null)
-                return RedirectToAction("Login", "Account");
-
-            // Convert date and time to DateTime
-            DateTime selectedDateTime = DateTime.ParseExact(data.Date + " " + data.Time, "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture);
+            // Ensure date is in "yyyy-MM-dd" format and time is in "HH:mm" format
+            DateTime selectedDate = DateTime.ParseExact(data.Date, "yyyy-MM-dd", CultureInfo.InvariantCulture);
 
             // Retrieve the showtime ID based on the theaterId, date, and time
-            var showtime = db.Showtime.FirstOrDefault(s => s.theaterID == data.TheaterId && s.date == selectedDateTime);
+            var showtime = db.Showtime.FirstOrDefault(s => s.theaterID == data.TheaterId &&
+                                                           DbFunctions.TruncateTime(s.date) == selectedDate &&
+                                                           s.time == data.Time);
             if (showtime == null)
             {
                 // Handle case where showtime is not found
-                return RedirectToAction("Error"); // or another appropriate view
+                return RedirectToAction("Error", new { message = "Showtime not found." });
             }
 
             // Retrieve theater layout
@@ -132,18 +131,43 @@ namespace WebProject.Controllers
             if (theaterLayout == null)
             {
                 // Handle case where theater layout is not found
-                return RedirectToAction("Error"); // or another appropriate view
+                return RedirectToAction("Error", new { message = "Theater layout not found." });
             }
 
-            var occupiedSeatIds = db.seatReservations
-                .Where(sr => sr.showtimeID == showtime.showtimeID)
-                .Select(sr => sr.seatID)
-                .ToList();
+            var totalQuantity = data.TotalQuantity;
+            if (totalQuantity == 0)
+            {
+                // Handle case where theater layout is not found
+                return RedirectToAction("Error", new { message = "Ticket quantity not found." });
+            }
 
-            var occupiedSeats = db.Seats
-                .Where(s => occupiedSeatIds.Contains(s.SeatID))
-                .Select(s => $"{s.SeatRowLetter}{s.SeatRowNumber}")
-                .ToList();
+            var totalPrice = data.TotalPrice;
+            if (totalPrice == 0)
+            {
+                // Handle case where theater layout is not found
+                return RedirectToAction("Error", new { message = "Total price not found." });
+            }
+
+            var occupiedSeatIdsQuery = db.seatReservations
+                                    .Where(sr => sr.showtimeID == showtime.showtimeID)
+                                    .Select(sr => sr.seatID);
+            bool hasOccupiedSeats = occupiedSeatIdsQuery.Any();
+
+            List<string> occupiedSeatsList;
+            if (hasOccupiedSeats)
+            {
+                var occupiedSeatIds = occupiedSeatIdsQuery.ToList();
+
+                occupiedSeatsList = db.Seats
+                                      .Where(s => occupiedSeatIds.Contains(s.SeatID))
+                                      .Select(s => $"{s.SeatRowLetter}{s.SeatRowNumber}")
+                                      .ToList();
+            }
+            else
+            {
+                // If there are no occupied seats, initialize an empty list
+                occupiedSeatsList = new List<string>();
+            }
 
             // Prepare the ViewModel for the SelectSeat view
             SelectSeat viewModel = new SelectSeat
@@ -151,13 +175,15 @@ namespace WebProject.Controllers
                 ShowtimeId = showtime.showtimeID,
                 TheaterId = data.TheaterId,
                 TheaterLayout = theaterLayout,
-                TicketQuantities = data.Tickets.ToDictionary(t => t.TicketTypeId, t => t.Quantity),
-                OccupiedSeats = occupiedSeats
+                TotalQuantity = totalQuantity,
+                TotalPrice = totalPrice,
+                OccupiedSeats = occupiedSeatsList
             };
 
             // Pass the ViewModel to the SelectSeat view
             return View("SelectSeat", viewModel);
         }
+
 
     }
 }

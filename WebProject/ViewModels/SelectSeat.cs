@@ -11,7 +11,9 @@ namespace WebProject.ViewModels
         public int ShowtimeId { get; set; }
         public int TheaterId { get; set; }
         public TheaterLayouts TheaterLayout { get; set; }
-        public Dictionary<int, int> TicketQuantities { get; set; } // TicketTypeId and Quantity
-        public List<string> OccupiedSeats { get; set; } // This will store seat identifiers like "A1", "A2", etc.                                                           
+        public List<string> OccupiedSeats { get; set; } // This will store seat identifiers like "A1", "A2", etc.
+        public int TotalQuantity { get; set; }
+        public decimal TotalPrice { get; set; }
+
     }
 }

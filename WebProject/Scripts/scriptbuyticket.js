@@ -183,14 +183,20 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     document.getElementById("ticket-confirmation-button").addEventListener("click", function () {
+        let totalQuantity = 0;
+        let totalPrice = 0;
+
+        Object.values(selectedTickets).forEach(ticket => {
+            totalQuantity += ticket.quantity;
+            totalPrice += ticket.quantity * ticket.price;
+        });
+
         let dataToSend = {
             theaterId: selectedTheater,
             date: selectedDate,
             time: selectedTime,
-            tickets: Object.keys(selectedTickets).map(key => ({
-                ticketType: key,
-                quantity: selectedTickets[key].quantity
-            }))
+            totalQuantity: totalQuantity,
+            totalPrice: totalPrice
         };
 
         $.ajax({
