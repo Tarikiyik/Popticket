@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using WebProject.Models;
 
 namespace WebProject.ViewModels
 {
@@ -9,7 +10,7 @@ namespace WebProject.ViewModels
     {
         public int ShowtimeId { get; set; }
         public int TheaterId { get; set; }
-        public TheaterLayout TheaterLayout { get; set; }
+        public TheaterLayouts TheaterLayout { get; set; }
         public Dictionary<int, int> TicketQuantities { get; set; } // TicketTypeId and Quantity
                                                                    // Add any other properties needed for seat selection
     }
