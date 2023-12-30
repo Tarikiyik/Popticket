@@ -10,7 +10,6 @@
         <EntityTypeShape EntityType="PopTicketModel.Cities" Width="1.5" PointX="1.25" PointY="5.375" IsExpanded="true" />
         <EntityTypeShape EntityType="PopTicketModel.Movie" Width="1.5" PointX="0.75" PointY="7.625" IsExpanded="true" />
         <EntityTypeShape EntityType="PopTicketModel.Payment" Width="1.5" PointX="12.5" PointY="3.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="PopTicketModel.seatReservations" Width="1.5" PointX="7.625" PointY="4.25" IsExpanded="true" />
         <EntityTypeShape EntityType="PopTicketModel.sysdiagrams" Width="1.5" PointX="1.25" PointY="1.75" IsExpanded="true" />
         <EntityTypeShape EntityType="PopTicketModel.Theater" Width="1.5" PointX="3.375" PointY="4.75" IsExpanded="true" />
         <EntityTypeShape EntityType="PopTicketModel.TicketTypes" Width="1.5" PointX="13.5" PointY="0.875" IsExpanded="true" />
@@ -19,18 +18,18 @@
         <AssociationConnector Association="PopTicketModel.FK_BookingDetails_TicketTypes" ManuallyRouted="false" />
         <AssociationConnector Association="PopTicketModel.FK_Bookings_User" ManuallyRouted="false" ></AssociationConnector>
         <AssociationConnector Association="PopTicketModel.FK_Payment_Bookings" ManuallyRouted="false" />
-        <AssociationConnector Association="PopTicketModel.FK_seatReservations_Bookings" ManuallyRouted="false" />
         <AssociationConnector Association="PopTicketModel.FK_Theater_Cities" ManuallyRouted="false" />
         <EntityTypeShape EntityType="PopTicketModel.Showtime" Width="1.5" PointX="4" PointY="0.75" />
         <AssociationConnector Association="PopTicketModel.FK_Bookings_Showtime" />
         <AssociationConnector Association="PopTicketModel.FK_Showtime_Movie" />
-        <AssociationConnector Association="PopTicketModel.FK_seatReservations_Showtime" />
         <AssociationConnector Association="PopTicketModel.FK_Showtime_Theater" />
         <EntityTypeShape EntityType="PopTicketModel.TheaterLayouts" Width="1.5" PointX="5.5" PointY="5.125" />
         <AssociationConnector Association="PopTicketModel.FK_TheaterLayouts_Theater" />
         <EntityTypeShape EntityType="PopTicketModel.Seats" Width="1.5" PointX="10" PointY="5.125" />
         <AssociationConnector Association="PopTicketModel.FK_Seats_TheaterLayouts" />
+        <EntityTypeShape EntityType="PopTicketModel.seatReservations" Width="1.5" PointX="7.625" PointY="4.25" />
         <AssociationConnector Association="PopTicketModel.FK_seatReservations_Seats" />
+        <AssociationConnector Association="PopTicketModel.FK_seatReservations_Showtime" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
