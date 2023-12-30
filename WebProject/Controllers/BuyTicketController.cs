@@ -101,9 +101,21 @@ namespace WebProject.Controllers
             }
         }
 
+        public ActionResult GetOccupiedSeats(int showtimeId)
+        {
+            var occupiedSeats = db.seatReservations
+                .Where(sr => sr.showtimeID == showtimeId)
+                .Select(sr => new { sr.Seats.SeatRowLetter, sr.Seats.SeatRowNumber })
+                .ToList();
+            return Json(new { occupiedSeats }, JsonRequestBehavior.AllowGet);
+        }
+
         [HttpPost]
         public ActionResult SelectSeats(SelectTicketData data)
         {
+            if (Session["User"] == null)
+                return RedirectToAction("Login", "Account");
+
             // Convert date and time to DateTime
             DateTime selectedDateTime = DateTime.ParseExact(data.Date + " " + data.Time, "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture);
 
@@ -123,17 +135,29 @@ namespace WebProject.Controllers
                 return RedirectToAction("Error"); // or another appropriate view
             }
 
-            // Prepare the ViewModel for SelectSeat view
+            var occupiedSeatIds = db.seatReservations
+                .Where(sr => sr.showtimeID == showtime.showtimeID)
+                .Select(sr => sr.seatID)
+                .ToList();
+
+            var occupiedSeats = db.Seats
+                .Where(s => occupiedSeatIds.Contains(s.SeatID))
+                .Select(s => $"{s.SeatRowLetter}{s.SeatRowNumber}")
+                .ToList();
+
+            // Prepare the ViewModel for the SelectSeat view
             SelectSeat viewModel = new SelectSeat
             {
                 ShowtimeId = showtime.showtimeID,
                 TheaterId = data.TheaterId,
                 TheaterLayout = theaterLayout,
-                TicketQuantities = data.Tickets.ToDictionary(t => t.TicketTypeId, t => t.Quantity)
+                TicketQuantities = data.Tickets.ToDictionary(t => t.TicketTypeId, t => t.Quantity),
+                OccupiedSeats = occupiedSeats
             };
 
             // Pass the ViewModel to the SelectSeat view
             return View("SelectSeat", viewModel);
         }
+
     }
 }

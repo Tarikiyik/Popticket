@@ -23,16 +23,16 @@
         </div>
         <div class="navbar-categories">
             <a href="@Url.Action("OnTheaters","Movies")"><h3>MOVIES</h3> </a>
+        </div>
+        @if (Session["IsAdmin"] != null && (bool)Session["IsAdmin"])
+        {<div class="navbar-categories">
+                <a href="@Url.Action("Index","MoviesAdmin")"><h3>MOVIES PANEL</h3> </a>
             </div>
-            @if (Session["IsAdmin"] != null && (bool)Session["IsAdmin"])
-            {       <div class="navbar-categories">
-                        <a href="@Url.Action("Index","MoviesAdmin")"><h3>MOVIES PANEL</h3> </a>
-                    </div>
-                    <div class="navbar-categories">
-                        <a href="@Url.Action("Index","TheatersAdmin")"><h3>THEATERS PANEL</h3> </a>
-                    </div>
-            }
-             
+            <div class="navbar-categories">
+                <a href="@Url.Action("Index","TheatersAdmin")"><h3>THEATERS PANEL</h3> </a>
+            </div>
+        }
+
         <div class="navbar-spacer"></div>
         <div class="navbar-search">
             <input type="text" id="searchInput" placeholder="Search..." />
@@ -161,6 +161,7 @@
         </div>
     </footer>
 
+    @RenderSection("Scripts", required: false)
     <script src="@Url.Content("~/Scripts/layout.js")"></script>
 
 </body>

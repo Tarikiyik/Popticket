@@ -1,8 +1,4 @@
 ﻿@model WebProject.ViewModels.SelectSeat
-@{
-    // Assuming 'OccupiedSeats' is a HashSet containing IDs of occupied seats for simplicity
-    var occupiedSeats = Model.OccupiedSeats ?? new HashSet<string>(); // This will come from your ViewModel
-}
 
 <div class="content-wrapper">
     <div class="select-seat-page">
@@ -11,14 +7,13 @@
                 <div class="curtain-line"></div>
             </div>
             <div class="seats">
-                @for (int row = 1; row <= Model.TheaterLayout.NumberOfRows; row++)
+                @for (int row = 0; row < Model.TheaterLayout.NumberOfRows; row++)
                 {
                     <div class="row">
                         @for (int seatNum = 1; seatNum <= Model.TheaterLayout.SeatsPerRow; seatNum++)
                         {
-                            // Construct the seat ID string, e.g., "A1"
-                            string seatId = $"{(char)('A' + row - 1)}{seatNum}";
-                            <span class="seat @(occupiedSeats.Contains(seatId) ? "occupied" : "")" data-seat-id="@seatId">@seatId</span>
+                            string seatId = $"{(char)('A' + row)}{seatNum}";
+                            <span class="seat" data-seat-id="@seatId">@seatId</span>
                         }
                     </div>
                 }
@@ -30,10 +25,20 @@
                     <h3>Selected Seats</h3>
                     <span class="seat selected"></span>
                 </div>
-                <button class="select-seat-confirmation">Continue</button>
+                <button class="select-seat-confirmation" disabled>Continue</button>
             </div>
         </div>
     </div>
 </div>
 
-<script src="@Url.Content("~/Scripts/seatselect.js")"></script>
+@section Scripts {
+    <script>
+        // Global object to hold data for the JavaScript file
+        window.showtimeData = {
+            showtimeId: @Model.ShowtimeId,
+            ticketQuantities: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.TicketQuantities)),
+            occupiedSeats: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.OccupiedSeats))
+        };
+    </script>
+    <script src="@Url.Content("~/Scripts/seatselect.js")"></script>
+}

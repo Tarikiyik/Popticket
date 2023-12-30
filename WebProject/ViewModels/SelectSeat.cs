@@ -12,6 +12,6 @@ namespace WebProject.ViewModels
         public int TheaterId { get; set; }
         public TheaterLayouts TheaterLayout { get; set; }
         public Dictionary<int, int> TicketQuantities { get; set; } // TicketTypeId and Quantity
-                                                                   // Add any other properties needed for seat selection
+        public List<string> OccupiedSeats { get; set; } // This will store seat identifiers like "A1", "A2", etc.                                                           
     }
 }

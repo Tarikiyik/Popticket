@@ -182,7 +182,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    // Event listener for the continue button
     document.getElementById("ticket-confirmation-button").addEventListener("click", function () {
         let dataToSend = {
             theaterId: selectedTheater,
@@ -194,18 +193,22 @@ document.addEventListener("DOMContentLoaded", function () {
             }))
         };
 
-        // AJAX POST request to BuyTicketController
         $.ajax({
-            url: '/BuyTicket/SelectSeats', // New action method in BuyTicketController
+            url: '/BuyTicket/SelectSeats', // Make sure this endpoint matches your server configuration
             type: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(dataToSend),
             dataType: 'json',
             success: function (response) {
-                window.location.href = response.redirectUrl; // Redirect to SelectSeat page
+                if (response.redirectUrl) {
+                    window.location.href = response.redirectUrl; // Redirect to SelectSeat page
+                } else {
+                    console.error("No redirect URL provided in response.");
+                }
             },
             error: function (xhr, status, error) {
                 console.error("Error occurred: ", status, error);
+                // Optionally, display an error message to the user
             }
         });
     });
