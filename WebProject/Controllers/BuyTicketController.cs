@@ -103,11 +103,17 @@ namespace WebProject.Controllers
 
         public ActionResult GetOccupiedSeats(int showtimeId)
         {
-            var occupiedSeats = db.seatReservations
+            // Perform the query and materialize the results with ToList()
+            var occupiedSeatsQueryResults = db.seatReservations
                 .Where(sr => sr.showtimeID == showtimeId)
-                .Select(sr => new { sr.Seats.SeatRowLetter, sr.Seats.SeatRowNumber })
+                .ToList(); // Materialize query results
+
+            // Now that you have the results in memory, you can use string interpolation
+            List<string> occupiedSeatsList = occupiedSeatsQueryResults
+                .Select(sr => $"{sr.Seats.SeatRowLetter}{sr.Seats.SeatRowNumber}")
                 .ToList();
-            return Json(new { occupiedSeats }, JsonRequestBehavior.AllowGet);
+
+            return Json(new { occupiedSeats = occupiedSeatsList }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -120,6 +126,7 @@ namespace WebProject.Controllers
             var showtime = db.Showtime.FirstOrDefault(s => s.theaterID == data.TheaterId &&
                                                            DbFunctions.TruncateTime(s.date) == selectedDate &&
                                                            s.time == data.Time);
+
             if (showtime == null)
             {
                 // Handle case where showtime is not found
@@ -148,26 +155,24 @@ namespace WebProject.Controllers
                 return RedirectToAction("Error", new { message = "Total price not found." });
             }
 
-            var occupiedSeatIdsQuery = db.seatReservations
-                                    .Where(sr => sr.showtimeID == showtime.showtimeID)
-                                    .Select(sr => sr.seatID);
-            bool hasOccupiedSeats = occupiedSeatIdsQuery.Any();
+            var occupiedSeatsQueryResults = db.seatReservations
+                .Where(sr => sr.showtimeID == showtime.showtimeID)
+                .ToList(); // Materialize query results
 
             List<string> occupiedSeatsList;
-            if (hasOccupiedSeats)
+            if (occupiedSeatsQueryResults.Any())
             {
-                var occupiedSeatIds = occupiedSeatIdsQuery.ToList();
-
-                occupiedSeatsList = db.Seats
-                                      .Where(s => occupiedSeatIds.Contains(s.SeatID))
-                                      .Select(s => $"{s.SeatRowLetter}{s.SeatRowNumber}")
-                                      .ToList();
+                // Use string interpolation after materializing the query results
+                occupiedSeatsList = occupiedSeatsQueryResults
+                    .Select(sr => $"{sr.Seats.SeatRowLetter}{sr.Seats.SeatRowNumber}")
+                    .ToList();
             }
             else
             {
                 // If there are no occupied seats, initialize an empty list
                 occupiedSeatsList = new List<string>();
             }
+
 
             // Prepare the ViewModel for the SelectSeat view
             SelectSeat viewModel = new SelectSeat

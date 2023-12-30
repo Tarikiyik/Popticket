@@ -2,10 +2,13 @@
 
 <div class="content-wrapper">
     <div class="select-seat-page">
+        <!-- Theater Layout -->
         <div class="theater">
+            <!-- Curtain for Aesthetic -->
             <div class="curtain">
                 <div class="curtain-line"></div>
             </div>
+            <!-- Seats Layout -->
             <div class="seats">
                 @for (int row = 0; row < Model.TheaterLayout.NumberOfRows; row++)
                 {
@@ -17,6 +20,7 @@
                         }
                     </div>
                 }
+                <!-- Legend for Seat States -->
                 <div class="example-seat">
                     <h3>Empty Seats</h3>
                     <span class="seat"></span>
@@ -25,7 +29,8 @@
                     <h3>Selected Seats</h3>
                     <span class="seat selected"></span>
                 </div>
-                <button class="select-seat-confirmation" disabled>Continue</button>
+                <!-- Continue Button -->
+                <button class="select-seat-confirmation" id="continue-button" disabled>Continue</button>
             </div>
         </div>
     </div>
@@ -33,7 +38,6 @@
 
 @section Scripts {
     <script>
-        // Pass the server-side data to JavaScript
         window.showtimeData = {
             showtimeId: @Model.ShowtimeId,
             ticketQuantities: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.TicketQuantities)),

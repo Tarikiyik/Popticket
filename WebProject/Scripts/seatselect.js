@@ -1,86 +1,45 @@
 document.addEventListener("DOMContentLoaded", function () {
-    // Initialize variables to store data from the server
-    var showtimeId;
-    var occupiedSeats = [];
-    var ticketQuantities = {};
+    const selectedSeats = new Set();
+    const maxSeats = window.showtimeData.ticketQuantities.reduce((acc, val) => acc + val.quantity, 0);
 
-    // Function to update the Continue button based on selected seats
-    function updateContinueButton(selectedSeats) {
-        var continueButton = document.querySelector(".select-seat-confirmation");
-        var totalTickets = Object.values(ticketQuantities).reduce((acc, val) => acc + val, 0);
-        continueButton.disabled = selectedSeats.size !== totalTickets;
-    }
-
-    // Function to mark a seat as occupied
-    function markOccupiedSeats(occupiedSeats) {
-        occupiedSeats.forEach(function (seatId) {
-            var seatElement = document.querySelector(`.seat[data-seat-id="${seatId}"]`);
-            if (seatElement) {
-                seatElement.classList.add('occupied');
-            }
-        });
-    }
-
-    // Function to toggle seat selection
-    function toggleSeatSelection(seat, selectedSeats) {
-        if (seat.classList.contains("occupied")) {
-            return; // Do nothing if the seat is already occupied
+    // Select or Deselect Seat
+    function selectSeat(seatId) {
+        const seatElement = document.querySelector(`[data-seat-id='${seatId}']`);
+        if (seatElement.classList.contains('occupied')) {
+            return; // Do nothing for occupied seats
         }
 
-        var seatId = seat.getAttribute('data-seat-id');
-        if (seat.classList.contains("selected")) {
+        if (seatElement.classList.contains('selected')) {
+            seatElement.classList.remove('selected');
             selectedSeats.delete(seatId);
-        } else {
+        } else if (selectedSeats.size < maxSeats) {
+            seatElement.classList.add('selected');
             selectedSeats.add(seatId);
         }
 
-        seat.classList.toggle("selected");
-        updateContinueButton(selectedSeats); // Update the Continue button state
+        // Enable or Disable Continue Button
+        document.getElementById('continue-button').disabled = selectedSeats.size !== maxSeats;
     }
 
-    document.addEventListener("DOMContentLoaded", function () {
-        var selectedSeats = new Set();
-
-        // Fetch occupied seats from the server on page load
-        fetchOccupiedSeats(showtimeId, function (data) {
-            occupiedSeats = data;
-            markOccupiedSeats(occupiedSeats);
-        });
-
-        // Event delegation for seat clicks
-        document.querySelector(".seats").addEventListener("click", function (event) {
-            if (event.target.classList.contains("seat")) {
-                toggleSeatSelection(event.target, selectedSeats);
-            }
-        });
-
-        // Fetch and display occupied seats from the server
-        function fetchOccupiedSeats(showtimeId, callback) {
-            var endpoint = '/BuyTicket/GetOccupiedSeats'; // Your actual endpoint URL
-            $.ajax({
-                url: endpoint,
-                type: 'GET',
-                data: { showtimeId: showtimeId },
-                success: function (data) {
-                    callback(data.occupiedSeats);
-                },
-                error: function (xhr, status, error) {
-                    console.error('Error fetching occupied seats:', status, error);
-                }
-            });
+    // Mark Occupied Seats
+    window.showtimeData.occupiedSeats.forEach(seatId => {
+        const seatElement = document.querySelector(`[data-seat-id='${seatId}']`);
+        if (seatElement) {
+            seatElement.classList.add('occupied');
         }
-
-        // Initialize the page with data from the server
-        function initializePage() {
-            // Assuming 'showtimeData' is a global object containing data from the server
-            showtimeId = showtimeData.showtimeId;
-            ticketQuantities = showtimeData.ticketQuantities;
-            fetchOccupiedSeats(showtimeId, function (occupied) {
-                occupiedSeats = occupied;
-                markOccupiedSeats(occupiedSeats);
-            });
-        }
-
-        initializePage();
     });
+
+    // Add Event Listener to All Seats
+    document.querySelectorAll('.seat').forEach(seat => {
+        seat.addEventListener('click', () => selectSeat(seat.dataset.seatId));
+    });
+
+    // Continue to Payment Page (Placeholder Function)
+    document.getElementById('continue-button').addEventListener('click', () => {
+        // Logic to handle transition to the payment page
+        // You will need to pass selectedSeats and other relevant data
+        console.log(Array.from(selectedSeats)); // For testing
+    });
+
+
 });
