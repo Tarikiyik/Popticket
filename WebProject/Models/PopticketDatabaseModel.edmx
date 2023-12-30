@@ -107,7 +107,7 @@
           <Key>
             <PropertyRef Name="TheaterLayoutID" />
           </Key>
-          <Property Name="TheaterLayoutID" Type="int" Nullable="false" />
+          <Property Name="TheaterLayoutID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="TheaterID" Type="int" Nullable="false" />
           <Property Name="NumberOfRows" Type="int" Nullable="false" />
           <Property Name="SeatsPerRow" Type="int" Nullable="false" />

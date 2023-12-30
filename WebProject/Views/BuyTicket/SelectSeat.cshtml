@@ -1,105 +1,22 @@
-﻿<div class="content-wrapper">
+﻿@model WebProject.ViewModels.SelectSeat
+@using WebProject.Models // Add necessary namespace for model access
+
+<div class="content-wrapper">
     <div class="select-seat-page">
         <div class="theater">
             <div class="curtain">
                 <div class="curtain-line"></div>
             </div>
             <div class="seats">
-                <div class="row">
-                    <span class="seat"></span>
-                    <span class="seat"></span>
-                    <span class="seat"></span>
-                    <span class="seat"></span>
-                    <span class="seat"></span>
-                    <span class="seat"></span>
-                    <span class="seat"></span>
-                    <span class="seat"></span>
-                    <span class="seat"></span>
-                    <span class="seat"></span>
-                    <span class="seat"></span>
-                    <span class="seat"></span>
-                    <span class="seat"></span>
-                    <span class="seat"></span>
-                    <span class="seat"></span>
-                    <span class="seat"></span>
-                    <!-- Add more seats as needed -->
-                </div>
-                <div class="row">
-                    <span class="seat"></span>
-                    <span class="seat"></span>
-                    <span class="seat"></span>
-                    <span class="seat"></span>
-                    <span class="seat"></span>
-                    <span class="seat"></span>
-                    <span class="seat"></span>
-                    <span class="seat"></span>
-                    <span class="seat"></span>
-                    <span class="seat"></span>
-                    <span class="seat"></span>
-                    <span class="seat"></span>
-                    <span class="seat"></span>
-                    <span class="seat"></span>
-                    <span class="seat"></span>
-                    <span class="seat"></span>
-                    <!-- Add more seats as needed -->
-                </div>
-                <div class="row">
-                    <span class="seat"></span>
-                    <span class="seat"></span>
-                    <span class="seat"></span>
-                    <span class="seat"></span>
-                    <span class="seat"></span>
-                    <span class="seat"></span>
-                    <span class="seat"></span>
-                    <span class="seat"></span>
-                    <span class="seat"></span>
-                    <span class="seat"></span>
-                    <span class="seat"></span>
-                    <span class="seat"></span>
-                    <span class="seat"></span>
-                    <span class="seat"></span>
-                    <span class="seat"></span>
-                    <span class="seat"></span>
-                    <!-- Add more seats as needed -->
-                </div>
-                <div class="row">
-                    <span class="seat"></span>
-                    <span class="seat"></span>
-                    <span class="seat"></span>
-                    <span class="seat"></span>
-                    <span class="seat"></span>
-                    <span class="seat"></span>
-                    <span class="seat"></span>
-                    <span class="seat"></span>
-                    <span class="seat"></span>
-                    <span class="seat"></span>
-                    <span class="seat"></span>
-                    <span class="seat"></span>
-                    <span class="seat"></span>
-                    <span class="seat"></span>
-                    <span class="seat"></span>
-                    <span class="seat"></span>
-                    <!-- Add more seats as needed -->
-                </div>
-                <div class="row">
-                    <span class="seat"></span>
-                    <span class="seat"></span>
-                    <span class="seat"></span>
-                    <span class="seat"></span>
-                    <span class="seat"></span>
-                    <span class="seat"></span>
-                    <span class="seat"></span>
-                    <span class="seat"></span>
-                    <span class="seat"></span>
-                    <span class="seat"></span>
-                    <span class="seat"></span>
-                    <span class="seat"></span>
-                    <span class="seat"></span>
-                    <span class="seat"></span>
-                    <span class="seat"></span>
-                    <span class="seat"></span>
-                    <!-- Add more seats as needed -->
-                </div>
+                @for (int row = 1; row <= Model.TheaterLayout.NumberOfRows; row++)
+                {
+                    <div class="row">
+                        @for (int seatNum = 1; seatNum <= Model.TheaterLayout.SeatsPerRow; seatNum++)
+                        {
+                            <span class="seat" data-seat-id="@($"R{row}S{seatNum}")"></span>
+                        }
+                    </div>
+                }
                 <div class="example-seat">
                     <h3>Empty Seats</h3>
                     <span class="seat"></span>
@@ -108,8 +25,7 @@
                     <h3>Selected Seats</h3>
                     <span class="seat selected"></span>
                 </div>
-                <a href="payment.html"><button class="select-seat-confirmation">Continue</button></a>
-                <!-- Repeat rows as needed -->
+                <button class="select-seat-confirmation">Continue</button>
             </div>
         </div>
     </div>
