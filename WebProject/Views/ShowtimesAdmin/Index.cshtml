@@ -1,0 +1,53 @@
+﻿@model IEnumerable<WebProject.Models.Showtime>
+
+@{
+    ViewBag.Title = "Index";
+}
+<div class="admin-panel">
+    <h2>Index</h2>
+
+    <p>
+        @Html.ActionLink("Create New", "Create")
+    </p>
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.time)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Movie.title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Theater.name)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.time)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.date)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Movie.title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Theater.name)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.showtimeID }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.showtimeID }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.showtimeID })
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>

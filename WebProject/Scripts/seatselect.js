@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
     const selectedSeats = new Set();
-    const maxSeats = window.showtimeData.ticketQuantities.reduce((acc, val) => acc + val.quantity, 0);
+    const maxSeats = window.showtimeData.ticketQuantity;
 
     // Select or Deselect Seat
     function selectSeat(seatId) {
@@ -9,11 +9,11 @@ document.addEventListener("DOMContentLoaded", function () {
             return; // Do nothing for occupied seats
         }
 
-        if (seatElement.classList.contains('selected')) {
-            seatElement.classList.remove('selected');
+        if (seatElement.classList.contains('selected-seat')) {
+            seatElement.classList.remove('selected-seat');
             selectedSeats.delete(seatId);
         } else if (selectedSeats.size < maxSeats) {
-            seatElement.classList.add('selected');
+            seatElement.classList.add('selected-seat');
             selectedSeats.add(seatId);
         }
 
@@ -40,6 +40,4 @@ document.addEventListener("DOMContentLoaded", function () {
         // You will need to pass selectedSeats and other relevant data
         console.log(Array.from(selectedSeats)); // For testing
     });
-
-
 });

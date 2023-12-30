@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Popticket</title>
-    <link rel="stylesheet" href="@Url.Content("~/Content/style.css?v=8")" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/style.css?v=9")" />
 
     <!-- Include jQuery -->
     <script src="@Url.Content("~/Scripts/jquery-3.7.1.js")"></script>
@@ -25,11 +25,18 @@
             <a href="@Url.Action("OnTheaters","Movies")"><h3>MOVIES</h3> </a>
         </div>
         @if (Session["IsAdmin"] != null && (bool)Session["IsAdmin"])
-        {<div class="navbar-categories">
+        {
+            <div class="navbar-categories">
                 <a href="@Url.Action("Index","MoviesAdmin")"><h3>MOVIES PANEL</h3> </a>
             </div>
             <div class="navbar-categories">
                 <a href="@Url.Action("Index","TheatersAdmin")"><h3>THEATERS PANEL</h3> </a>
+            </div>
+            <div class="navbar-categories">
+                <a href="@Url.Action("Index","ShowtimesAdmin")"><h3>SHOWTIMES PANEL</h3> </a>
+            </div>
+            <div class="navbar-categories">
+                <a href="@Url.Action("Index","TicketTypes")"><h3>TICKETS PANEL</h3> </a>
             </div>
         }
 

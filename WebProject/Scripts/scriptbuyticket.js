@@ -186,11 +186,13 @@ document.addEventListener("DOMContentLoaded", function () {
         let totalQuantity = 0;
         let totalPrice = 0;
 
+        // Calculate the total price and quantity based on the selected tickets
         Object.values(selectedTickets).forEach(ticket => {
             totalQuantity += ticket.quantity;
             totalPrice += ticket.quantity * ticket.price;
         });
 
+        // Prepare the data to send
         let dataToSend = {
             theaterId: selectedTheater,
             date: selectedDate,
@@ -199,22 +201,23 @@ document.addEventListener("DOMContentLoaded", function () {
             totalPrice: totalPrice
         };
 
+        // Make the AJAX POST request
         $.ajax({
-            url: '/BuyTicket/SelectSeats', // Make sure this endpoint matches your server configuration
+            url: '/BuyTicket/PrepareSelectSeats',
             type: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(dataToSend),
             dataType: 'json',
             success: function (response) {
-                if (response.redirectUrl) {
-                    window.location.href = response.redirectUrl; // Redirect to SelectSeat page
+                if (response.success) {
+                    // If successful, redirect to the SelectSeat action
+                    window.location.href = response.redirectAction;
                 } else {
-                    console.error("No redirect URL provided in response.");
+                    console.error("Error preparing data for seat selection: ", response.message);
                 }
             },
             error: function (xhr, status, error) {
                 console.error("Error occurred: ", status, error);
-                // Optionally, display an error message to the user
             }
         });
     });

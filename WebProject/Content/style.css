@@ -1730,17 +1730,20 @@ footer {
   margin-right: 40px;
 }
 .seat {
-  width: 20px;
-  height: 20px;
+  display:flex;
+  width: 24px;
+  height: 24px;
   margin: 5px;
   background-color: #3d9970;
   border-top-right-radius: 10px;
   border-top-left-radius: 10px;
   cursor: pointer;
+  align-items: center;
+  justify-content: center;
 }
 
 /* You can add more styling to seat classes to represent different states */
-.seat.selecteded {
+.seat.selected-seat {
   background-color: #ff851b;
 }
 
@@ -1763,8 +1766,39 @@ footer {
   float: right;
   margin-top: 20px;
 }
+
 .select-seat-confirmation:hover {
   filter: brightness(0.8);
+}
+
+.select-seat-confirmation:disabled {
+    width: 40%;
+    height: 36px;
+    border-radius: 30px;
+    transition: 0.15s;
+    background: rgb(255, 217, 0);
+    border: 1px solid rgb(95, 95, 95, 0.15);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    color: black;
+    text-align: center;
+    cursor: default;
+    float: right;
+    margin-top: 20px;
+}
+
+.select-seat-confirmation:disabled:hover {
+    width: 40%;
+    height: 36px;
+    border-radius: 30px;
+    transition: 0.15s;
+    background: rgb(255, 217, 0);
+    border: 1px solid rgb(95, 95, 95, 0.15);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    color: black;
+    text-align: center;
+    cursor: default;
+    float: right;
+    margin-top: 20px;
 }
 
 

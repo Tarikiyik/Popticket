@@ -117,78 +117,76 @@ namespace WebProject.Controllers
         }
 
         [HttpPost]
-        public ActionResult SelectSeats(SelectTicketData data)
+        public JsonResult PrepareSelectSeats(SelectTicketData data)
         {
-            // Ensure date is in "yyyy-MM-dd" format and time is in "HH:mm" format
-            DateTime selectedDate = DateTime.ParseExact(data.Date, "yyyy-MM-dd", CultureInfo.InvariantCulture);
-
-            // Retrieve the showtime ID based on the theaterId, date, and time
-            var showtime = db.Showtime.FirstOrDefault(s => s.theaterID == data.TheaterId &&
-                                                           DbFunctions.TruncateTime(s.date) == selectedDate &&
-                                                           s.time == data.Time);
-
-            if (showtime == null)
+            try
             {
-                // Handle case where showtime is not found
-                return RedirectToAction("Error", new { message = "Showtime not found." });
-            }
+                DateTime selectedDate = DateTime.ParseExact(data.Date, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+                var showtime = db.Showtime.FirstOrDefault(s => s.theaterID == data.TheaterId &&
+                                                               DbFunctions.TruncateTime(s.date) == selectedDate &&
+                                                               s.time == data.Time);
 
-            // Retrieve theater layout
-            var theaterLayout = db.TheaterLayouts.FirstOrDefault(tl => tl.TheaterID == data.TheaterId);
-            if (theaterLayout == null)
-            {
-                // Handle case where theater layout is not found
-                return RedirectToAction("Error", new { message = "Theater layout not found." });
-            }
+                if (showtime == null)
+                    return Json(new { success = false, message = "Showtime not found." });
 
-            var totalQuantity = data.TotalQuantity;
-            if (totalQuantity == 0)
-            {
-                // Handle case where theater layout is not found
-                return RedirectToAction("Error", new { message = "Ticket quantity not found." });
-            }
+                var theaterLayout = db.TheaterLayouts.FirstOrDefault(tl => tl.TheaterID == data.TheaterId);
+                if (theaterLayout == null)
+                    return Json(new { success = false, message = "Theater layout not found." });
 
-            var totalPrice = data.TotalPrice;
-            if (totalPrice == 0)
-            {
-                // Handle case where theater layout is not found
-                return RedirectToAction("Error", new { message = "Total price not found." });
-            }
+                if (data.TotalQuantity == 0)
+                    return Json(new { success = false, message = "Ticket quantity not found." });
 
-            var occupiedSeatsQueryResults = db.seatReservations
-                .Where(sr => sr.showtimeID == showtime.showtimeID)
-                .ToList(); // Materialize query results
+                if (data.TotalPrice == 0)
+                    return Json(new { success = false, message = "Total price not found." });
 
-            List<string> occupiedSeatsList;
-            if (occupiedSeatsQueryResults.Any())
-            {
-                // Use string interpolation after materializing the query results
-                occupiedSeatsList = occupiedSeatsQueryResults
+                var occupiedSeatsQueryResults = db.seatReservations
+                    .Where(sr => sr.showtimeID == showtime.showtimeID)
+                    .ToList();
+
+                List<string> occupiedSeatsList = occupiedSeatsQueryResults
                     .Select(sr => $"{sr.Seats.SeatRowLetter}{sr.Seats.SeatRowNumber}")
                     .ToList();
+
+                // Prepare the ViewModel for the SelectSeat view
+                SelectSeat viewModel = new SelectSeat
+                {
+                    ShowtimeId = showtime.showtimeID,
+                    TheaterId = data.TheaterId,
+                    TheaterLayout = theaterLayout,
+                    TotalQuantity = data.TotalQuantity,
+                    TotalPrice = data.TotalPrice,
+                    OccupiedSeats = occupiedSeatsList
+                };
+
+                // Store the viewModel in TempData
+                TempData["SelectSeatData"] = viewModel;
+
+                // Return a JsonResult indicating success and the next action to redirect to
+                return Json(new { success = true, redirectAction = Url.Action("SelectSeat") });
             }
-            else
+            catch (Exception ex)
             {
-                // If there are no occupied seats, initialize an empty list
-                occupiedSeatsList = new List<string>();
+                // Log the exception here
+                return Json(new { success = false, message = "An error occurred. " + ex.Message });
             }
-
-
-            // Prepare the ViewModel for the SelectSeat view
-            SelectSeat viewModel = new SelectSeat
-            {
-                ShowtimeId = showtime.showtimeID,
-                TheaterId = data.TheaterId,
-                TheaterLayout = theaterLayout,
-                TotalQuantity = totalQuantity,
-                TotalPrice = totalPrice,
-                OccupiedSeats = occupiedSeatsList
-            };
-
-            // Pass the ViewModel to the SelectSeat view
-            return View("SelectSeat", viewModel);
         }
 
+        public ActionResult SelectSeat()
+        {
+            if (Session["User"] == null)
+                return RedirectToAction("Login", "Account");
 
+            // Retrieve the ViewModel from TempData
+            var viewModel = TempData["SelectSeatData"] as SelectSeat;
+
+            if (viewModel == null)
+            {
+                // Log the error here
+                return RedirectToAction("Error", new { message = "Seat selection data is not available." });
+            }
+
+            // Render the SelectSeat view with the viewModel
+            return View(viewModel);
+        }
     }
 }
