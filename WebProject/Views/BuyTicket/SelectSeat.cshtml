@@ -1,5 +1,8 @@
 ﻿@model WebProject.ViewModels.SelectSeat
-@using WebProject.Models // Add necessary namespace for model access
+@{
+    // Assuming 'OccupiedSeats' is a HashSet containing IDs of occupied seats for simplicity
+    var occupiedSeats = Model.OccupiedSeats ?? new HashSet<string>(); // This will come from your ViewModel
+}
 
 <div class="content-wrapper">
     <div class="select-seat-page">
@@ -13,7 +16,9 @@
                     <div class="row">
                         @for (int seatNum = 1; seatNum <= Model.TheaterLayout.SeatsPerRow; seatNum++)
                         {
-                            <span class="seat" data-seat-id="@($"R{row}S{seatNum}")"></span>
+                            // Construct the seat ID string, e.g., "A1"
+                            string seatId = $"{(char)('A' + row - 1)}{seatNum}";
+                            <span class="seat @(occupiedSeats.Contains(seatId) ? "occupied" : "")" data-seat-id="@seatId">@seatId</span>
                         }
                     </div>
                 }
