@@ -194,15 +194,15 @@ document.addEventListener("DOMContentLoaded", function () {
             }))
         };
 
-        // AJAX request to server
+        // AJAX POST request to BuyTicketController
         $.ajax({
-            url: '/BuyTicket/ConfirmTicketSelection', // Replace with your actual endpoint
+            url: '/BuyTicket/SelectSeats', // New action method in BuyTicketController
             type: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(dataToSend),
             dataType: 'json',
             success: function (response) {
-                window.location.href = response.redirectUrl;
+                window.location.href = response.redirectUrl; // Redirect to SelectSeat page
             },
             error: function (xhr, status, error) {
                 console.error("Error occurred: ", status, error);

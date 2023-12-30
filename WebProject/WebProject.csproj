@@ -211,10 +211,9 @@
       <DependentUpon>PopticketDatabaseModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ViewModels\PaymentViewModel.cs" />
+    <Compile Include="ViewModels\SelectSeat.cs" />
     <Compile Include="ViewModels\SelectTicket.cs" />
-    <Compile Include="ViewModels\ShowTicketViewModel.cs" />
-    <Compile Include="ViewModels\TicketSelection.cs" />
+    <Compile Include="ViewModels\SelectTicketData.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\style.css" />

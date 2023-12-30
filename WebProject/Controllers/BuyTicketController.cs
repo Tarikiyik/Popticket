@@ -100,5 +100,40 @@ namespace WebProject.Controllers
                 return Json(new { success = false, error = "An error occurred while fetching times." }, JsonRequestBehavior.AllowGet);
             }
         }
+
+        [HttpPost]
+        public ActionResult SelectSeats(SelectTicketData data)
+        {
+            // Convert date and time to DateTime
+            DateTime selectedDateTime = DateTime.ParseExact(data.Date + " " + data.Time, "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture);
+
+            // Retrieve the showtime ID based on the theaterId, date, and time
+            var showtime = db.Showtime.FirstOrDefault(s => s.theaterID == data.TheaterId && s.date == selectedDateTime);
+            if (showtime == null)
+            {
+                // Handle case where showtime is not found
+                return RedirectToAction("Error"); // or another appropriate view
+            }
+
+            // Retrieve theater layout
+            var theaterLayout = db.TheaterLayouts.FirstOrDefault(tl => tl.TheaterID == data.TheaterId);
+            if (theaterLayout == null)
+            {
+                // Handle case where theater layout is not found
+                return RedirectToAction("Error"); // or another appropriate view
+            }
+
+            // Prepare the ViewModel for SelectSeat view
+            SelectSeat viewModel = new SelectSeat
+            {
+                ShowtimeId = showtime.showtimeID,
+                TheaterId = data.TheaterId,
+                TheaterLayout = theaterLayout,
+                TicketQuantities = data.Tickets.ToDictionary(t => t.TicketTypeId, t => t.Quantity)
+            };
+
+            // Pass the ViewModel to the SelectSeat view
+            return View("SelectSeat", viewModel);
+        }
     }
 }

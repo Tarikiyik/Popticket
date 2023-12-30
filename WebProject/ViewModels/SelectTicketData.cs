@@ -2,18 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using WebProject.Models;
+
 namespace WebProject.ViewModels
 {
-    public class ConfirmTicketSelectionViewModel
+    public class SelectTicketData
     {
-        public int ShowtimeId { get; set; }
-        public List<TicketSelection> TicketSelections { get; set; }
+        public int TheaterId { get; set; }
+        public string Date { get; set; }
+        public string Time { get; set; }
+        public List<TicketSelection> Tickets { get; set; }
     }
 
     public class TicketSelection
     {
-        public int SeatId { get; set; }
         public int TicketTypeId { get; set; }
         public int Quantity { get; set; }
     }
