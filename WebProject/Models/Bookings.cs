@@ -19,6 +19,7 @@ namespace WebProject.Models
         {
             this.BookingDetails = new HashSet<BookingDetails>();
             this.Payment = new HashSet<Payment>();
+            this.seatReservations = new HashSet<seatReservations>();
         }
     
         public int bookingID { get; set; }
@@ -32,5 +33,7 @@ namespace WebProject.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Payment> Payment { get; set; }
         public virtual Showtime Showtime { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<seatReservations> seatReservations { get; set; }
     }
 }

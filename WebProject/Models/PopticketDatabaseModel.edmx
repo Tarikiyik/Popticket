@@ -61,6 +61,8 @@
           <Property Name="reservationID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="showtimeID" Type="int" Nullable="false" />
           <Property Name="seatID" Type="int" Nullable="false" />
+          <Property Name="bookingID" Type="int" />
+          <Property Name="status" Type="varchar" MaxLength="10" Nullable="false" />
         </EntityType>
         <EntityType Name="Seats">
           <Key>
@@ -193,6 +195,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_seatReservations_Bookings">
+          <End Role="Bookings" Type="Self.Bookings" Multiplicity="0..1" />
+          <End Role="seatReservations" Type="Self.seatReservations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Bookings">
+              <PropertyRef Name="bookingID" />
+            </Principal>
+            <Dependent Role="seatReservations">
+              <PropertyRef Name="bookingID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_seatReservations_Seats">
           <End Role="Seats" Type="Self.Seats" Multiplicity="1" />
           <End Role="seatReservations" Type="Self.seatReservations" Multiplicity="*" />
@@ -311,6 +325,10 @@
             <End Role="Bookings" EntitySet="Bookings" />
             <End Role="Payment" EntitySet="Payment" />
           </AssociationSet>
+          <AssociationSet Name="FK_seatReservations_Bookings" Association="Self.FK_seatReservations_Bookings">
+            <End Role="Bookings" EntitySet="Bookings" />
+            <End Role="seatReservations" EntitySet="seatReservations" />
+          </AssociationSet>
           <AssociationSet Name="FK_seatReservations_Seats" Association="Self.FK_seatReservations_Seats">
             <End Role="Seats" EntitySet="Seats" />
             <End Role="seatReservations" EntitySet="seatReservations" />
@@ -367,6 +385,7 @@
           <NavigationProperty Name="User" Relationship="Self.FK_Bookings_User" FromRole="Bookings" ToRole="User" />
           <NavigationProperty Name="Payment" Relationship="Self.FK_Payment_Bookings" FromRole="Bookings" ToRole="Payment" />
           <NavigationProperty Name="Showtime" Relationship="PopTicketModel.FK_Bookings_Showtime" FromRole="Bookings" ToRole="Showtime" />
+          <NavigationProperty Name="seatReservations" Relationship="PopTicketModel.FK_seatReservations_Bookings" FromRole="Bookings" ToRole="seatReservations" />
         </EntityType>
         <EntityType Name="Cities">
           <Key>
@@ -572,6 +591,10 @@
             <End Role="Showtime" EntitySet="Showtime" />
             <End Role="seatReservations" EntitySet="seatReservations" />
           </AssociationSet>
+          <AssociationSet Name="FK_seatReservations_Bookings" Association="PopTicketModel.FK_seatReservations_Bookings">
+            <End Role="Bookings" EntitySet="Bookings" />
+            <End Role="seatReservations" EntitySet="seatReservations" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="Showtime">
           <Key>
@@ -678,6 +701,9 @@
           <Property Name="seatID" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Seats" Relationship="PopTicketModel.FK_seatReservations_Seats" FromRole="seatReservations" ToRole="Seats" />
           <NavigationProperty Name="Showtime" Relationship="PopTicketModel.FK_seatReservations_Showtime" FromRole="seatReservations" ToRole="Showtime" />
+          <Property Name="bookingID" Type="Int32" />
+          <Property Name="status" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Bookings" Relationship="PopTicketModel.FK_seatReservations_Bookings" FromRole="seatReservations" ToRole="Bookings" />
         </EntityType>
         <Association Name="FK_seatReservations_Seats">
           <End Type="PopTicketModel.Seats" Role="Seats" Multiplicity="1" />
@@ -700,6 +726,18 @@
             </Principal>
             <Dependent Role="seatReservations">
               <PropertyRef Name="showtimeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_seatReservations_Bookings">
+          <End Type="PopTicketModel.Bookings" Role="Bookings" Multiplicity="0..1" />
+          <End Type="PopTicketModel.seatReservations" Role="seatReservations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Bookings">
+              <PropertyRef Name="bookingID" />
+            </Principal>
+            <Dependent Role="seatReservations">
+              <PropertyRef Name="bookingID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -844,6 +882,8 @@
           <EntitySetMapping Name="seatReservations">
             <EntityTypeMapping TypeName="PopTicketModel.seatReservations">
               <MappingFragment StoreEntitySet="seatReservations">
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="bookingID" ColumnName="bookingID" />
                 <ScalarProperty Name="seatID" ColumnName="seatID" />
                 <ScalarProperty Name="showtimeID" ColumnName="showtimeID" />
                 <ScalarProperty Name="reservationID" ColumnName="reservationID" />
