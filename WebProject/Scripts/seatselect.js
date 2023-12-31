@@ -1,6 +1,9 @@
 document.addEventListener("DOMContentLoaded", function () {
     const selectedSeats = new Set();
     const maxSeats = window.showtimeData.ticketQuantity;
+    const totalPrice = window.showtimeData.totalPrice;
+    const continueButton = document.getElementById('continue-button');
+
 
     // Select or Deselect Seat
     function selectSeat(seatId) {
@@ -34,10 +37,37 @@ document.addEventListener("DOMContentLoaded", function () {
         seat.addEventListener('click', () => selectSeat(seat.dataset.seatId));
     });
 
-    // Continue to Payment Page (Placeholder Function)
-    document.getElementById('continue-button').addEventListener('click', () => {
-        // Logic to handle transition to the payment page
-        // You will need to pass selectedSeats and other relevant data
-        console.log(Array.from(selectedSeats)); // For testing
+    // Continue Button Click Event
+    continueButton.addEventListener('click', function () {
+        if (selectedSeats.size === maxSeats) {
+            const selectedSeatIds = Array.from(selectedSeats);
+            const showtimeId = window.showtimeData.showtimeId;
+
+            // Prepare the AJAX call to send the selected seats to the server
+            $.ajax({
+                url: '/BuyTicket/PrepareForPayment', // This is the server endpoint that will prepare for payment
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    selectedSeatIds: selectedSeatIds,
+                    showtimeId: showtimeId,
+                    totalQuantity: maxSeats,
+                    totalPrice: totalPrice
+                }),
+                success: function (response) {
+                    // If the server returns a success response, redirect to the payment page
+                    if (response.success) {
+                        window.location.href = response.paymentPageUrl; // This URL will be provided by the server
+                    } else {
+                        alert('There was an error preparing for payment. Please try again.');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error('An error occurred while preparing for payment:', error);
+                }
+            });
+        } else {
+            alert('Please select the correct number of seats before continuing.');
+        }
     });
 });

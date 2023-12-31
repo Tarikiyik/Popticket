@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Globalization;
 using System.Web;
+using System.Transactions;
 using System.Web.Mvc;
 using System.Data.Entity;
 using WebProject.Models;
@@ -187,6 +188,69 @@ namespace WebProject.Controllers
 
             // Render the SelectSeat view with the viewModel
             return View(viewModel);
+        }
+
+        [HttpPost]
+        public JsonResult PrepareForPayment(SelectSeatData data)
+        {
+            try
+            {
+                var user = Session["User"] as User;
+                int userId = user.UserID; // Ensure the property name matches your User model
+
+                // Start a database transaction
+                using (var transaction = new TransactionScope())
+                {
+                    // Check if the selected seats are already reserved
+                    var alreadyReservedSeats = db.seatReservations
+                        .Where(sr => sr.showtimeID == data.ShowtimeId && data.SelectedSeatIds.Contains(sr.seatID.ToString()))
+                        .ToList();
+
+                    if (alreadyReservedSeats.Any(sr => sr.status == "reserved"))
+                    {
+                        return Json(new { success = false, message = "Some of the selected seats are already reserved." });
+                    }
+
+                    // Create temporary seat reservations with a status of "pending"
+                    foreach (var seatId in data.SelectedSeatIds)
+                    {
+                        var tempReservation = new seatReservations
+                        {
+                            showtimeID = data.ShowtimeId,
+                            seatID = int.Parse(seatId),
+                            status = "pending" // Mark the reservation as pending
+                        };
+
+                        db.seatReservations.Add(tempReservation);
+                    }
+
+                    // Save the changes to the database
+                    db.SaveChanges();
+
+                    // Complete the transaction
+                    transaction.Complete();
+                }
+
+                // Prepare the data to be passed to the payment page
+                var paymentData = new
+                {
+                    ShowtimeId = data.ShowtimeId,
+                    SelectedSeatIds = data.SelectedSeatIds,
+                    TotalQuantity = data.TotalQuantity,
+                    TotalPrice = data.TotalPrice
+                };
+
+                // Store the payment data in TempData or Session
+                TempData["PaymentData"] = paymentData;
+
+                // Return a JsonResult indicating success and the next action to redirect to
+                string paymentPageUrl = Url.Action("Payment");
+                return Json(new { success = true, redirectUrl = paymentPageUrl });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "An error occurred: " + ex.Message });
+            }
         }
     }
 }

@@ -41,8 +41,9 @@
         window.showtimeData = {
             showtimeId: @Model.ShowtimeId,
             ticketQuantity: @Model.TotalQuantity,
+            totalPrice: @Model.TotalPrice,
             occupiedSeats: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.OccupiedSeats))
         };
     </script>
-    <script src="@Url.Content("~/Scripts/seatselect.js?v=1")"></script>
+    <script src="@Url.Content("~/Scripts/seatselect.js?v=2")"></script>
 }
