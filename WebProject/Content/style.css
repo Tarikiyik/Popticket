@@ -1079,27 +1079,36 @@ footer {
 }
 
 .movie-info-button {
-  position: absolute;
-  bottom: 4px;
-  left: 8px;
+    display: flex;
+    position: absolute;
+    bottom: 4px;
+    left: 8px;
+    height: 56px;
+    width: 300px;
+    border-radius: 30px;
 }
 
-.movie-info-button button {
-  border: 1px solid rgb(95, 95, 95);
-  height: 56px;
-  width: 300px;
-  border-radius: 30px;
-  background: rgb(95, 95, 95, 0.15);
-  color: white;
-  text-align: center;
-  cursor: pointer;
-  font-weight: bold;
-  font-size: 16px;
+.movie-info-button a {
+    display: flex;
+    border: 1px solid rgb(95, 95, 95);
+    height: 56px;
+    width: 300px;
+    border-radius: 30px;
+    background: rgb(95, 95, 95, 0.15);
+    color: white;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 16px;
 }
 
-.movie-info-button button:hover {
-  background: rgb(255, 208, 0);
-  color: black;
+.movie-info-button a:hover {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgb(255, 208, 0);
+    color: black;
 }
 
 .buy-ticket-page {
@@ -1363,24 +1372,24 @@ footer {
 }
 
 #ticket-confirmation-button {
-  border: 1px solid rgb(95, 95, 95);
-  height: 64px;
-  width: 90%;
-  border-radius: 30px;
-  background: rgb(95, 95, 95, 0.15);
-  color: white;
-  text-align: center;
-  cursor: pointer;
-  font-weight: bold;
-  font-size: 16px;
-  position: absolute;
-  bottom: 0;
-  left: 5%;
+    border: 1px solid rgb(95, 95, 95);
+    height: 64px;
+    width: 90%;
+    border-radius: 30px;
+    background: rgb(255, 217, 0);
+    color: black;
+    text-align: center;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 16px;
+    position: absolute;
+    bottom: 0;
+    left: 5%;
 }
 
 #ticket-confirmation-button:hover {
-   background: rgb(255, 208, 0);
-   color: black;}
+   filter: brightness(0.9);
+}
 
 #ticket-confirmation-button:disabled {
    border: 1px solid rgb(95, 95, 95);
@@ -1731,8 +1740,8 @@ footer {
 }
 .seat {
   display:flex;
-  width: 24px;
-  height: 24px;
+  width: 32px;
+  height: 32px;
   margin: 5px;
   background-color: #3d9970;
   border-top-right-radius: 10px;

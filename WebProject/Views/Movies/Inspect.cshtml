@@ -31,7 +31,7 @@
 
                     @if (!isUpcoming)
                     {
-                        <a href="@Url.Action("BuyTicket", "Ticket", new { id = Model.MovieID })"><button>Buy Ticket</button></a>
+                        <a href="@Url.Action("SelectTicket", "BuyTicket", new { movieId = Model.MovieID })">Buy Ticket</a>
                     }
                     </div>
             </div>
