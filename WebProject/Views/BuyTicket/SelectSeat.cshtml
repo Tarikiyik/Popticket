@@ -42,6 +42,7 @@
             showtimeId: @Model.ShowtimeId,
             ticketQuantity: @Model.TotalQuantity,
             totalPrice: @Model.TotalPrice,
+            ticketTypeQuantities: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.TicketTypeQuantities)),
             occupiedSeats: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.OccupiedSeats))
         };
     </script>

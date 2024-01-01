@@ -197,8 +197,8 @@ document.addEventListener("DOMContentLoaded", function () {
             theaterId: selectedTheater,
             date: selectedDate,
             time: selectedTime,
-            totalQuantity: totalQuantity,
-            totalPrice: totalPrice
+            totalPrice: totalPrice,
+            ticketTypeQuantities: selectedTickets
         };
 
         // Make the AJAX POST request

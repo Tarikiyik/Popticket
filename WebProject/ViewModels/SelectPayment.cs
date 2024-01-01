@@ -6,11 +6,11 @@ using WebProject.Models;
 
 namespace WebProject.ViewModels
 {
-    public class SelectSeatData
+    public class SelectPayment
     {
-        public List<string> SelectedSeatIds { get; set; }
         public int ShowtimeId { get; set; }
-        public Dictionary<int, int> TicketTypeQuantities { get; set; }
+        public List<string> SelectedSeatIds { get; set; }
+        public int TotalQuantity { get; set; }
         public decimal TotalPrice { get; set; }
     }
 }

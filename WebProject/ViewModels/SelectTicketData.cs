@@ -10,7 +10,7 @@ namespace WebProject.ViewModels
         public int TheaterId { get; set; }
         public string Date { get; set; }
         public string Time { get; set; }
-        public int TotalQuantity { get; set; }
         public decimal TotalPrice { get; set; }
+        public Dictionary<int, int> TicketTypeQuantities { get; set; }
     }
 }

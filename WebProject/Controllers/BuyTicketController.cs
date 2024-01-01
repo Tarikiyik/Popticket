@@ -134,7 +134,7 @@ namespace WebProject.Controllers
                 if (theaterLayout == null)
                     return Json(new { success = false, message = "Theater layout not found." });
 
-                if (data.TotalQuantity == 0)
+                if (data.TicketTypeQuantities.Values.Sum() == 0)
                     return Json(new { success = false, message = "Ticket quantity not found." });
 
                 if (data.TotalPrice == 0)
@@ -154,13 +154,14 @@ namespace WebProject.Controllers
                     ShowtimeId = showtime.showtimeID,
                     TheaterId = data.TheaterId,
                     TheaterLayout = theaterLayout,
-                    TotalQuantity = data.TotalQuantity,
+                    TotalQuantity = data.TicketTypeQuantities.Values.Sum(),
                     TotalPrice = data.TotalPrice,
-                    OccupiedSeats = occupiedSeatsList
+                    OccupiedSeats = occupiedSeatsList,
+                    TicketTypeQuantities = data.TicketTypeQuantities
                 };
 
                 // Store the viewModel in TempData
-                TempData["SelectSeatData"] = viewModel;
+                TempData["SelectSeat"] = viewModel;
 
                 // Return a JsonResult indicating success and the next action to redirect to
                 return Json(new { success = true, redirectAction = Url.Action("SelectSeat") });
@@ -195,12 +196,29 @@ namespace WebProject.Controllers
         {
             try
             {
+                if (Session["User"] == null)
+                {
+                    return Json(new { success = false, message = "User session has expired." });
+                }
+
                 var user = Session["User"] as User;
-                int userId = user.UserID; // Ensure the property name matches your User model
+                int userId = user.UserID;
 
                 // Start a database transaction
                 using (var transaction = new TransactionScope())
                 {
+                    // Retrieve all bookings for this user
+                    var userBookings = db.Bookings.Where(b => b.userID == userId).ToList();
+
+                    // Find all pending reservations from these bookings
+                    var pendingReservations = userBookings
+                        .SelectMany(b => b.seatReservations)
+                        .Where(sr => sr.status == "pending")
+                        .ToList();
+
+                    // Remove these pending reservations
+                    db.seatReservations.RemoveRange(pendingReservations);
+
                     // Check if the selected seats are already reserved
                     var alreadyReservedSeats = db.seatReservations
                         .Where(sr => sr.showtimeID == data.ShowtimeId && data.SelectedSeatIds.Contains(sr.seatID.ToString()))
@@ -231,17 +249,17 @@ namespace WebProject.Controllers
                     transaction.Complete();
                 }
 
-                // Prepare the data to be passed to the payment page
                 var paymentData = new
                 {
                     ShowtimeId = data.ShowtimeId,
                     SelectedSeatIds = data.SelectedSeatIds,
-                    TotalQuantity = data.TotalQuantity,
+                    TotalQuantity = data.TicketTypeQuantities.Values.Sum(),
                     TotalPrice = data.TotalPrice
                 };
 
                 // Store the payment data in TempData or Session
                 TempData["PaymentData"] = paymentData;
+                TempData.Keep("PaymentData"); // Ensure TempData is kept after a refresh
 
                 // Return a JsonResult indicating success and the next action to redirect to
                 string paymentPageUrl = Url.Action("Payment");
@@ -252,5 +270,6 @@ namespace WebProject.Controllers
                 return Json(new { success = false, message = "An error occurred: " + ex.Message });
             }
         }
+
     }
 }

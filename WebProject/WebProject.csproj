@@ -214,6 +214,7 @@
       <DependentUpon>PopticketDatabaseModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\SelectPayment.cs" />
     <Compile Include="ViewModels\SelectSeat.cs" />
     <Compile Include="ViewModels\SelectSeatData.cs" />
     <Compile Include="ViewModels\SelectTicket.cs" />

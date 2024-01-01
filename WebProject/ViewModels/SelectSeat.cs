@@ -14,6 +14,7 @@ namespace WebProject.ViewModels
         public List<string> OccupiedSeats { get; set; } // This will store seat identifiers like "A1", "A2", etc.
         public int TotalQuantity { get; set; }
         public decimal TotalPrice { get; set; }
+        public Dictionary<int, int> TicketTypeQuantities { get; set; }
 
     }
 }

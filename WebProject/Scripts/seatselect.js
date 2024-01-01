@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const selectedSeats = new Set();
     const maxSeats = window.showtimeData.ticketQuantity;
     const totalPrice = window.showtimeData.totalPrice;
+    const ticketTypeQuantities = window.showtimeData.ticketTypeQuantities;
     const continueButton = document.getElementById('continue-button');
 
 
@@ -52,7 +53,8 @@ document.addEventListener("DOMContentLoaded", function () {
                     selectedSeatIds: selectedSeatIds,
                     showtimeId: showtimeId,
                     totalQuantity: maxSeats,
-                    totalPrice: totalPrice
+                    totalPrice: totalPrice,
+                    ticketTypeQuantities: ticketTypeQuantities
                 }),
                 success: function (response) {
                     // If the server returns a success response, redirect to the payment page
