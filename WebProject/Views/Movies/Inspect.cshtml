@@ -21,8 +21,8 @@
 
                 <div class="movie-info-detail">
                     <p>Genre: @Model.genre</p>
-                    <p>Release Date: @Model.releaseDate</p>
-                    <p>Time: @String.Format("{0}m", (int)Model.duration)</p>
+                    <p>Release Date: @Model.releaseDate.ToString("dd.MM.yyyy")</p>
+                    <p>Time: @String.Format("{0} minutes", (int)Model.duration)</p>
                 </div>
                 <div class="movie-info-desc">
                     <p>@Model.description</p>
