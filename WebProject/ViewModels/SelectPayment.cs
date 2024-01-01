@@ -8,8 +8,8 @@ namespace WebProject.ViewModels
 {
     public class SelectPayment
     {
-        public int ShowtimeId { get; set; }
-        public List<string> SelectedSeatIds { get; set; }
+        public List<int> TicketTypeIds { get; set; }
+        public List<int> TicketQuantities { get; set; }
         public int TotalQuantity { get; set; }
         public decimal TotalPrice { get; set; }
     }

@@ -38,13 +38,16 @@
 
 @section Scripts {
     <script>
-        window.showtimeData = {
+         console.log('@Model.TotalQuantity');
+         window.showtimeData = {
             showtimeId: @Model.ShowtimeId,
-            ticketQuantity: @Model.TotalQuantity,
+            totalQuantity: @Model.TotalQuantity,
+            theaterLayoutId: @Model.TheaterLayout.TheaterLayoutID,
+            ticketTypeIds: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.TicketTypeIds)),
+            ticketQuantities: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.TicketQuantities)),
             totalPrice: @Model.TotalPrice,
-            ticketTypeQuantities: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.TicketTypeQuantities)),
-            occupiedSeats: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.OccupiedSeats))
+            occupiedSeats: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.OccupiedSeats)),
         };
     </script>
-    <script src="@Url.Content("~/Scripts/seatselect.js?v=2")"></script>
+    <script src="@Url.Content("~/Scripts/seatselect.js")"></script>
 }

@@ -1442,6 +1442,30 @@ footer {
   align-items: center; /* Centers horizontally */
 }
 
+.payment-page-header {
+    display: flex;
+    flex-direction: row;
+    position: absolute;
+    justify-content: space-between;
+    align-items: center; /* Centers horizontally */
+    width: 100%;
+    padding-left: 156px;
+    padding-right: 156px;
+    top: 164px;
+}
+
+.total-cost {
+    font-size: 34px;
+    font-weight: bold;
+    color: white;
+}
+
+#countdown-timer {
+    color: white;
+    font-size: 52px;
+    font-weight: bold;
+}
+
 .content-wrapper-payment {
   display: flex;
   flex-direction: column;

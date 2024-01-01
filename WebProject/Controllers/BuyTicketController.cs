@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Globalization;
 using System.Web;
+using System.Net;
 using System.Transactions;
 using System.Web.Mvc;
 using System.Data.Entity;
@@ -18,7 +19,7 @@ namespace WebProject.Controllers
         public ActionResult SelectTicket(int movieId)
         {
             if (Session["User"] == null)
-                return RedirectToAction("Login", "Account");
+                return RedirectToAction("Homepage", "Home");
 
             var movie = db.Movie.Find(movieId);
             var theaters = db.Theater.ToList();
@@ -35,6 +36,16 @@ namespace WebProject.Controllers
                 Cities = cities
             };
 
+            // Instantiate ShowTicketViewModel
+            var showTicket = new ShowTicket
+            {
+                MovieName = movie.title,
+                MovieId = movie.MovieID,
+            };
+
+            // Store the ShowTicket in TempData
+            TempData["ShowTicket"] = showTicket;
+            TempData.Keep("ShowTicket"); // Ensure TempData is kept after a refresh
 
             return View(viewModel);
         }
@@ -44,6 +55,7 @@ namespace WebProject.Controllers
             try
             {
                 var theatersQuery = db.Theater.AsQueryable();
+
 
                 if (cityId.HasValue)
                 {
@@ -134,7 +146,7 @@ namespace WebProject.Controllers
                 if (theaterLayout == null)
                     return Json(new { success = false, message = "Theater layout not found." });
 
-                if (data.TicketTypeQuantities.Values.Sum() == 0)
+                if (!data.TicketQuantities.Any())
                     return Json(new { success = false, message = "Ticket quantity not found." });
 
                 if (data.TotalPrice == 0)
@@ -154,17 +166,30 @@ namespace WebProject.Controllers
                     ShowtimeId = showtime.showtimeID,
                     TheaterId = data.TheaterId,
                     TheaterLayout = theaterLayout,
-                    TotalQuantity = data.TicketTypeQuantities.Values.Sum(),
+                    TotalQuantity = data.TicketQuantities.Sum(),
                     TotalPrice = data.TotalPrice,
                     OccupiedSeats = occupiedSeatsList,
-                    TicketTypeQuantities = data.TicketTypeQuantities
+                    TicketTypeIds = data.TicketTypeIds,
+                    TicketQuantities = data.TicketQuantities
                 };
 
                 // Store the viewModel in TempData
                 TempData["SelectSeat"] = viewModel;
 
+                var ShowTicket = TempData["ShowTicket"] as ShowTicket;
+                if (ShowTicket != null)
+                {
+                    ShowTicket.TheaterId = data.TheaterId; // Save TheaterID for later lookup
+                    ShowTicket.ShowtimeId = showtime.showtimeID;
+                    ShowTicket.TotalPrice = data.TotalPrice;
+                    ShowTicket.TicketQuantities = data.TicketQuantities;
+                    ShowTicket.TicketTypeIds = data.TicketTypeIds;
+                }
+                TempData["ShowTicket"] = ShowTicket; // Re-save the ViewModel in TempData
+                TempData.Keep("ShowTicket");
+
                 // Return a JsonResult indicating success and the next action to redirect to
-                return Json(new { success = true, redirectAction = Url.Action("SelectSeat") });
+                return Json(new { success = true, redirectUrl = Url.Action("SelectSeat", "BuyTicket") });
             }
             catch (Exception ex)
             {
@@ -173,13 +198,14 @@ namespace WebProject.Controllers
             }
         }
 
+
         public ActionResult SelectSeat()
         {
             if (Session["User"] == null)
-                return RedirectToAction("Login", "Account");
+                return RedirectToAction("Homepage", "Home");
 
             // Retrieve the ViewModel from TempData
-            var viewModel = TempData["SelectSeatData"] as SelectSeat;
+            var viewModel = TempData["SelectSeat"] as SelectSeat;
 
             if (viewModel == null)
             {
@@ -189,6 +215,22 @@ namespace WebProject.Controllers
 
             // Render the SelectSeat view with the viewModel
             return View(viewModel);
+        }
+
+        private int ConvertAlphanumericToNumericSeatId(string alphanumericSeatId, int theaterLayoutId)
+        {
+            // This method should query your database to find the seat with the given alphanumeric ID and layout ID
+            // and return the numeric seat ID
+            var seat = db.Seats.FirstOrDefault(s => s.SeatRowLetter + s.SeatRowNumber.ToString() == alphanumericSeatId && s.TheaterLayoutID == theaterLayoutId);
+            if (seat != null)
+            {
+                return seat.SeatID;
+            }
+            else
+            {
+                // Handle the case where the seat is not found, perhaps by logging and throwing an exception
+                throw new Exception("Seat ID not found for given alphanumeric ID and theater layout ID.");
+            }
         }
 
         [HttpPost]
@@ -203,6 +245,9 @@ namespace WebProject.Controllers
 
                 var user = Session["User"] as User;
                 int userId = user.UserID;
+
+                // Convert alphanumeric seat IDs to numeric IDs based on the theater layout
+                List<int> numericSeatIds = data.SelectedSeatIds.Select(alphanumericId => ConvertAlphanumericToNumericSeatId(alphanumericId, data.TheaterLayoutId)).ToList();
 
                 // Start a database transaction
                 using (var transaction = new TransactionScope())
@@ -230,13 +275,15 @@ namespace WebProject.Controllers
                     }
 
                     // Create temporary seat reservations with a status of "pending"
-                    foreach (var seatId in data.SelectedSeatIds)
+                    foreach (var seatId in numericSeatIds)
                     {
                         var tempReservation = new seatReservations
                         {
                             showtimeID = data.ShowtimeId,
-                            seatID = int.Parse(seatId),
-                            status = "pending" // Mark the reservation as pending
+                            userID = userId,
+                            seatID = seatId,
+                            status = "pending", // Mark the reservation as pending
+                            createdTime = DateTime.Now
                         };
 
                         db.seatReservations.Add(tempReservation);
@@ -249,20 +296,28 @@ namespace WebProject.Controllers
                     transaction.Complete();
                 }
 
-                var paymentData = new
+                var selectPayment = new SelectPayment
                 {
-                    ShowtimeId = data.ShowtimeId,
-                    SelectedSeatIds = data.SelectedSeatIds,
-                    TotalQuantity = data.TicketTypeQuantities.Values.Sum(),
-                    TotalPrice = data.TotalPrice
+                    TotalQuantity = data.TicketQuantities.Sum(),
+                    TicketQuantities = data.TicketQuantities,
+                    TicketTypeIds = data.TicketTypeIds,
+                    TotalPrice = data.TotalPrice,
                 };
 
                 // Store the payment data in TempData or Session
-                TempData["PaymentData"] = paymentData;
-                TempData.Keep("PaymentData"); // Ensure TempData is kept after a refresh
+                TempData["SelectPayment"] = selectPayment;
+                TempData.Keep("SelectPayment");
+
+                var showTicket = TempData["ShowTicket"] as ShowTicket;
+                if (showTicket != null)
+                {
+                    showTicket.SelectedSeatIds = data.SelectedSeatIds;
+                }
+                TempData["ShowTicket"] = showTicket;
+                TempData.Keep("ShowTicket");
 
                 // Return a JsonResult indicating success and the next action to redirect to
-                string paymentPageUrl = Url.Action("Payment");
+                string paymentPageUrl = Url.Action("SelectPayment");
                 return Json(new { success = true, redirectUrl = paymentPageUrl });
             }
             catch (Exception ex)
@@ -271,5 +326,87 @@ namespace WebProject.Controllers
             }
         }
 
+        public ActionResult SelectPayment()
+        {
+            if (Session["User"] == null)
+            {
+                return RedirectToAction("Homepage", "Home");
+            }
+            var user = Session["User"] as User;
+            int userId = user.UserID;
+
+            // Retrieve the SelectPayment ViewModel from TempData
+            var selectPayment = TempData["SelectPayment"] as SelectPayment;
+
+            if (selectPayment == null)
+            {
+                // If the ViewModel is not found, redirect to an error page or a relevant action
+                return RedirectToAction("Error", new { message = "Payment data is not available." });
+            }
+
+            CleanUpPendingReservations(userId);
+
+            // Render the SelectPayment view with the ViewModel
+            return View(selectPayment);
+        }
+
+        [HttpPost]
+        public ActionResult ClearPendingReservations()
+        {
+            if (Session["User"] == null)
+            {
+                return RedirectToAction("Homepage", "Home");
+            }
+            var user = Session["User"] as User;
+            int userId = user.UserID;
+
+            CleanUpPendingReservationsOnLeave(userId);
+
+            return new HttpStatusCodeResult(HttpStatusCode.OK);
+        }
+
+        [HttpPost]
+        public ActionResult HandleTimeout()
+        {
+            if (Session["User"] == null)
+            {
+                return RedirectToAction("Homepage", "Home");
+            }
+            var user = Session["User"] as User;
+
+            // Perform cleanup
+            CleanUpPendingReservationsOnLeave(user.UserID);
+
+            // You can return a simple success response, as the client-side will handle the redirection
+            return Json(new { success = true });
+        }
+
+        private void CleanUpPendingReservations(int userId)
+        {
+            // Define the time limit for pending reservations
+            int reservationTimeLimit = 5;
+
+            // Find all pending reservations for the user that are older than the limit
+            var outdatedReservations = db.seatReservations
+                .Where(sr => sr.status == "pending" &&
+                             sr.userID == userId &&
+                             DbFunctions.AddMinutes(sr.createdTime, reservationTimeLimit) < DateTime.Now);
+
+            // Remove the outdated reservations
+            db.seatReservations.RemoveRange(outdatedReservations);
+            db.SaveChanges();
+        }
+
+        private void CleanUpPendingReservationsOnLeave(int userId)
+        {
+            // Find all pending reservations for the user that are older than the limit
+            var pendingReservations = db.seatReservations
+                .Where(sr => sr.status == "pending" &&
+                             sr.userID == userId);
+
+            // Remove the outdated reservations
+            db.seatReservations.RemoveRange(pendingReservations);
+            db.SaveChanges();
+        }
     }
 }

@@ -11,6 +11,7 @@ namespace WebProject.ViewModels
         public string Date { get; set; }
         public string Time { get; set; }
         public decimal TotalPrice { get; set; }
-        public Dictionary<int, int> TicketTypeQuantities { get; set; }
+        public List<int> TicketTypeIds { get; set; }
+        public List<int> TicketQuantities { get; set; }
     }
 }

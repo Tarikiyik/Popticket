@@ -31,6 +31,7 @@
         <AssociationConnector Association="PopTicketModel.FK_seatReservations_Seats" />
         <AssociationConnector Association="PopTicketModel.FK_seatReservations_Showtime" />
         <AssociationConnector Association="PopTicketModel.FK_seatReservations_Bookings" />
+        <AssociationConnector Association="PopTicketModel.FK_seatReservations_User" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

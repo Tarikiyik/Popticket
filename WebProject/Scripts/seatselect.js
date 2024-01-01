@@ -1,9 +1,36 @@
 document.addEventListener("DOMContentLoaded", function () {
     const selectedSeats = new Set();
-    const maxSeats = window.showtimeData.ticketQuantity;
+    const maxSeats = window.showtimeData.totalQuantity;
     const totalPrice = window.showtimeData.totalPrice;
-    const ticketTypeQuantities = window.showtimeData.ticketTypeQuantities;
     const continueButton = document.getElementById('continue-button');
+
+    let countdownDisplay = document.getElementById('countdown-timer'); // Add an element with this ID to your HTML where you want to show the timer
+    let countdownTime = 5 * 60 * 1000; // 5 minutes in milliseconds
+    let alertShown = false; // Flag to track if alert has been shown
+
+    // Function to update countdown display
+    function updateCountdownDisplay(timeLeft) {
+        let minutes = Math.floor(timeLeft / 60000);
+        let seconds = ((timeLeft % 60000) / 1000).toFixed(0);
+        countdownDisplay.textContent = minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
+    }
+
+    // Set a timer for 5 minutes
+    let timer = setInterval(function () {
+        countdownTime -= 1000; // Decrease time by one second
+        updateCountdownDisplay(countdownTime);
+
+        if (countdownTime <= 0) {
+            clearInterval(timer); // Stop the timer
+
+            if (!alertShown) {
+                alert("Time's up! Redirecting to another page.");
+                alertShown = true;
+                navigator.sendBeacon('/BuyTicket/ClearPendingReservations');
+                window.location.href = 'Movies/OnTheaters';
+            }
+        }
+    }, 1000);
 
 
     // Select or Deselect Seat
@@ -43,23 +70,26 @@ document.addEventListener("DOMContentLoaded", function () {
         if (selectedSeats.size === maxSeats) {
             const selectedSeatIds = Array.from(selectedSeats);
             const showtimeId = window.showtimeData.showtimeId;
+            const theaterLayoutId = window.showtimeData.theaterLayoutId;
+            const ticketQuantities = window.showtimeData.ticketQuantities;
+            const ticketTypeIds = window.showtimeData.ticketTypeIds;
 
-            // Prepare the AJAX call to send the selected seats to the server
+            // Prepare the AJAX call to send the selected seats and ticket types to the server
             $.ajax({
-                url: '/BuyTicket/PrepareForPayment', // This is the server endpoint that will prepare for payment
+                url: '/BuyTicket/PrepareForPayment',
                 type: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify({
                     selectedSeatIds: selectedSeatIds,
                     showtimeId: showtimeId,
-                    totalQuantity: maxSeats,
+                    theaterLayoutId: theaterLayoutId,
                     totalPrice: totalPrice,
-                    ticketTypeQuantities: ticketTypeQuantities
+                    ticketQuantities: ticketQuantities,
+                    ticketTypeIds: ticketTypeIds,
                 }),
                 success: function (response) {
-                    // If the server returns a success response, redirect to the payment page
                     if (response.success) {
-                        window.location.href = response.paymentPageUrl; // This URL will be provided by the server
+                        window.location.href = response.redirectUrl; // Updated to use redirectUrl
                     } else {
                         alert('There was an error preparing for payment. Please try again.');
                     }

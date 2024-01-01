@@ -19,9 +19,12 @@ namespace WebProject.Models
         public int seatID { get; set; }
         public Nullable<int> bookingID { get; set; }
         public string status { get; set; }
+        public System.DateTime createdTime { get; set; }
+        public int userID { get; set; }
     
         public virtual Seats Seats { get; set; }
         public virtual Showtime Showtime { get; set; }
         public virtual Bookings Bookings { get; set; }
+        public virtual User User { get; set; }
     }
 }

@@ -219,6 +219,7 @@
     <Compile Include="ViewModels\SelectSeatData.cs" />
     <Compile Include="ViewModels\SelectTicket.cs" />
     <Compile Include="ViewModels\SelectTicketData.cs" />
+    <Compile Include="ViewModels\ShowTicket.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\style.css" />

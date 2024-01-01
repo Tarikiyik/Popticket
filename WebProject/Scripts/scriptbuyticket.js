@@ -165,7 +165,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (e.target.classList.contains('buy-info-ticket-count-button')) {
             const button = e.target;
             const container = button.closest('.buy-info-ticket-container');
-            const ticketType = container.dataset.ticketTypeId;
+            const ticketTypeId = container.dataset.ticketTypeId;
             const price = parseFloat(container.querySelector(".buy-info-ticket-pricing h3").textContent.replace('TL', ''));
             const ticketCountValueElement = container.querySelector(".ticket-count-value");
             let quantity = parseInt(ticketCountValueElement.textContent);
@@ -176,21 +176,28 @@ document.addEventListener("DOMContentLoaded", function () {
                 quantity--;
             }
 
-            selectedTickets[ticketType] = { quantity: quantity, price: price };
+            selectedTickets[ticketTypeId] = { quantity: quantity, price: price };
             ticketCountValueElement.textContent = quantity;
             updateTotalPrice();
         }
     });
 
+    // Event listener for Continue button
     document.getElementById("ticket-confirmation-button").addEventListener("click", function () {
         let totalQuantity = 0;
         let totalPrice = 0;
+        let ticketTypeIds = [];
+        let ticketQuantities = [];
 
         // Calculate the total price and quantity based on the selected tickets
-        Object.values(selectedTickets).forEach(ticket => {
-            totalQuantity += ticket.quantity;
-            totalPrice += ticket.quantity * ticket.price;
-        });
+        for (const [ticketTypeId, ticketInfo] of Object.entries(selectedTickets)) {
+            let quantity = ticketInfo.quantity;
+            let price = ticketInfo.price;
+            totalQuantity += quantity;
+            totalPrice += quantity * price; // This calculates the total price
+            ticketTypeIds.push(parseInt(ticketTypeId));
+            ticketQuantities.push(quantity);
+        }
 
         // Prepare the data to send
         let dataToSend = {
@@ -198,7 +205,8 @@ document.addEventListener("DOMContentLoaded", function () {
             date: selectedDate,
             time: selectedTime,
             totalPrice: totalPrice,
-            ticketTypeQuantities: selectedTickets
+            ticketTypeIds: ticketTypeIds,
+            ticketQuantities: ticketQuantities
         };
 
         // Make the AJAX POST request
@@ -211,7 +219,7 @@ document.addEventListener("DOMContentLoaded", function () {
             success: function (response) {
                 if (response.success) {
                     // If successful, redirect to the SelectSeat action
-                    window.location.href = response.redirectAction;
+                    window.location.href = response.redirectUrl;
                 } else {
                     console.error("Error preparing data for seat selection: ", response.message);
                 }
