@@ -921,6 +921,7 @@ footer {
 
 .movieslistrow {
   display: flex; /* Use flexbox layout */
+  width: 100%;
   flex-wrap: wrap; /* Allow items to wrap to the next line */
   gap: 20px; /* Space between movie banners */
   justify-content: flex-start; /* Align items to the start of the container */
@@ -988,6 +989,9 @@ footer {
 
 .bannerbutton {
   position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   bottom: 8px;
   left: 14px;
   border: 1px solid rgb(95, 95, 95);
