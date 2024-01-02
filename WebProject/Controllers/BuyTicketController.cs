@@ -7,6 +7,7 @@ using System.Net;
 using System.Transactions;
 using System.Web.Mvc;
 using System.Data.Entity;
+using Newtonsoft.Json;
 using WebProject.Models;
 using WebProject.ViewModels;
 
@@ -442,6 +443,7 @@ namespace WebProject.Controllers
             {
                 return RedirectToAction("Homepage", "Home");
             }
+            var user = Session["User"] as User;
 
             var showTicketViewModel = TempData["ShowTicket"] as ShowTicket;
 
@@ -464,6 +466,25 @@ namespace WebProject.Controllers
             // Populate additional details in the ViewModel
             showTicketViewModel.TheaterName = theater.name;
             showTicketViewModel.ShowtimeDetails = $"{showtime.date.ToString("yyyy-MM-dd")} at {showtime.time}";
+
+            var ticketDetails = showTicketViewModel.TicketTypeIds.Zip(showTicketViewModel.TicketQuantities, (id, quantity) =>
+                    new { TicketTypeId = id, Quantity = quantity }).ToList();
+
+            Bookings newBooking = new Bookings
+            {
+                userID = user.UserID,
+                movieID = showTicketViewModel.MovieId,
+                showtimeID = showTicketViewModel.ShowtimeId,
+                theaterID = showTicketViewModel.TheaterId,
+                selectedSeats = JsonConvert.SerializeObject(showTicketViewModel.SelectedSeatIds),
+                ticketTypeQuantities = JsonConvert.SerializeObject(ticketDetails),
+                totalPrice = showTicketViewModel.TotalPrice,
+                bookingTime = DateTime.Now
+            };
+
+            db.Bookings.Add(newBooking);
+            db.SaveChanges();
+
 
             // Render the ShowTicket view with the populated ViewModel
             return View(showTicketViewModel);

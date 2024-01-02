@@ -5,8 +5,8 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="dd3ffa9902f54b31b126c517b05cafba" Name="Diagram1" ZoomLevel="85">
-        <EntityTypeShape EntityType="PopTicketModel.BookingDetails" Width="1.5" PointX="11.5" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="PopTicketModel.Bookings" Width="1.5" PointX="9.375" PointY="0.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="PopTicketModel.BookingDetails" Width="1.5" PointX="10.625" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="PopTicketModel.Bookings" Width="1.5" PointX="13.25" PointY="6.25" IsExpanded="true" />
         <EntityTypeShape EntityType="PopTicketModel.Cities" Width="1.5" PointX="1.375" PointY="5.375" IsExpanded="true" />
         <EntityTypeShape EntityType="PopTicketModel.Movie" Width="1.5" PointX="1.625" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="PopTicketModel.Payment" Width="1.5" PointX="13.125" PointY="3.75" IsExpanded="true" />
@@ -32,6 +32,8 @@
         <AssociationConnector Association="PopTicketModel.FK_seatReservations_Showtime" />
         <AssociationConnector Association="PopTicketModel.FK_seatReservations_Bookings" />
         <AssociationConnector Association="PopTicketModel.FK_seatReservations_User" />
+        <AssociationConnector Association="PopTicketModel.FK_Bookings_Movie" />
+        <AssociationConnector Association="PopTicketModel.FK_Bookings_Theater" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
