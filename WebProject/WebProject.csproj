@@ -159,9 +159,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\BookingDetails.cs">
-      <DependentUpon>PopticketDatabaseModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\Bookings.cs">
       <DependentUpon>PopticketDatabaseModel.tt</DependentUpon>
     </Compile>
@@ -169,9 +166,6 @@
       <DependentUpon>PopticketDatabaseModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Movie.cs">
-      <DependentUpon>PopticketDatabaseModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Payment.cs">
       <DependentUpon>PopticketDatabaseModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PopticketDatabaseModel.Context.cs">

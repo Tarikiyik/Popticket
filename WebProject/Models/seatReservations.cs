@@ -24,7 +24,7 @@ namespace WebProject.Models
     
         public virtual Seats Seats { get; set; }
         public virtual Showtime Showtime { get; set; }
-        public virtual Bookings Bookings { get; set; }
         public virtual User User { get; set; }
+        public virtual Bookings Bookings { get; set; }
     }
 }

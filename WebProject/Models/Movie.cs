@@ -18,6 +18,7 @@ namespace WebProject.Models
         public Movie()
         {
             this.Showtime = new HashSet<Showtime>();
+            this.Bookings = new HashSet<Bookings>();
         }
     
         public int MovieID { get; set; }
@@ -33,5 +34,7 @@ namespace WebProject.Models
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Showtime> Showtime { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Bookings> Bookings { get; set; }
     }
 }
