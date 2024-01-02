@@ -40,7 +40,7 @@
         <div class="navbar-spacer"></div>
         <div class="navbar-search">
             <input type="text" id="searchInput" placeholder="Search..." />
-            <img src="@Url.Content("~/images/search.png")" alt="" class="navbar-search-icon" id="searchIcon" />
+            <img src="@Url.Content("~/images/search.png")" alt="" class="navbar-search-icon" id="searchIcon" onclick="searchMovies()" />
         </div>
         @if (Session["User"] != null)
         {

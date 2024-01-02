@@ -152,6 +152,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MoviesAdminController.cs" />
     <Compile Include="Controllers\MoviesController.cs" />
+    <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Controllers\TheatersAdminController.cs" />
     <Compile Include="Controllers\TicketTypesAdminController.cs" />
     <Compile Include="Global.asax.cs">
@@ -207,6 +208,7 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\Homepage.cs" />
+    <Compile Include="ViewModels\SearchResults.cs" />
     <Compile Include="ViewModels\SelectPayment.cs" />
     <Compile Include="ViewModels\SelectSeat.cs" />
     <Compile Include="ViewModels\SelectSeatData.cs" />
@@ -319,6 +321,7 @@
     <Content Include="Views\TheatersAdmin\Details.cshtml" />
     <Content Include="Views\TheatersAdmin\Edit.cshtml" />
     <Content Include="Views\TheatersAdmin\Index.cshtml" />
+    <Content Include="Views\Search\SearchResults.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

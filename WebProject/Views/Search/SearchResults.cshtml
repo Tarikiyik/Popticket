@@ -1,0 +1,22 @@
+﻿@model WebProject.ViewModels.SearchResults
+@{
+    ViewBag.Title = "SearchResults";
+}
+
+<h2>Search Results for "@Model.Query"</h2>
+
+@if (!Model.Movies.Any())
+{
+    <p>No results found.</p>
+}
+else
+{
+    foreach (var movie in Model.Movies)
+    {
+        <div class="search-result-item">
+            <h3>@movie.Title</h3>
+            <p>@movie.Description</p>
+            <!-- Add more movie details as needed -->
+        </div>
+    }
+}
