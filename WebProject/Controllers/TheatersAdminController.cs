@@ -56,8 +56,8 @@ namespace WebProject.Controllers
         }
 
         // POST: TheatersAdmin/Create
-        // Aşırı gönderim saldırılarından korunmak için, bağlamak istediğiniz belirli özellikleri etkinleştirin, 
-        // daha fazla bilgi için bkz. https://go.microsoft.com/fwlink/?LinkId=317598.
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "theaterID,cityID,name,address,contactNumber,contactMail")] Theater theater)
@@ -98,8 +98,8 @@ namespace WebProject.Controllers
         }
 
         // POST: TheatersAdmin/Edit/5
-        // Aşırı gönderim saldırılarından korunmak için, bağlamak istediğiniz belirli özellikleri etkinleştirin, 
-        // daha fazla bilgi için bkz. https://go.microsoft.com/fwlink/?LinkId=317598.
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "theaterID,cityID,name,address,contactNumber,contactMail")] Theater theater)
@@ -142,10 +142,6 @@ namespace WebProject.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            if (Session["IsAdmin"] == null || !(bool)Session["IsAdmin"])
-            {
-                return RedirectToAction("Homepage", "Home");
-            }
             Theater theater = db.Theater.Find(id);
             db.Theater.Remove(theater);
             db.SaveChanges();

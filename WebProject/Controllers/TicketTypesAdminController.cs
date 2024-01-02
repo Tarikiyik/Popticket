@@ -10,11 +10,11 @@ using WebProject.Models;
 
 namespace WebProject.Controllers
 {
-    public class TicketTypesController : Controller
+    public class TicketTypesAdminController : Controller
     {
         private PopTicketEntities db = new PopTicketEntities();
 
-        // GET: TicketTypes
+        // GET: TicketTypesAdmin
         public ActionResult Index()
         {
             if (Session["IsAdmin"] == null || !(bool)Session["IsAdmin"])
@@ -24,7 +24,7 @@ namespace WebProject.Controllers
             return View(db.TicketTypes.ToList());
         }
 
-        // GET: TicketTypes/Details/5
+        // GET: TicketTypesAdmin/Details/5
         public ActionResult Details(int? id)
         {
             if (Session["IsAdmin"] == null || !(bool)Session["IsAdmin"])
@@ -43,7 +43,7 @@ namespace WebProject.Controllers
             return View(ticketTypes);
         }
 
-        // GET: TicketTypes/Create
+        // GET: TicketTypesAdmin/Create
         public ActionResult Create()
         {
             if (Session["IsAdmin"] == null || !(bool)Session["IsAdmin"])
@@ -53,7 +53,7 @@ namespace WebProject.Controllers
             return View();
         }
 
-        // POST: TicketTypes/Create
+        // POST: TicketTypesAdmin/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -74,7 +74,7 @@ namespace WebProject.Controllers
             return View(ticketTypes);
         }
 
-        // GET: TicketTypes/Edit/5
+        // GET: TicketTypesAdmin/Edit/5
         public ActionResult Edit(int? id)
         {
             if (Session["IsAdmin"] == null || !(bool)Session["IsAdmin"])
@@ -93,7 +93,7 @@ namespace WebProject.Controllers
             return View(ticketTypes);
         }
 
-        // POST: TicketTypes/Edit/5
+        // POST: TicketTypesAdmin/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -113,7 +113,7 @@ namespace WebProject.Controllers
             return View(ticketTypes);
         }
 
-        // GET: TicketTypes/Delete/5
+        // GET: TicketTypesAdmin/Delete/5
         public ActionResult Delete(int? id)
         {
             if (Session["IsAdmin"] == null || !(bool)Session["IsAdmin"])
@@ -132,7 +132,7 @@ namespace WebProject.Controllers
             return View(ticketTypes);
         }
 
-        // POST: TicketTypes/Delete/5
+        // POST: TicketTypesAdmin/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)

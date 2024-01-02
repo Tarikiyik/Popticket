@@ -511,6 +511,7 @@ ul .categories a:hover {
   transition: transform 0.5s ease;
   flex-wrap: nowrap;
   margin-top: 20px;
+  height: 520px;
 }
 
 .carousel_item {
@@ -523,7 +524,7 @@ ul .categories a:hover {
 }
 
 .carousel_item img {
-  width: 100%;
+  width: auto;
   height: 100%;
   display: block;
   transition: filter 0.3s ease; /* Transition for the filter effect */
