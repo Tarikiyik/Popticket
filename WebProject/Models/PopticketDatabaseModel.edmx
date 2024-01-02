@@ -40,6 +40,7 @@
           <Property Name="duration" Type="int" Nullable="false" />
           <Property Name="movieImg" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="movieBanner" Type="varchar" MaxLength="50" />
+          <Property Name="isFeatured" Type="bit" />
         </EntityType>
         <EntityType Name="seatReservations">
           <Key>
@@ -373,6 +374,7 @@
           <Property Name="movieBanner" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Showtime" Relationship="PopTicketModel.FK_Showtime_Movie" FromRole="Movie" ToRole="Showtime" />
           <NavigationProperty Name="Bookings" Relationship="PopTicketModel.FK_Bookings_Movie" FromRole="Movie" ToRole="Bookings" />
+          <Property Name="isFeatured" Type="Boolean" />
         </EntityType>
         <EntityType Name="sysdiagrams">
           <Key>
@@ -732,6 +734,7 @@
           <EntitySetMapping Name="Movie">
             <EntityTypeMapping TypeName="PopTicketModel.Movie">
               <MappingFragment StoreEntitySet="Movie">
+                <ScalarProperty Name="isFeatured" ColumnName="isFeatured" />
                 <ScalarProperty Name="movieBanner" ColumnName="movieBanner" />
                 <ScalarProperty Name="movieImg" ColumnName="movieImg" />
                 <ScalarProperty Name="MovieID" ColumnName="MovieID" />

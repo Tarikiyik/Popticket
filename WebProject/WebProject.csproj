@@ -208,6 +208,7 @@
       <DependentUpon>PopticketDatabaseModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\Homepage.cs" />
     <Compile Include="ViewModels\SelectPayment.cs" />
     <Compile Include="ViewModels\SelectSeat.cs" />
     <Compile Include="ViewModels\SelectSeatData.cs" />
@@ -239,7 +240,7 @@
     <Content Include="images\movie11.jpg" />
     <Content Include="images\movie12.jpg" />
     <Content Include="images\movie2.jpg" />
-    <Content Include="images\movie3.jpg" />
+    <Content Include="images\oppenheimer_banner.jpg" />
     <Content Include="images\search.png" />
     <Content Include="images\oppenheimer.PNG" />
     <Content Include="images\smovie3.png" />

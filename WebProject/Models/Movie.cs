@@ -31,6 +31,7 @@ namespace WebProject.Models
         public int duration { get; set; }
         public string movieImg { get; set; }
         public string movieBanner { get; set; }
+        public Nullable<bool> isFeatured { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Showtime> Showtime { get; set; }

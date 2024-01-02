@@ -1,4 +1,5 @@
-﻿@{
+﻿@model WebProject.ViewModels.Homepage
+@{
     ViewBag.Title = "Home Page";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
@@ -64,24 +65,17 @@
     <a href="@Url.Action("OnTheaters","Movies")" class="carousel-text">On Theaters</a>
     <div class="carousel">
         <div class="carousel_container" id="carousel_cont">
-            <div class="carousel_item">
-                <img src="@Url.Content("~/images/smovie3.png")" alt="Movie 1" />
-                <div class="carousel-item-hover">
-                    <p class="bannerimdb">IMDB: 6.1</p>
-                    <button class="bannerbutton buybutton">Buy Ticket</button>
-                    <button class="bannerbutton inspectbutton">Inspect</button>
+            @foreach (var movie in Model.OnTheaters)
+            {
+                <div class="carousel_item">
+                    <img src="@Url.Content("~/images/" + movie.movieImg)" alt="@movie.title" />
+                    <div class="carousel-item-hover">
+                        <p class="bannerimdb">@movie.imdb</p>
+                        <a href="@Url.Action("SelectTicket", "BuyTicket", new { movieId = movie.MovieID })" class="bannerbutton buybutton">Buy Ticket</a>
+                        <a href="@Url.Action("Inspect", "Movies", new { id = movie.MovieID })" class="bannerbutton inspectbutton">Inspect</a>
+                    </div>
                 </div>
-            </div>
-            <div class="carousel_item">
-                <img src="@Url.Content("~/images/smovie3.png")" alt="Movie 2" />
-            </div>
-            <div class="carousel_item">
-                <img src="@Url.Content("~/images/smovie3.png")" alt="Movie 3" />
-            </div>
-            <div class="carousel_item">
-                <img src="@Url.Content("~/images/smovie4.png")" alt="Movie 4" />
-            </div>
-
+            }
         </div>
 
         <button class="carousel_prev" id="carousel_previous_button">
@@ -95,23 +89,16 @@
     <a href="@Url.Action("Upcoming","Movies")" class="carousel-text">Upcoming Movies</a>
     <div class="carousel">
         <div class="carousel_container" id="upcoming_carousel_cont">
-            <div class="carousel_item">
-                <img src="@Url.Content("~/images/smovie3.png")" alt="Movie 1" />
-                <div class="carousel-item-hover">
-                    <p class="bannerimdb">IMDB: 6.1</p>
-                    <button class="bannerbutton buybutton">Buy Ticket</button>
-                    <button class="bannerbutton inspectbutton">Inspect</button>
+            @foreach (var movie in Model.Upcoming)
+            {
+                <div class="carousel_item">
+                    <img src="@Url.Content("~/images/" + movie.movieImg)" alt="@movie.title" />
+                    <div class="carousel-item-hover">
+                        <p class="bannerimdb">@movie.imdb</p>
+                        <a href="@Url.Action("Inspect", "Movies", new { id = movie.MovieID })" class="bannerbutton inspectbutton">Inspect</a>
+                    </div>
                 </div>
-            </div>
-            <div class="carousel_item">
-                <img src="@Url.Content("~/images/smovie3.png")" alt="Movie 2" />
-            </div>
-            <div class="carousel_item">
-                <img src="@Url.Content("~/images/smovie3.png")" alt="Movie 3" />
-            </div>
-            <div class="carousel_item">
-                <img src="@Url.Content("~/images/smovie4.png")" alt="Movie 4" />
-            </div>
+            }
         </div>
 
         <button class="carousel_prev" id="upcoming_carousel_previous_button">

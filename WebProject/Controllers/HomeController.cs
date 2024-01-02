@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using WebProject.ViewModels;
 using WebProject.Models;
 
 
@@ -13,7 +14,19 @@ namespace WebProject.Controllers
         private PopTicketEntities db = new PopTicketEntities();
         public ActionResult Homepage()
         {
-            return View();
+            // Fetch the movies from the database; adjust the logic as needed to fetch the appropriate movies
+            var moviesOnTheaters = db.Movie.Where(m => m.releaseDate <= DateTime.Now).Take(5).ToList();
+            var upcomingMovies = db.Movie.Where(m => m.releaseDate > DateTime.Now).Take(5).ToList();
+            var featuredMovies = db.Movie.Where(m => m.isFeatured == true).Take(3).ToList();
+
+            var viewModel = new Homepage
+            {
+                OnTheaters = moviesOnTheaters,
+                Upcoming = upcomingMovies,
+                Featured = featuredMovies
+            };
+
+            return View(viewModel);
         }
 
         public ActionResult About()
