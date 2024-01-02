@@ -1548,10 +1548,6 @@ footer {
   cursor: pointer;
 }
 
-.btn-confirm-payment:hover {
-  filter: brightness(0.8);
-}
-
 .btn-confirm-payment:disabled {
     width: 40%;
     height: 36px;

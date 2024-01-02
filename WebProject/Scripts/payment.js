@@ -14,10 +14,11 @@ document.addEventListener("DOMContentLoaded", function () {
     let confirmPaymentButton = document.querySelector('.btn-confirm-payment');
     confirmPaymentButton.disabled = true; // Disable button initially
 
+    const currentYear = new Date().getFullYear();
+    const currentMonth = new Date().getMonth() + 1; // January is 0
+
     // Function to check if all inputs are valid
     function areAllInputsValid() {
-        const currentYear = new Date().getFullYear();
-        const currentMonth = new Date().getMonth() + 1; // January is 0
         const cardNumberValid = cardNumberInput.value.length === 16;
         const cardMonthValid = parseInt(cardMonthInput.value) >= 1 && parseInt(cardMonthInput.value) <= 12;
         const cardYearValid = parseInt(cardYearInput.value) >= currentYear;
