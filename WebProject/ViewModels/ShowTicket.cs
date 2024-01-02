@@ -10,7 +10,9 @@ namespace WebProject.ViewModels
         public string MovieName { get; set; }
         public int MovieId { get; set; }
         public int TheaterId { get; set; }
+        public string TheaterName { get; set; }
         public int ShowtimeId { get; set; }
+        public string ShowtimeDetails { get; set; }
         public List<string> SelectedSeatIds { get; set; }
         public List<int> TicketTypeIds { get; set; }
         public List<int> TicketQuantities { get; set; }

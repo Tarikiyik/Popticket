@@ -1552,6 +1552,37 @@ footer {
   filter: brightness(0.8);
 }
 
+.btn-confirm-payment:disabled {
+    width: 40%;
+    height: 36px;
+    border-radius: 30px;
+    transition: 0.15s;
+    background: rgb(95, 95, 95, 0.15);
+    border: 1px solid rgb(95, 95, 95);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    color: white;
+    cursor: default;
+    font-weight: bold;
+    font-size: 16px;
+    text-align: center;
+}
+
+.btn-confirm-payment:disabled:hover {
+    width: 40%;
+    height: 36px;
+    border-radius: 30px;
+    transition: 0.15s;
+    background: rgb(95, 95, 95, 0.15);
+    border: 1px solid rgb(95, 95, 95);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    color: white;
+    cursor: default;
+    font-weight: bold;
+    font-size: 16px;
+    text-align: center;
+}
+
+
 .content-wrapper-profile {
   display: flex;
   flex-direction: column;

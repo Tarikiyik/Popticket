@@ -408,5 +408,65 @@ namespace WebProject.Controllers
             db.seatReservations.RemoveRange(pendingReservations);
             db.SaveChanges();
         }
+
+        [HttpPost]
+        public ActionResult ConfirmPayment()
+        {
+            if (Session["User"] == null)
+            {
+                return Json(new { success = false, message = "User is not logged in." });
+            }
+
+            var user = Session["User"] as User;
+            int userId = user.UserID;
+
+            // Update the status of pending reservations to 'reserved'
+            var pendingReservations = db.seatReservations
+                .Where(sr => sr.userID == userId && sr.status == "pending")
+                .ToList();
+
+            foreach (var reservation in pendingReservations)
+            {
+                reservation.status = "reserved";
+                reservation.createdTime = DateTime.Now; // Update the creation time to the current time
+            }
+
+            db.SaveChanges();
+
+            return Json(new { success = true, message = "Payment confirmed and reservations updated." });
+        }
+
+        public ActionResult ShowTicket()
+        {
+            if (Session["User"] == null)
+            {
+                return RedirectToAction("Homepage", "Home");
+            }
+
+            var showTicketViewModel = TempData["ShowTicket"] as ShowTicket;
+
+            if (showTicketViewModel == null)
+            {
+                // If the ViewModel is not found, redirect to an error page or a relevant action
+                return RedirectToAction("Error", new { message = "ShowTicket data is not available." });
+            }
+
+            // Fetch additional details from the database
+            var theater = db.Theater.Find(showTicketViewModel.TheaterId);
+            var showtime = db.Showtime.Find(showTicketViewModel.ShowtimeId);
+
+            if (theater == null || showtime == null)
+            {
+                // Handle missing theater or showtime data
+                return RedirectToAction("Error", new { message = "Theater or Showtime information is missing." });
+            }
+
+            // Populate additional details in the ViewModel
+            showTicketViewModel.TheaterName = theater.name;
+            showTicketViewModel.ShowtimeDetails = $"{showtime.date.ToString("yyyy-MM-dd")} at {showtime.time}";
+
+            // Render the ShowTicket view with the populated ViewModel
+            return View(showTicketViewModel);
+        }
     }
 }

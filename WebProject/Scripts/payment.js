@@ -11,6 +11,87 @@ document.addEventListener("DOMContentLoaded", function () {
     let cardNamePreview = document.getElementById("card-front-text3");
     let cardCvvPreview = document.getElementById("card-back-text");
 
+    let confirmPaymentButton = document.querySelector('.btn-confirm-payment');
+    confirmPaymentButton.disabled = true; // Disable button initially
+
+    // Function to check if all inputs are valid
+    function areAllInputsValid() {
+        const currentYear = new Date().getFullYear();
+        const currentMonth = new Date().getMonth() + 1; // January is 0
+        const cardNumberValid = cardNumberInput.value.length === 16;
+        const cardMonthValid = parseInt(cardMonthInput.value) >= 1 && parseInt(cardMonthInput.value) <= 12;
+        const cardYearValid = parseInt(cardYearInput.value) >= currentYear;
+        const cardCvvValid = cardCvvInput.value.length === 3;
+        const cardNameValid = cardNameInput.value.trim().length > 0;
+        const expiryDateValid = parseInt(cardYearInput.value) > currentYear || (parseInt(cardYearInput.value) === currentYear && parseInt(cardMonthInput.value) >= currentMonth);
+
+        return cardNumberValid && cardMonthValid && cardYearValid && cardCvvValid && cardNameValid && expiryDateValid;
+    }
+
+    // Function to show error messages
+    function showErrorMessage() {
+        let errorMessage = '';
+
+        if (cardNumberInput.value.length !== 16) {
+            errorMessage += 'Card number must be 16 digits long.\n';
+        }
+        if (!(parseInt(cardMonthInput.value) >= 1 && parseInt(cardMonthInput.value) <= 12)) {
+            errorMessage += 'Invalid month in expiry date.\n';
+        }
+        if (!(parseInt(cardYearInput.value) >= currentYear)) {
+            errorMessage += 'Invalid year in expiry date.\n';
+        }
+        if (cardCvvInput.value.length !== 3) {
+            errorMessage += 'CVV must be 3 digits long.\n';
+        }
+
+        if (errorMessage) {
+            alert(errorMessage);
+            return false;
+        }
+        return true;
+    }
+
+    // Event listener to validate input fields
+    document.querySelectorAll('.payment-form input').forEach(input => {
+        input.addEventListener('input', () => {
+            confirmPaymentButton.disabled = !areAllInputsValid();
+        });
+    });
+
+    // Confirm Payment button click event
+    confirmPaymentButton.addEventListener('click', function (event) {
+        event.preventDefault();
+        if (areAllInputsValid()) {
+            if (showErrorMessage()) {
+                if (window.confirm("Do you want to proceed with the transaction?")) {
+                    // AJAX request to confirm the payment
+                    fetch('/BuyTicket/ConfirmPayment', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                    }).then(response => {
+                        if (response.ok) {
+                            return response.json();
+                        } else {
+                            throw new Error('Network response was not ok.');
+                        }
+                    }).then(data => {
+                        if (data.success) {
+                            window.location.href = '/BuyTicket/ShowTicket'; // Update with the correct URL
+                        } else {
+                            alert('Transaction failed. Please try again.');
+                        }
+                    }).catch(error => {
+                        console.error('Error:', error);
+                        alert('An error occurred during the transaction.');
+                    });
+                }
+            }
+        }
+    });
+
     // Function to update card number preview
     cardNumberInput.addEventListener("input", function () {
         cardNumberPreview.textContent = this.value;
@@ -65,7 +146,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 alert("Time's up! Redirecting to another page.");
                 alertShown = true;
                 navigator.sendBeacon('/BuyTicket/ClearPendingReservations');
-                window.location.href = '/YourRedirectionPage'; // Replace with your redirection page
+                window.location.href = '/Movies/OnTheaters';
             }
         }
     }, 1000);
@@ -74,4 +155,4 @@ document.addEventListener("DOMContentLoaded", function () {
         // Call your method to clean up pending reservations
         navigator.sendBeacon('/BuyTicket/ClearPendingReservations');
     });
-}
+});
