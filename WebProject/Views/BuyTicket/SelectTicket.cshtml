@@ -1,5 +1,7 @@
 ﻿@model WebProject.ViewModels.SelectTicket
-
+@{
+    ViewBag.Title = "Select Ticket";
+}
 <div class="content-wrapper">
     <div class="buy-ticket-page" data-movie-id="@Model.Movie.MovieID">
         <!-- Movie Information Section -->
@@ -14,13 +16,13 @@
                     <h1>@Model.Movie.title</h1>
                     <div class="title-detail">
                         <p>Director: @Model.Movie.director</p>
-                        <p>IMDB: @Model.Movie.imdb</p>
+                        <p><img src="@Url.Content("~/images/imdb.png")" alt="" class="tiny-image" /> @Model.Movie.imdb</p>
                     </div>
                 </div>
                 <div class="movie-info-detail">
                     <p>Genre: @Model.Movie.genre</p>
-                    <p>Release Date: @Model.Movie.releaseDate.ToString("dd.MM.yyyy")</p>
-                    <p>Time: @Model.Movie.duration</p>
+                    <p><img src="@Url.Content("~/images/date.png")" alt="" class="tiny-image" /> @Model.Movie.releaseDate.ToString("dd.MM.yyyy")</p>
+                    <p><img src="@Url.Content("~/images/time.png")" alt="" class="tiny-image" /> @Model.Movie.duration</p>
                 </div>
                 <div class="movie-info-desc">
                     <p>@Model.Movie.description</p>

@@ -75,7 +75,26 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
+    // Trigger the search when the search icon is clicked
+    searchIcon.addEventListener("click", function () {
+        searchMovies();
+    });
 
+    // Also trigger the search when the Enter key is pressed
+    searchInput.addEventListener("keypress", function (e) {
+        if (e.key === "Enter") {
+            e.preventDefault(); // Prevent the default form submission if it's inside a form
+            searchMovies();
+        }
+    });
+
+    function searchMovies() {
+        var query = $('#searchInput').val().trim();
+        if (query) { // Make sure the query is not empty
+            // Redirect directly to the results page with the query
+            window.location.href = '/Search/SearchResults?query=' + encodeURIComponent(query);
+        }
+    }
 
 
     $(document).ready(function () {
@@ -163,36 +182,5 @@ document.addEventListener("DOMContentLoaded", function () {
             });
         });
     });
-
-    // Trigger the search when the search icon is clicked
-    searchIcon.addEventListener("click", function () {
-        searchMovies();
-    });
-
-    // Also trigger the search when the Enter key is pressed
-    searchInput.addEventListener("keypress", function (e) {
-        if (e.key === "Enter") {
-            e.preventDefault(); // Prevent the default form submission if it's inside a form
-            searchMovies();
-        }
-    });
-
-    function searchMovies() {
-        var query = $('#searchInput').val().trim();
-        if (query) { // Make sure the query is not empty
-            $.ajax({
-                url: '/Search/Results',
-                type: 'GET',
-                data: { query: query },
-                success: function (result) {
-                    // Redirect to the results page
-                    window.location.href = 'Search/SearchResults?query=' + encodeURIComponent(query);
-                },
-                error: function (xhr, status, error) {
-                    console.error('Search error:', error);
-                }
-            });
-        }
-    }
 });
 

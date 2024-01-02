@@ -1,1 +1,29 @@
-﻿
+﻿@model WebProject.ViewModels.ShowTicket
+@{
+    ViewBag.Title = "Inspect Ticket";
+}
+
+<div class="content-wrapper">
+    <div class="inspect-page">
+        <div class="movie-info">
+            <div class="movie-info-text">
+                <div class="movie-title">
+                    <h1>@Model.MovieName at @Model.TheaterName</h1>
+                    <div class="title-detail">
+                        <p>Showtime: @Model.ShowtimeDetails</p>
+                    </div>
+                </div>
+
+                <div class="movie-info-detail">
+                    <p>Seats: @string.Join(", ", Model.SelectedSeatIds)</p>
+                    <p>Total Price: @Model.TotalPrice.ToString("C")</p>
+                </div>
+
+                <div class="movie-info-button">
+                    <a href="@Url.Action("Homepage", "Home")">Return to Homepage</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

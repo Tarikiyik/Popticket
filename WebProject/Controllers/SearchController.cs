@@ -18,7 +18,7 @@ namespace WebProject.Controllers
         private PopTicketEntities db = new PopTicketEntities();
 
         [HttpGet]
-        public ActionResult Results(string query)
+        public ActionResult SearchResults(string query)
         {
             var searchResults = db.Movie
                 .Where(m => m.title.Contains(query))
@@ -32,6 +32,16 @@ namespace WebProject.Controllers
             };
 
             return View(viewModel);
+        }
+
+        public ActionResult AjaxSearchResults(string query)
+        {
+            var searchResults = db.Movie
+                .Where(m => m.title.Contains(query))
+                .Select(m => new { m.title, m.description, m.movieImg, m.imdb, m.duration })
+                .ToList();
+
+            return Json(searchResults, JsonRequestBehavior.AllowGet);
         }
     }
 }

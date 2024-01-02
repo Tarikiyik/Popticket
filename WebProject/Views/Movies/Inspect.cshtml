@@ -15,14 +15,14 @@
                     <h1>@Model.title</h1>
                     <div class="title-detail">
                         <p>Director: @Model.director</p>
-                        <p>IMDB: @Model.imdb</p>
+                        <p><img src="@Url.Content("~/images/imdb.png")" alt="" class="tiny-image" />@Model.imdb</p>
                     </div>
                 </div>
 
                 <div class="movie-info-detail">
                     <p>Genre: @Model.genre</p>
-                    <p>Release Date: @Model.releaseDate.ToString("dd.MM.yyyy")</p>
-                    <p>Time: @String.Format("{0} minutes", (int)Model.duration)</p>
+                    <p><img src="@Url.Content("~/images/date.png")" alt="" class="tiny-image" />@Model.releaseDate.ToString("dd.MM.yyyy")</p>
+                    <p><img src="@Url.Content("~/images/time.png")" alt="" class="tiny-image" />@String.Format("{0} minutes", (int)Model.duration)</p>
                 </div>
                 <div class="movie-info-desc">
                     <p>@Model.description</p>

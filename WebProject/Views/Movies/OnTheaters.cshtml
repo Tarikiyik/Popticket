@@ -41,14 +41,14 @@
                         <div class="movie-banner-img">
                             <img src="@Url.Content("~/images/" + movie.movieImg)" alt="@movie.title" class="movie-image" />
                             <div class="movie-banner-img-hover">
-                                <p class="bannerimdb">IMDB: @movie.imdb</p>
+                                <p class="bannerimdb"><img src="@Url.Content("~/images/imdb.png")" alt="" class="tiny-image" /> @movie.imdb</p>
                                 <a href="@Url.Action("SelectTicket", "BuyTicket", new { movieId = movie.MovieID })" class="bannerbutton buybutton">Buy Ticket</a>
                                 <a href="@Url.Action("Inspect", "Movies", new { id = movie.MovieID })" class="bannerbutton inspectbutton">Inspect</a>
                             </div>
                         </div>
                         <div class="movie-banner-details">
                             <h3>@movie.title</h3>
-                            <p>@movie.duration.ToString()</p>
+                            <p>@movie.duration.ToString() minutes</p>
                             <p>@movie.genre</p>
                         </div>
                     </div>

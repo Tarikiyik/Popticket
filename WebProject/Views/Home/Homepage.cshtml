@@ -29,8 +29,8 @@
                                 <p>Director: @movie.director</p>
                             </div>
                             <div class="movietimeandrate">
-                                <h4>Duration: @movie.duration</h4>
-                                <h4>Rating: @movie.imdb</h4>
+                                <h4><img src="@Url.Content("~/images/time.png")" alt="" class="tiny-image" />@movie.duration minutes</h4>
+                                <h4><img src="@Url.Content("~/images/imdb.png")" alt="" class="tiny-image" />@movie.imdb</h4>
                             </div>
                             <div class="movieinspect">
                                 <a href="@Url.Action("Inspect", "Movies", new { id = movie.MovieID })">Inspect</a>
@@ -63,7 +63,7 @@
                 <div class="carousel_item">
                     <a href="@Url.Action("Inspect", "Movies", new { id = movie.MovieID })"><img src="@Url.Content("~/images/" + movie.movieImg)" alt="@movie.title" /></a>
                     <div class="carousel-item-hover">
-                        <p class="bannerimdb">@movie.imdb</p>
+                        <p class="bannerimdb"><img src="@Url.Content("~/images/imdb.png")" alt="" class="tiny-image" />  @movie.imdb</p>
                         <a href="@Url.Action("SelectTicket", "BuyTicket", new { movieId = movie.MovieID })" class="bannerbutton buybutton">Buy Ticket</a>
                         <a href="@Url.Action("Inspect", "Movies", new { id = movie.MovieID })" class="bannerbutton inspectbutton">Inspect</a>
                     </div>

@@ -1999,3 +1999,99 @@ footer {
     padding:0 0 10px 0;
     letter-spacing:0;
 }
+
+.search-container {
+    height: 70px;
+    width: 80%;
+    border-radius: 10px;
+    background: rgb(95, 95, 95, 0.65);
+    position: relative;
+    cursor: pointer;
+    margin-top: 30px;
+}
+
+    .search-container img {
+        height: 50px;
+        position: absolute;
+        right: 10px;
+        top: 10px;
+    }
+
+    .search-container input {
+        width: 96%;
+        height: 100%;
+        background: transparent;
+        border: none;
+        outline: none;
+        color: white;
+        font-size: 30px;
+        margin-left: 4px;
+    }
+
+.search-item {
+    background: rgba(68, 68, 68, 0.65);
+    height: fit-content;
+    width: 80%;
+    margin: 20px auto;
+    border-radius: 10px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    color: white;
+}
+
+.search-page-container {
+    display: flex;
+    justify-content: center;
+}
+
+.search-item img {
+    height: 200px;
+    border-radius: 5px;
+}
+
+.search-banner {
+    width: 135px;
+}
+
+.search-item-details {
+    line-height: 50px;
+    margin-left: 20px;
+}
+
+.search-item h3 img {
+    height: 30px;
+    margin-right: 10px;
+}
+
+.search-header {
+    color: white;
+    font-size: 36px;
+}
+
+.search-result {
+    color: white;
+    margin-left: 190px;
+    margin-top: 12px;
+}
+
+h3 .tiny-image {
+    height: 30px;
+    width: 30px;
+    margin-right: 10px;
+}
+
+h4 .tiny-image {
+    height: 30px;
+    width: 30px;
+    margin-right: 10px;
+}
+
+p .tiny-image {
+    height: 30px;
+    width: 30px;
+}
+
+.bannerimdb {
+    display: flex;
+}
