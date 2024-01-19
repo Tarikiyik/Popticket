@@ -24,7 +24,6 @@ namespace WebProject.Controllers
                 .Where(m => m.title.Contains(query))
                 .ToList();
 
-            // Assume you have a SearchResults ViewModel
             var viewModel = new SearchResults
             {
                 Query = query,

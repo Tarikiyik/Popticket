@@ -6,7 +6,6 @@ document.addEventListener("DOMContentLoaded", function () {
     let selectedTickets = {};
     let movieId = document.querySelector('.buy-ticket-page').dataset.movieId;
 
-    // Call this function on initial load so the theaters are displayed before any city is selected
     fetchTheaters(null);
 
     // Function to clear selections
@@ -33,7 +32,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Function to update total price and handle ticket selection
     function updateTotalPrice() {
         let total = 0;
-        ticketSelected = false; // Flag to detect if any ticket quantity is more than 0
+        ticketSelected = false; 
 
         for (const ticket of Object.values(selectedTickets)) {
             total += (ticket.quantity * ticket.price);
@@ -42,7 +41,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         document.getElementById("ticket-total-price").textContent = `Total Price: ${total.toFixed(2)}TL`;
 
-        // Call the function to enable or disable the continue button based on ticket selection
         updateContinueButtonState(ticketSelected);
     }
 
@@ -75,7 +73,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         let dateDiv = document.createElement('div');
                         dateDiv.className = 'date-container';
                         dateDiv.dataset.date = date;
-                        dateDiv.textContent = formatDate(date); // No need to format date as it's already in the desired format
+                        dateDiv.textContent = formatDate(date); 
                         dateSelectionDiv.appendChild(dateDiv);
                     });
                 } else {
@@ -218,7 +216,6 @@ document.addEventListener("DOMContentLoaded", function () {
             dataType: 'json',
             success: function (response) {
                 if (response.success) {
-                    // If successful, redirect to the SelectSeat action
                     window.location.href = response.redirectUrl;
                 } else {
                     console.error("Error preparing data for seat selection: ", response.message);
@@ -272,7 +269,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function updateTheaterSelection(theaters) {
         const theaterSelectionDiv = document.getElementById("theater-selection");
-        // Clear the container safely
+        // Clear the container 
         while (theaterSelectionDiv.firstChild) {
             theaterSelectionDiv.removeChild(theaterSelectionDiv.firstChild);
         }
@@ -323,7 +320,7 @@ document.addEventListener("DOMContentLoaded", function () {
         var day = date.getDate();
         var month = date.toLocaleString('default', { month: 'long' });
 
-        return `${day} ${month}`; // e.g., "29 December"
+        return `${day} ${month}`; 
     }
 
 });

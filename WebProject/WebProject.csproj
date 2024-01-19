@@ -294,7 +294,7 @@
     <Content Include="Scripts\layoutnew.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\payment.js" />
-    <Content Include="Scripts\script.js" />
+    <Content Include="Scripts\script2.js" />
     <Content Include="Scripts\scriptbuyticket.js" />
     <Content Include="Scripts\scriptmovies.js" />
     <Content Include="Scripts\scriptupcoming.js" />

@@ -54,8 +54,6 @@ namespace WebProject.Controllers
         }
 
         // POST: MoviesAdmin/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "MovieID,title,description,imdb,releaseDate,director,genre,duration,movieImg,movieBanner")] Movie movie)
@@ -94,8 +92,6 @@ namespace WebProject.Controllers
         }
 
         // POST: MoviesAdmin/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "MovieID,title,description,imdb,releaseDate,director,genre,duration,movieImg,movieBanner")] Movie movie)

@@ -164,13 +164,19 @@ namespace WebProject.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteAccount(int userId)
         {
+
             var userInDb = db.User.Find(userId);
             if (userInDb == null)
             {
                 // Handle the case where the user could not be found in the database
                 return HttpNotFound();
             }
-
+            var reservation = db.seatReservations.FirstOrDefault(r => r.userID == userInDb.UserID);
+            db.seatReservations.Remove(reservation);
+            db.SaveChanges();
+            var booking = db.Bookings.FirstOrDefault(b => b.userID == userInDb.UserID);
+            db.Bookings.Remove(booking);
+            db.SaveChanges();
             // Remove the user from the database
             db.User.Remove(userInDb);
             db.SaveChanges();

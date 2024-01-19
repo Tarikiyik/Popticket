@@ -46,7 +46,7 @@ namespace WebProject.Controllers
 
             // Store the ShowTicket in TempData
             TempData["ShowTicket"] = showTicket;
-            TempData.Keep("ShowTicket"); // Ensure TempData is kept after a refresh
+            TempData.Keep("ShowTicket"); 
 
             return View(viewModel);
         }
@@ -83,7 +83,7 @@ namespace WebProject.Controllers
                     .Distinct()
                     .OrderBy(d => d)
                     .ToList()
-                    .Select(d => d.ToString("yyyy-MM-dd")); // Format dates into a standard ISO format
+                    .Select(d => d.ToString("yyyy-MM-dd")); 
 
                 return Json(new { success = true, availableDates }, JsonRequestBehavior.AllowGet);
             }
@@ -161,7 +161,6 @@ namespace WebProject.Controllers
                     .Select(sr => $"{sr.Seats.SeatRowLetter}{sr.Seats.SeatRowNumber}")
                     .ToList();
 
-                // Prepare the ViewModel for the SelectSeat view
                 SelectSeat viewModel = new SelectSeat
                 {
                     ShowtimeId = showtime.showtimeID,
@@ -189,12 +188,10 @@ namespace WebProject.Controllers
                 TempData["ShowTicket"] = ShowTicket; // Re-save the ViewModel in TempData
                 TempData.Keep("ShowTicket");
 
-                // Return a JsonResult indicating success and the next action to redirect to
                 return Json(new { success = true, redirectUrl = Url.Action("SelectSeat", "BuyTicket") });
             }
             catch (Exception ex)
             {
-                // Log the exception here
                 return Json(new { success = false, message = "An error occurred. " + ex.Message });
             }
         }
@@ -220,8 +217,6 @@ namespace WebProject.Controllers
 
         private int ConvertAlphanumericToNumericSeatId(string alphanumericSeatId, int theaterLayoutId)
         {
-            // This method should query your database to find the seat with the given alphanumeric ID and layout ID
-            // and return the numeric seat ID
             var seat = db.Seats.FirstOrDefault(s => s.SeatRowLetter + s.SeatRowNumber.ToString() == alphanumericSeatId && s.TheaterLayoutID == theaterLayoutId);
             if (seat != null)
             {
@@ -229,7 +224,6 @@ namespace WebProject.Controllers
             }
             else
             {
-                // Handle the case where the seat is not found, perhaps by logging and throwing an exception
                 throw new Exception("Seat ID not found for given alphanumeric ID and theater layout ID.");
             }
         }
@@ -378,7 +372,6 @@ namespace WebProject.Controllers
             // Perform cleanup
             CleanUpPendingReservationsOnLeave(user.UserID);
 
-            // You can return a simple success response, as the client-side will handle the redirection
             return Json(new { success = true });
         }
 

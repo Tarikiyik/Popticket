@@ -15,9 +15,9 @@ namespace WebProject.Controllers
         public ActionResult Homepage()
         {
             // Fetch the movies from the database; adjust the logic as needed to fetch the appropriate movies
-            var moviesOnTheaters = db.Movie.Where(m => m.releaseDate <= DateTime.Now).Take(5).ToList();
-            var upcomingMovies = db.Movie.Where(m => m.releaseDate > DateTime.Now).Take(5).ToList();
-            var featuredMovies = db.Movie.Where(m => m.isFeatured == true).Take(3).ToList();
+            var moviesOnTheaters = db.Movie.Where(m => m.releaseDate <= DateTime.Now).Take(15).ToList();
+            var upcomingMovies = db.Movie.Where(m => m.releaseDate > DateTime.Now).Take(15).ToList();
+            var featuredMovies = db.Movie.Where(m => m.isFeatured == true).Take(5).ToList();
 
             var viewModel = new Homepage
             {
