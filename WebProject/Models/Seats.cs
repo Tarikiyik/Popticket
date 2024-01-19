@@ -20,13 +20,13 @@ namespace WebProject.Models
             this.seatReservations = new HashSet<seatReservations>();
         }
     
-        public int seatID { get; set; }
-        public int theaterID { get; set; }
-        public int seatNumber { get; set; }
-        public int seatRow { get; set; }
+        public int SeatID { get; set; }
+        public int TheaterLayoutID { get; set; }
+        public string SeatRowLetter { get; set; }
+        public int SeatRowNumber { get; set; }
     
+        public virtual TheaterLayouts TheaterLayouts { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<seatReservations> seatReservations { get; set; }
-        public virtual Theater Theater { get; set; }
     }
 }

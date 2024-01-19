@@ -17,8 +17,9 @@ namespace WebProject.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Theater()
         {
-            this.Seats = new HashSet<Seats>();
             this.Showtime = new HashSet<Showtime>();
+            this.TheaterLayouts = new HashSet<TheaterLayouts>();
+            this.Bookings = new HashSet<Bookings>();
         }
     
         public int theaterID { get; set; }
@@ -30,8 +31,10 @@ namespace WebProject.Models
     
         public virtual Cities Cities { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Seats> Seats { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Showtime> Showtime { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<TheaterLayouts> TheaterLayouts { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Bookings> Bookings { get; set; }
     }
 }

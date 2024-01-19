@@ -1,0 +1,35 @@
+﻿@model WebProject.Models.TicketTypes
+
+@{
+    ViewBag.Title = "Details";
+}
+<div class="admin-panel">
+    <h2>Details</h2>
+
+    <div>
+        <h4>TicketTypes</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.typeName)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.typeName)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.price)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.price)
+            </dd>
+
+        </dl>
+    </div>
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.ticketTypeID }) |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+</div>

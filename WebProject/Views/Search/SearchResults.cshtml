@@ -1,0 +1,39 @@
+﻿@model WebProject.ViewModels.SearchResults
+
+<div class="content-wrapper">
+    <div class="searchpage">
+        <div class="search-result">
+            <h2>Search Results For: @Html.DisplayFor(model => model.Query)</h2>
+            @if (Model.Movies != null && Model.Movies.Any())
+            {
+                foreach (var movie in Model.Movies)
+                {
+                    <a href="@Url.Action("Inspect", "Movies", new { id = movie.MovieID })" class="search-item-link">
+                        <div class="search-item">
+                            <img class="search-banner" src="@Url.Content("~/images/" + movie.movieImg)" alt="@Html.DisplayFor(modelItem => movie.title)" />
+                            <div class="search-item-details">
+                                <h3 class="search-header">@Html.DisplayFor(modelItem => movie.title)</h3>
+                                <h3>
+                                    <img src="~/images/imdb.png" alt="IMDB Rating" />
+                                    @Html.DisplayFor(modelItem => movie.imdb)
+                                </h3>
+                                <h3>
+                                    <img src="~/images/time.png" alt="Runtime" />
+                                    @Html.DisplayFor(modelItem => movie.duration)minutes
+                                </h3>
+                            </div>
+                        </div>
+                    </a>
+                }
+            }
+            else
+            {
+                <div>No results found.</div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="@Url.Content("~/Scripts/searchResultsAjax.js")"></script>
+}

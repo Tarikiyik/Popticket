@@ -1,4 +1,13 @@
-﻿<div class="content-wrapper-payment">
+﻿@model WebProject.ViewModels.SelectPayment
+@{
+    ViewBag.Title = "Payment";
+}
+
+<div class="content-wrapper-payment">
+    <div class="payment-page-header">
+        <div class="total-cost">Total Cost: @Model.TotalPrice TL</div>
+        <div id="countdown-timer">05:00</div>
+    </div>
     <div class="payment-page">
         <div class="payment-container">
             <div class="payment-form" id="payment-form">
@@ -53,7 +62,7 @@
                     </div>
 
                     <div class="form-actions">
-                        <button type="submit" class="btn-confirm-payment">
+                        <button type="submit" class="btn-confirm-payment" disabled>
                             Confirm Payment
                         </button>
                     </div>
@@ -62,17 +71,19 @@
         </div>
         <div class="credit-card-preview">
             <div class="credit-card-front-preview">
-                <img src="./images/creditcard_front.png" alt="" />
+                <img src="@Url.Content("~/images/creditcard_front.png")" alt="" />
                 <h3 id="card-front-text1">1234 5678 9012 3456</h3>
                 <h3 id="card-front-text2">12/23</h3>
                 <h3 id="card-front-text3">John Doe</h3>
             </div>
             <div class="credit-card-back-preview">
-                <img src="./images/creditcard_back.png" alt="" />
+                <img src="@Url.Content("~/images/creditcard_back.png")" alt="" />
                 <h3 id="card-back-text">123</h3>
             </div>
         </div>
     </div>
 </div>
 
-<script src="@Url.Content("~/Scripts/payment.js")"></script>
+@section Scripts{
+    <script src="@Url.Content("~/Scripts/payment.js?v=3")"></script>
+}   

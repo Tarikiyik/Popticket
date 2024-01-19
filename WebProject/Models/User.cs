@@ -17,6 +17,7 @@ namespace WebProject.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public User()
         {
+            this.seatReservations = new HashSet<seatReservations>();
             this.Bookings = new HashSet<Bookings>();
         }
     
@@ -30,6 +31,8 @@ namespace WebProject.Models
         public Nullable<System.DateTime> birthday { get; set; }
         public bool isAdmin { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<seatReservations> seatReservations { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Bookings> Bookings { get; set; }
     }

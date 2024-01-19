@@ -14,17 +14,8 @@ namespace WebProject.Models
     
     public partial class TicketTypes
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public TicketTypes()
-        {
-            this.BookingDetails = new HashSet<BookingDetails>();
-        }
-    
         public int ticketTypeID { get; set; }
         public string typeName { get; set; }
         public decimal price { get; set; }
-    
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<BookingDetails> BookingDetails { get; set; }
     }
 }

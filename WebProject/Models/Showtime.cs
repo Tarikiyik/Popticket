@@ -17,21 +17,21 @@ namespace WebProject.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Showtime()
         {
-            this.Bookings = new HashSet<Bookings>();
             this.seatReservations = new HashSet<seatReservations>();
+            this.Bookings = new HashSet<Bookings>();
         }
     
         public int showtimeID { get; set; }
         public int movieID { get; set; }
         public int theaterID { get; set; }
-        public System.TimeSpan time { get; set; }
+        public string time { get; set; }
         public System.DateTime date { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Bookings> Bookings { get; set; }
         public virtual Movie Movie { get; set; }
+        public virtual Theater Theater { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<seatReservations> seatReservations { get; set; }
-        public virtual Theater Theater { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Bookings> Bookings { get; set; }
     }
 }

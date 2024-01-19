@@ -40,7 +40,6 @@
                         <div class="movie-banner-img">
                             <img src="@Url.Content("~/images/" + movie.movieImg)" alt="@movie.title" class="movie-image" />
                             <div class="movie-banner-img-hover">
-                                <p class="bannerimdb">IMDB: @movie.imdb</p>
                                 <a href="@Url.Action("Inspect", "Movies", new { id = movie.MovieID })" class="bannerbutton inspectbutton">Inspect</a>
                             </div>
                         </div>
@@ -51,7 +50,6 @@
                         </div>
                     </div>
                 }
-                <!-- Repeat for each movie -->
             </div>
         </div>
     </div>

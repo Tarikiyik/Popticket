@@ -1,153 +1,326 @@
 document.addEventListener("DOMContentLoaded", function () {
-  // Scroll 100 pixels from the top, replace 100 with your desired scroll position
-  window.scrollTo({ top: 300, behavior: "smooth" });
-});
+    let selectedTheater = null;
+    let selectedDate = null;
+    let selectedTime = null;
+    let ticketSelected = false;
+    let selectedTickets = {};
+    let movieId = document.querySelector('.buy-ticket-page').dataset.movieId;
 
-document.querySelectorAll(".custom-select-wrapper").forEach(function (wrapper) {
-  const visiblePart = wrapper.querySelector(".custom-select-visible");
-  visiblePart.addEventListener("click", function () {
-    toggleCustomSelect(wrapper);
-  });
-});
+    fetchTheaters(null);
 
-function toggleCustomSelect(wrapper) {
-  const optionsList = wrapper.querySelector(".custom-select-options");
-  optionsList.classList.toggle("hidden");
-}
+    // Function to clear selections
+    function clearSelections(selector) {
+        document.querySelectorAll(selector).forEach(el => el.classList.remove('selected'));
+    }
 
-document
-  .querySelectorAll(".custom-select-options li")
-  .forEach(function (option) {
-    option.addEventListener("click", function () {
-      const wrapper = this.closest(".custom-select-wrapper");
-      const text = this.textContent;
-      const value = this.getAttribute("data-value");
-      const placeholder = document.getElementById("custom-placeholder");
-      const nativeSelect = wrapper.querySelector(".custom-select");
-      console.log("Option clicked:", text, value);
-      // Update the placeholder text
-      placeholder.textContent = text;
+    // Clear date and time selections
+    function clearTimeSelection() {
+        let timeSelectionDiv = document.getElementById("time-selection");
+        while (timeSelectionDiv.firstChild) {
+            timeSelectionDiv.removeChild(timeSelectionDiv.firstChild);
+        }
+    }
 
-      // Update the value of the native select element
-      nativeSelect.value = value;
+    function clearDateAndTimeSelection() {
+        let dateSelectionDiv = document.getElementById("date-selection");
+        while (dateSelectionDiv.firstChild) {
+            dateSelectionDiv.removeChild(dateSelectionDiv.firstChild);
+        }
+        clearTimeSelection();
+    }
 
-      // Hide the custom options again
-      wrapper.querySelector(".custom-select-options").classList.add("hidden");
+    // Function to update total price and handle ticket selection
+    function updateTotalPrice() {
+        let total = 0;
+        ticketSelected = false; 
 
-      // Optional: Trigger any change event listeners attached to the native select
-      const event = new Event("change", { bubbles: true });
-      nativeSelect.dispatchEvent(event);
+        for (const ticket of Object.values(selectedTickets)) {
+            total += (ticket.quantity * ticket.price);
+            if (ticket.quantity > 0) ticketSelected = true; // At least one ticket is selected
+        }
+
+        document.getElementById("ticket-total-price").textContent = `Total Price: ${total.toFixed(2)}TL`;
+
+        updateContinueButtonState(ticketSelected);
+    }
+
+    // Function to enable/disable the continue button
+    function updateContinueButtonState() {
+        const continueButton = document.getElementById('ticket-confirmation-button');
+        continueButton.disabled = !(selectedTheater && selectedDate && selectedTime && ticketSelected);
+    }
+
+    // Function to fetch dates based on selected theater
+    function fetchDates(theaterId) {
+        $.ajax({
+            url: '/BuyTicket/GetDates',
+            type: 'GET',
+            data: { theaterId: theaterId, movieId: movieId },
+            success: function (response) {
+                // Clear the date containers
+                let dateSelectionDiv = document.getElementById("date-selection");
+                while (dateSelectionDiv.firstChild) {
+                    dateSelectionDiv.removeChild(dateSelectionDiv.firstChild);
+                }
+                // Clear the time containers
+                let timeSelectionDiv = document.getElementById("time-selection");
+                while (timeSelectionDiv.firstChild) {
+                    timeSelectionDiv.removeChild(timeSelectionDiv.firstChild);
+                }
+                // Append new date containers if the request was successful
+                if (response.success) {
+                    response.availableDates.forEach(date => {
+                        let dateDiv = document.createElement('div');
+                        dateDiv.className = 'date-container';
+                        dateDiv.dataset.date = date;
+                        dateDiv.textContent = formatDate(date); 
+                        dateSelectionDiv.appendChild(dateDiv);
+                    });
+                } else {
+                    // Handle error if success is false
+                    console.error("Error fetching dates: ", response.error);
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error("Error fetching dates: ", status, error);
+            }
+        });
+    }
+
+    // Update the fetchTimes function to handle the new success property
+    function fetchTimes(date) {
+        $.ajax({
+            url: '/BuyTicket/GetTimes',
+            type: 'GET',
+            data: { date: date, theaterId: selectedTheater, movieId: movieId },
+            success: function (response) {
+                if (response.success) {
+                    let timeSelectionDiv = document.getElementById("time-selection");
+                    // Clear the container safely
+                    while (timeSelectionDiv.firstChild) {
+                        timeSelectionDiv.removeChild(timeSelectionDiv.firstChild);
+                    }
+                    // Append new time containers
+                    response.availableTimes.forEach(time => {
+                        let timeDiv = document.createElement('div');
+                        timeDiv.className = 'time-container';
+                        timeDiv.dataset.time = time;
+                        timeDiv.textContent = time; // Directly using the time string
+                        timeSelectionDiv.appendChild(timeDiv);
+                    });
+                } else {
+                    console.error("Error fetching times: ", response.error);
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error("Error fetching times: ", status, error);
+            }
+        });
+    }
+
+    // Add event delegation for dynamically created date elements
+    document.getElementById("date-selection").addEventListener("click", function (e) {
+        if (e.target.classList.contains('date-container')) {
+            // Toggle selection if the same date is clicked again
+            if (e.target.classList.contains('selected')) {
+                e.target.classList.remove('selected');
+                selectedDate = null;
+            } else {
+                clearSelections("#date-selection .date-container.selected");
+                e.target.classList.add('selected');
+                selectedDate = e.target.dataset.date;
+            }
+            // Clear times when date selection changes
+            clearSelections("#time-selection .time-container.selected");
+            selectedTime = null;
+            updateContinueButtonState();
+            if (selectedDate) {
+                fetchTimes(selectedDate);
+            } else {
+                clearTimeSelection();
+            }
+        }
     });
-  });
 
-// Close the custom select options if clicking outside of the select
-window.addEventListener("click", function (event) {
-  if (!event.target.closest(".custom-select-wrapper")) {
-    document
-      .querySelectorAll(".custom-select-options")
-      .forEach(function (optionsList) {
-        optionsList.classList.add("hidden");
-      });
-  }
-});
+    // Add event delegation for dynamically created time elements
+    document.getElementById("time-selection").addEventListener("click", function (e) {
+        if (e.target.classList.contains('time-container')) {
+            // Toggle selection if the same time is clicked again
+            if (e.target.classList.contains('selected')) {
+                e.target.classList.remove('selected');
+                selectedTime = null;
+            } else {
+                clearSelections("#time-selection .time-container.selected");
+                e.target.classList.add('selected');
+                selectedTime = e.target.dataset.time;
+            }
+            updateContinueButtonState();
+        }
+    });
 
-let select_theater = document.querySelectorAll(".theater-select-container");
-let select_date = document.querySelectorAll(".date-container");
-let select_time = document.querySelectorAll(".time-container");
-let total_ticket_price = document.getElementById("ticket-total-price");
-let ticket_reduce_standard = document.getElementById("ticket-reduce-count-sta");
-let ticket_count_standard = document.getElementById(
-  "buy-info-ticket-count-value-sta"
-);
-let ticket_increase_standard = document.getElementById(
-  "ticket-increase-count-sta"
-);
-let ticket_reduce_student = document.getElementById("ticket-reduce-count-stu");
-let ticket_count_student = document.getElementById(
-  "buy-info-ticket-count-value-stu"
-);
-let ticket_increase_student = document.getElementById(
-  "ticket-increase-count-stu"
-);
-let ticket_confirmation = document.getElementById("ticket-confirmation-button");
-let ticket_price_standard = document.getElementById("ticket-price-standard");
-let ticket_price_student = document.getElementById("ticket-price-student");
+    // Event listeners for ticket count buttons
+    document.querySelector(".buy-info-ticket-options").addEventListener("click", function (e) {
+        if (e.target.classList.contains('buy-info-ticket-count-button')) {
+            const button = e.target;
+            const container = button.closest('.buy-info-ticket-container');
+            const ticketTypeId = container.dataset.ticketTypeId;
+            const price = parseFloat(container.querySelector(".buy-info-ticket-pricing h3").textContent.replace('TL', ''));
+            const ticketCountValueElement = container.querySelector(".ticket-count-value");
+            let quantity = parseInt(ticketCountValueElement.textContent);
 
-function clearSelections(elements) {
-  elements.forEach((element) => {
-    element.style.background = ""; // Reset background to default for all containers
-    element.dataset.selected = "false";
-  });
-}
+            if (button.classList.contains('increase')) {
+                quantity++;
+            } else if (button.classList.contains('reduce') && quantity > 0) {
+                quantity--;
+            }
 
-// Add click event listener to each theater container
-select_theater.forEach((container) => {
-  container.addEventListener("click", function () {
-    if (this.dataset.selected === "true") {
-      this.style.background = ""; // Deselect it by resetting the background
-      this.dataset.selected = "false"; // Update the data-selected attribute to false
-    } else {
-      clearSelections(select_theater); // First clear all previous selections
-      this.style.background = "rgb(255, 208, 0)"; // Set the background of the clicked container
-      this.dataset.selected = "true"; // Update the data-selected attribute to true
+            selectedTickets[ticketTypeId] = { quantity: quantity, price: price };
+            ticketCountValueElement.textContent = quantity;
+            updateTotalPrice();
+        }
+    });
+
+    // Event listener for Continue button
+    document.getElementById("ticket-confirmation-button").addEventListener("click", function () {
+        let totalQuantity = 0;
+        let totalPrice = 0;
+        let ticketTypeIds = [];
+        let ticketQuantities = [];
+
+        // Calculate the total price and quantity based on the selected tickets
+        for (const [ticketTypeId, ticketInfo] of Object.entries(selectedTickets)) {
+            let quantity = ticketInfo.quantity;
+            let price = ticketInfo.price;
+            totalQuantity += quantity;
+            totalPrice += quantity * price; // This calculates the total price
+            ticketTypeIds.push(parseInt(ticketTypeId));
+            ticketQuantities.push(quantity);
+        }
+
+        // Prepare the data to send
+        let dataToSend = {
+            theaterId: selectedTheater,
+            date: selectedDate,
+            time: selectedTime,
+            totalPrice: totalPrice,
+            ticketTypeIds: ticketTypeIds,
+            ticketQuantities: ticketQuantities
+        };
+
+        // Make the AJAX POST request
+        $.ajax({
+            url: '/BuyTicket/PrepareSelectSeats',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(dataToSend),
+            dataType: 'json',
+            success: function (response) {
+                if (response.success) {
+                    window.location.href = response.redirectUrl;
+                } else {
+                    console.error("Error preparing data for seat selection: ", response.message);
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error("Error occurred: ", status, error);
+            }
+        });
+    });
+
+    // Event listener for the city dropdown change
+    document.getElementById('city-dropdown').addEventListener('change', function () {
+        clearSelections(".theater-select-container.selected");
+        clearSelections("#date-selection .date-container.selected");
+        clearSelections("#time-selection .time-container.selected");
+        const selectedCityId = this.value;
+        fetchTheaters(selectedCityId);
+        selectedTheater = null;
+        selectedDate = null;
+        selectedTime = null;
+        updateContinueButtonState();
+    });
+
+    function fetchTheaters(cityId) {
+        $.ajax({
+            url: '/BuyTicket/GetTheatersByCity',
+            type: 'GET',
+            data: { cityId: cityId }, // Pass the selected cityId to the controller
+            success: function (response) {
+                if (response.success) {
+                    let dateSelectionDiv = document.getElementById("date-selection");
+                    while (dateSelectionDiv.firstChild) {
+                        dateSelectionDiv.removeChild(dateSelectionDiv.firstChild);
+                    }
+
+                    let timeSelectionDiv = document.getElementById("time-selection");
+                    while (timeSelectionDiv.firstChild) {
+                        timeSelectionDiv.removeChild(timeSelectionDiv.firstChild);
+                    }
+                    updateTheaterSelection(response.theaters);
+                } else {
+                    console.error("Error fetching theaters: ", response.error);
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error("Error fetching theaters: ", status, error);
+            }
+        });
     }
-  });
-});
 
-select_time.forEach((container) => {
-  container.addEventListener("click", function () {
-    if (this.dataset.selected === "true") {
-      this.style.background = ""; // Deselect it by resetting the background
-      this.dataset.selected = "false"; // Update the data-selected attribute to false
-    } else {
-      clearSelections(select_time); // First clear all previous selections
-      this.style.background = "rgb(255, 208, 0)"; // Set the background of the clicked container
-      this.dataset.selected = "true"; // Update the data-selected attribute to true
+    function updateTheaterSelection(theaters) {
+        const theaterSelectionDiv = document.getElementById("theater-selection");
+        // Clear the container 
+        while (theaterSelectionDiv.firstChild) {
+            theaterSelectionDiv.removeChild(theaterSelectionDiv.firstChild);
+        }
+        // Append new theater containers
+        theaters.forEach(theater => {
+            const theaterDiv = document.createElement('div');
+            theaterDiv.className = 'theater-select-container';
+            theaterDiv.dataset.theaterId = theater.theaterID;
+            theaterDiv.dataset.cityId = theater.cityID;
+            theaterDiv.innerHTML = `<h4>${theater.name}</h4><p>${theater.address}</p>`;
+            theaterSelectionDiv.appendChild(theaterDiv);
+        });
+
+        // Reattach event listeners to the new theater elements
+        attachTheaterSelectionEvents();
     }
-  });
-});
-select_date.forEach((container) => {
-  container.addEventListener("click", function () {
-    if (this.dataset.selected === "true") {
-      this.style.background = ""; // Deselect it by resetting the background
-      this.dataset.selected = "false"; // Update the data-selected attribute to false
-    } else {
-      clearSelections(select_date); // First clear all previous selections
-      this.style.background = "rgb(255, 208, 0)"; // Set the background of the clicked container
-      this.dataset.selected = "true"; // Update the data-selected attribute to true
+
+    function attachTheaterSelectionEvents() {
+        // Event listeners for theater selection
+        document.querySelectorAll(".theater-select-container").forEach(container => {
+            container.addEventListener("click", function () {
+                // Toggle selection if the same theater is clicked again
+                if (this.classList.contains('selected')) {
+                    this.classList.remove('selected');
+                    selectedTheater = null;
+                } else {
+                    clearSelections(".theater-select-container.selected");
+                    this.classList.add('selected');
+                    selectedTheater = this.dataset.theaterId;
+                }
+                // Clear dates and times when theater selection changes
+                clearSelections("#date-selection .date-container.selected");
+                clearSelections("#time-selection .time-container.selected");
+                selectedDate = null;
+                selectedTime = null;
+                updateContinueButtonState();
+                if (selectedTheater) {
+                    fetchDates(selectedTheater);
+                } else {
+                    clearDateAndTimeSelection();
+                }
+            });
+        });
     }
-  });
-});
 
-ticket_reduce_standard.addEventListener("click", function () {
-  if (ticket_count_standard.textContent > 0) {
-    ticket_count_standard.textContent--;
-    calculateTotal();
-  }
-});
-ticket_increase_standard.addEventListener("click", function () {
-  ticket_count_standard.textContent++;
-  calculateTotal();
-});
-ticket_reduce_student.addEventListener("click", function () {
-  if (ticket_count_student.textContent > 0) {
-    ticket_count_student.textContent--;
-    calculateTotal();
-  }
-});
-ticket_increase_student.addEventListener("click", function () {
-  ticket_count_student.textContent++;
-  calculateTotal();
-});
+    function formatDate(dateString) {
+        var date = new Date(dateString);
+        var day = date.getDate();
+        var month = date.toLocaleString('default', { month: 'long' });
 
-function calculateTotal() {
-  let countStandard = ticket_count_standard.textContent;
-  let countStudent = ticket_count_student.textContent;
-  let studentPrice = parseInt(ticket_price_student.textContent, 10);
-  let standardPrice = parseInt(ticket_price_standard.textContent, 10);
-  let total = countStandard * standardPrice + countStudent * studentPrice;
-  total_ticket_price.textContent = `Total Price: ${total.toFixed(2)}TL`;
-}
-calculateTotal();
+        return `${day} ${month}`; 
+    }
 
-
+});

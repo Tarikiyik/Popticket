@@ -3,13 +3,10 @@
 @{
     ViewBag.Title = "Index";
 }
-
-
-
 <div class="admin-panel">
-    <h2 style="padding-bottom:10px; font-size:22px; font-family:cursive;">Index</h2>
+    <h2>Index</h2>
 
-    <p style="line-height:24px; font-weight:300; color:black;">
+    <p>
         @Html.ActionLink("Create New", "Create")
     </p>
     <table class="table">
@@ -17,7 +14,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.title)
             </th>
-            <th class="admin-panel-description">
+            <th>
                 @Html.DisplayNameFor(model => model.description)
             </th>
             <th>
@@ -50,7 +47,7 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.title)
                 </td>
-                <td class="admin-panel-description">
+                <td>
                     @Html.DisplayFor(modelItem => item.description)
                 </td>
                 <td>
@@ -83,5 +80,4 @@
         }
 
     </table>
-
 </div>

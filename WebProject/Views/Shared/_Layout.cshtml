@@ -1,17 +1,14 @@
-﻿
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Popticket</title>
-    <link rel="stylesheet" href="@Url.Content("~/Content/style.css?v=3")" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/style.css?v=19")" />
 
-    <!-- Include jQuery -->
-    <script src="@Url.Content("~/Scripts/jquery-3.4.1.js")"></script>
+    <script src="@Url.Content("~/Scripts/jquery-3.7.1.js")"></script>
 
-    <!-- Include jQuery Validation -->
     <script src="@Url.Content("~/Scripts/jquery.validate.js")"></script>
     <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")"></script>
 </head>
@@ -24,20 +21,24 @@
         </div>
         <div class="navbar-categories">
             <a href="@Url.Action("OnTheaters","Movies")"><h3>MOVIES</h3> </a>
+        </div>
+        @if (Session["IsAdmin"] != null && (bool)Session["IsAdmin"])
+        {
+            <div class="navbar-categories">
+                <a href="@Url.Action("Index","MoviesAdmin")"><h3>MOVIES PANEL</h3> </a>
             </div>
-            @if (Session["IsAdmin"] != null && (bool)Session["IsAdmin"])
-            {       <div class="navbar-categories">
-                        <a href="@Url.Action("Index","MoviesAdmin")"><h3>MOVIES PANEL</h3> </a>
-                    </div>
-                    <div class="navbar-categories">
-                        <a href="@Url.Action("Index","TheatersAdmin")"><h3>THEATERS PANEL</h3> </a>
-                    </div>
-            }
-             
+            <div class="navbar-categories">
+                <a href="@Url.Action("Index","TheatersAdmin")"><h3>THEATERS PANEL</h3> </a>
+            </div>
+            <div class="navbar-categories">
+                <a href="@Url.Action("Index","TicketTypesAdmin")"><h3>TICKETS PANEL</h3> </a>
+            </div>
+        }
+
         <div class="navbar-spacer"></div>
         <div class="navbar-search">
             <input type="text" id="searchInput" placeholder="Search..." />
-            <img src="@Url.Content("~/images/search.png")" alt="" class="navbar-search-icon" id="searchIcon" />
+            <img src="@Url.Content("~/images/search.png")" alt="" class="navbar-search-icon" id="searchIcon" onclick="searchMovies()" />
         </div>
         @if (Session["User"] != null)
         {
@@ -162,7 +163,8 @@
         </div>
     </footer>
 
-    <script src="@Url.Content("~/Scripts/layout.js")"></script>
+    @RenderSection("Scripts", required: false)
+    <script src="@Url.Content("~/Scripts/layoutnew.js")"></script>
 
 </body>
 </html>

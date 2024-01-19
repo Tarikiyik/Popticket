@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Globalization;
 using System.Web;
+using System.Transactions;
 using System.Web.Mvc;
+using System.Data.Entity;
 using WebProject.Models;
+using WebProject.ViewModels;
 using System.Text.RegularExpressions;
 
 namespace WebProject.Controllers
@@ -78,10 +82,28 @@ namespace WebProject.Controllers
 
         public ActionResult Logout()
         {
+            var user = Session["User"] as User;
+            int userId = user.UserID;
+
+            CleanUpPendingReservations(userId);
+
             Session["User"] = null; // Existing code
             Session["IsAdmin"] = null; // Add this line to clear the admin flag
             Session.Clear(); // This will clear all session data
+
             return RedirectToAction("Homepage", "Home");
+        }
+
+        private void CleanUpPendingReservations(int userId)
+        {
+            // Find all pending reservations for the user that are older than the limit
+            var pendingReservations = db.seatReservations
+                .Where(sr => sr.status == "pending" &&
+                             sr.userID == userId);
+
+            // Remove the outdated reservations
+            db.seatReservations.RemoveRange(pendingReservations);
+            db.SaveChanges();
         }
 
         public ActionResult UserProfile(int id)
@@ -142,13 +164,19 @@ namespace WebProject.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteAccount(int userId)
         {
+
             var userInDb = db.User.Find(userId);
             if (userInDb == null)
             {
                 // Handle the case where the user could not be found in the database
                 return HttpNotFound();
             }
-
+            var reservation = db.seatReservations.FirstOrDefault(r => r.userID == userInDb.UserID);
+            db.seatReservations.Remove(reservation);
+            db.SaveChanges();
+            var booking = db.Bookings.FirstOrDefault(b => b.userID == userInDb.UserID);
+            db.Bookings.Remove(booking);
+            db.SaveChanges();
             // Remove the user from the database
             db.User.Remove(userInDb);
             db.SaveChanges();
