@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let cardDatePreview = document.getElementById("card-front-text2");
     let cardNamePreview = document.getElementById("card-front-text3");
     let cardCvvPreview = document.getElementById("card-back-text");
-
+ 
     // Function to update card number preview
     cardNumberInput.addEventListener("input", function () {
         cardNumberPreview.textContent = this.value;
