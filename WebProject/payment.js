@@ -44,6 +44,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     let countdownDisplay = document.getElementById('countdown-timer');
     let countdownTime = 5 * 60 * 1000; // 5 minutes in milliseconds
+    
     let alertShown = false;
 
     // Function to update countdown display
